@@ -1,0 +1,79 @@
+********************************************************************************
+***                       Micro-Cap 12.2.0.4 (64 bit)                        ***
+***                                                                          ***
+***                                                                          ***
+***                       Transient Analysis of Solver                       ***
+***                           2022-01-29 13:19:02                            ***
+********************************************************************************
+Limits
+======
+Maximum Run Time           1u
+Output Start Time (tstart) 0
+Maximum Time Step          0
+Number of Points           51
+Temperature                Linear 27
+Retrace Runs               1
+Run Options                Normal
+State Variables            Zero
+Operating Point            On
+Operating Point Only       Off
+Auto Scale Ranges          On
+Accumulate Plots           Off
+Fixed Time Step            Off
+Periodic Steady State      Off
+Ignore Expression Errors   Off
+
+
+*****************************************************
+***                Temperature=27                 ***
+*****************************************************
+
+Temperature=27
+
+DC Operating Point Voltages
+===========================
+Node         Voltage  Node         Voltage  Node         Voltage 
+1             0.000   U1          800.000m  3            33.000  
+4             2.500   U2          800.000m  6             1.000  
+
+
+Operating Point for Devices of Type Resistor
+============================================
+Instance:               RH1            R1           RL1           RH2            R2
+V                  800.000m      -32.200      -800.000m       -1.700      -200.000m
+Power DC Terms:
+PD                  37.236u        4.713m       79.855u      168.145u      181.818n
+
+DC Pin Currents:
+Ir                  46.545u     -146.364u      -99.818u      -98.909u     -909.091n
+
+Device Variables:
+tc1                  0.000         0.000         0.000         0.000         0.000 
+tc2                  0.000         0.000         0.000         0.000         0.000 
+
+
+Instance:               RL2
+V                 -800.000m
+Power DC Terms:
+PD                  79.855u
+
+DC Pin Currents:
+Ir                 -99.818u
+
+Device Variables:
+tc1                  0.000 
+tc2                  0.000 
+
+
+
+Operating Point for Devices of Type SPICE Source
+================================================
+Instance:            VDAC1         VOUT1         VDAC2         VOUT2
+V                   0.000        33.000         2.500         1.000 
+Power DC Terms:
+PG                  0.000         4.830m      247.273u      909.091n
+
+DC Pin Currents:
+ISource            46.545u     -146.364u      -98.909u     -909.091n
+
+

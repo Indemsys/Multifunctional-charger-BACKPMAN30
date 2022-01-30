@@ -1,0 +1,48 @@
+********************************************************************************
+***                       Micro-Cap 12.2.0.4 (64 bit)                        ***
+***                                                                          ***
+***                                                                          ***
+***                  Transient Analysis Optimizer of Solver                  ***
+***                           2022-01-29 13:07:12                            ***
+********************************************************************************
+
+Find:
+   PARAM RH Low=1 High=10Meg 
+   PARAM RL Low=1 High=10Meg 
+
+That:
+   Equates Peak_Y(v(U1),1,1) To=Uref
+   Equates Peak_Y(v(U2),1,1) To=Uref
+
+Objective Function = Sum of the differences between the values of "That Expression" and the "To" values.
+
+Minimizing the Objective Function
+
+Start With:
+   Existing
+
+Powell:
+   Start with:PARAM RH=1K PARAM RL=1K 
+   Best: PARAM RH=17.187652K PARAM RL=8.014591K Percent=5.1427m
+Hooke:
+   Start with:PARAM RH=1K PARAM RL=1K 
+   Best: PARAM RH=17.187496K PARAM RL=8.014549K Percent=358.961926u
+Levenberg-Marquardt:
+   Start with:PARAM RH=1K PARAM RL=1K 
+   Best: PARAM RH=17.1875K PARAM RL=8.014572K Percent=0
+Differential Evolution:
+   Start with:PARAM RH=1K PARAM RL=1K 
+   Best: PARAM RH=25.862289K PARAM RL=9.689108K Percent=26.153463
+
+Best so far Levenberg-Marquardt: PARAM RH=17.1875K PARAM RL=8.014572K Percent=0
+
+
+Final Result:
+   Levenberg-Marquardt
+   Start:   PARAM RH=1K PARAM RL=1K 
+   Result:   PARAM RH=17.1875K PARAM RL=8.014572K Percent=0
+
+Info:
+   Time=4.641 sec
+   RMS Error=0
+   Percent Error=0

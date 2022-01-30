@@ -1,0 +1,48 @@
+********************************************************************************
+***                       Micro-Cap 12.2.0.4 (64 bit)                        ***
+***                                                                          ***
+***                                                                          ***
+***                 Transient Analysis Optimizer of Verifier                 ***
+***                           2022-01-29 13:19:54                            ***
+********************************************************************************
+
+Find:
+   VOUT1 Low=0.1 High=10Meg 
+   VOUT2 Low=0.1 High=10Meg 
+
+That:
+   Equates Peak_Y(v(U1),1,1) To=Uref
+   Equates Peak_Y(v(U2),1,1) To=Uref
+
+Objective Function = Sum of the differences between the values of "That Expression" and the "To" values.
+
+Minimizing the Objective Function
+
+Start With:
+   Existing
+
+Powell:
+   Start with:VOUT1=33 VOUT2=1 
+   Best: VOUT1=32.751171 VOUT2=1.141977 Percent=795.849137u
+Hooke:
+   Start with:VOUT1=33 VOUT2=1 
+   Best: VOUT1=32.75125 VOUT2=1.141977 Percent=421.586983u
+Levenberg-Marquardt:
+   Start with:VOUT1=33 VOUT2=1 
+   Best: VOUT1=32.751171 VOUT2=1.141975 Percent=13.877788f
+Differential Evolution:
+   Start with:VOUT1=33 VOUT2=1 
+   Best: VOUT1=415.809025 VOUT2=313.15716 Percent=96.339588
+
+Best so far Levenberg-Marquardt: VOUT1=32.751171 VOUT2=1.141975 Percent=13.877788f
+
+
+Final Result:
+   Levenberg-Marquardt
+   Start:   VOUT1=33 VOUT2=1 
+   Result:   VOUT1=32.751171 VOUT2=1.141975 Percent=13.877788f
+
+Info:
+   Time=0.687 sec
+   RMS Error=0
+   Percent Error=6.938894f
