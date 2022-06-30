@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Untitled Document</title>
+    <link rel="stylesheet" href="./widgets/jqwidgets/styles/jqx.base.css" type="text/css"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1 minimum-scale=1"/>
+    <script type="text/javascript" src="./widgets/scripts/jquery-1.11.1.min.js">
+    </script>
+    <script type="text/javascript" src="./widgets/jqwidgets/jqxcore.js">
+    </script>
+    <script type="text/javascript" src="./widgets/jqwidgets/jqxslider.js">
+    </script>
+    <script type="text/javascript" src="./widgets/jqwidgets/jqxbuttons.js">
+    </script>
+    <script type="text/javascript" src="./widgets/jqwidgets/jqxscrollbar.js">
+    </script>
+    <script type="text/javascript" src="./widgets/jqwidgets/jqxpanel.js">
+    </script>
+    <script type="text/javascript">
+
+      MIN_DCDC_VOLTAGE  = 1.66;
+      MAX_DCDC_VOLTAGE  = 31.91;
+
+      $(document).ready(function() {
+
+          $('#jqxSlider').jqxSlider({ orientation: 'vertical',
+            height: 400, width: 30, mode: 'fixed',
+            min: 0, max: 65535, ticksFrequency: 5000, step: 1,
+            tooltip: true, value: 65535, showTickLabels: true, ticksPosition: 'bottom',
+            tickLabelFormatFunction: function(value)
+            {
+              if (value == 65536) return "";
+              return value;
+            }
+
+          });
+          $('#jqxSlider').on('change', function(event) {
+              Send_DCDC_DAC_code(event); });
+
+          setInterval(Timer_Callback, 500);
+
+
+        });
+
+      function Show_DAC_state(dac_code)
+      {
+        $('#DCDC_DAC_code').text(dac_code);
+        code =   0xFFFF - dac_code;
+        v = code * (MAX_DCDC_VOLTAGE - MIN_DCDC_VOLTAGE) / 0xFFFF + MIN_DCDC_VOLTAGE;
+        $('#DCDC_DAC_voltage').text(v.toFixed(3) + " V");
+
+      }
+
+      function Send_DCDC_DAC_code(event)
+      {
+        var dac_code = event.args.value;
+        Show_DAC_state(dac_code)
+        cmd = "SET_DCDC_DAC(" + dac_code + ")";
+        retMsg = "";
+        pcm.SendCommand(cmd, retMsg);
+      }
+
+
+      function Timer_Callback()
+      {
+        if (pcm.ReadVariable("!sys.DCDC_DAC_code"))
+        {
+          dac_code = pcm.LastVariable_vValue;
+          Show_DAC_state(dac_code);
+          $('#jqxSlider').jqxSlider({ value: dac_code }); 
+        }
+      }
+
+    </script>
+
+
+
+    <style>
+html, body {
+	font-family: Verdana, sans-serif;
+	font-size: 12px;
+	line-height: 1
+}
+table td {
+	border: 1px solid #d4d4d4;
+  border-style: none;
+	text-align: left;
+	padding: 1px;
+	vertical-align: top;
+    font-family: Verdana, sans-serif;
+	font-size: 15px;
+	line-height: 1.5
+}
+.table1 {
+    border-style: solid;
+    border-width: thin;
+}
+
+    </style>
+  </head>
+
+  <body>
+    <object id="pcm" height="0" width="0" classid="clsid:48A185F1-FFDB-11D3-80E3-00C04F176153">
+    </object>
+
+
+    <table>
+      <tr>
+        <td>
+        <div>
+          <a href="pcmaster:cmd:Reset_device()" title="Reset Device">Reset device</a>
+        </div></td>
+      </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    
+    <table class="table1">
+      <tr>
+        <td>
+        <div style="margin:10px 50px;" id='jqxSlider'>
+        </div>
+        </td>
+        <td>
+        <div style="font-size: 12px;">
+          DCDC DAC code
+        </div>
+        <div style="font-size: 15px;font-weight: bold;" id='DCDC_DAC_code'>
+          ???
+        </div>
+        <br>
+        <div style="font-size: 12px;">
+          DCDC voltage
+        </div>
+        <div style="font-size: 15px;font-weight: bold;" id='DCDC_DAC_voltage'>
+          ???
+        </div>
+        </td>
+      </tr>
+    </table>
+    <div style="padding:10px">
+      <a href="pcmaster:cmd:ENABLE_DCDC()" title="Enable DCDC">Enable DCDC</a>
+    </div>
+    <div style="padding:10px">
+      <a href="pcmaster:cmd:DISABLE_DCDC()" title="Disable DCDC">Disable DCDC</a>
+    </div>
+  </body>
+</html>
