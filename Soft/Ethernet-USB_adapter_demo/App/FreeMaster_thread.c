@@ -93,6 +93,27 @@ err_exit_:
 
 
 /*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+-----------------------------------------------------------------------------------------------------*/
+void FreeMaster_task_delete(void)
+{
+  T_serial_io_driver *p_drv =(T_serial_io_driver *)(p_freemaster_thread->driver);
+  tx_thread_terminate(p_freemaster_thread);
+  p_drv->_deinit(&p_drv->pdrvcbl);
+  tx_thread_delete(p_freemaster_thread);
+  App_free(p_freemaster_stack);
+  App_free(p_freemaster_thread);
+  App_free(pipeRxBuff);
+  App_free(pipeTxBuff);
+  App_free(p_log_rec);
+  App_free(log_str);
+  task_freemaster_created = 0;
+
+}
+
+/*-----------------------------------------------------------------------------------------------------
   Функция для управления пинами из FreeMaster
 
   \param void
@@ -228,8 +249,8 @@ void Freemaster_send_log_to_pipe(void)
       return;
     }
   }
-
 }
+
 
 /*-------------------------------------------------------------------------------------------------------------
   Цикл движка FreeMaster

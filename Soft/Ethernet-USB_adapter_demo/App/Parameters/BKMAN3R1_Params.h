@@ -5,7 +5,7 @@
 #define  MAIN_PARAMS_ROOT   BKMAN3R1_main
 #define  PARAMS_ROOT        BKMAN3R1_0
 
-#define  DWVAR_SIZE        14
+#define  DWVAR_SIZE        15
 #define  PARMNU_ITEM_NUM   5
 
 #define  SELECTORS_NUM     5
@@ -99,6 +99,7 @@ typedef struct
   uint8_t        default_ip_addr[16];           // Default IP address | def.val.= 192.168.1.1
   uint8_t        default_net_mask[16];          // Default network mask  | def.val.= 255.255.255.0
   uint8_t        en_dhcp_client;                // Enable DHCP client (0-No, 1-Yes) | def.val.= 1
+  uint8_t        en_freemaster_on_telnet;       // Enable FreeMaster on Telnet (0-No, 1-Yes) | def.val.= 1
   uint8_t        enable_HTTP_server;            // Enable WEB server | def.val.= 1
   uint8_t        enable_HTTPS;                  // Enable_HTTPS | def.val.= 0
   uint8_t        HTTP_server_password[32];      // HTTP server pasword | def.val.= 123456789

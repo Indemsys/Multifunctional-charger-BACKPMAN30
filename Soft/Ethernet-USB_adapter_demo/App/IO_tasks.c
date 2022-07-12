@@ -5,33 +5,26 @@
 #include   "App.h"
 #include   "freemaster.h"
 
-static TX_MUTEX               io_mutex;
+static TX_MUTEX              io_mutex;
 
-TX_THREAD                     io_thread;
+TX_THREAD                    io_thread;
 #pragma data_alignment=8
-uint8_t                       thread_io_stack[THREAD_IO_STACK_SIZE];
+uint8_t                      thread_io_stack[THREAD_IO_STACK_SIZE];
 
 
 volatile int32_t             g_encoder_counter;
-static uint8_t               enc_a;
-static uint8_t               enc_a_prev;
-static uint8_t               curr_enc_a_smpl;
-static uint8_t               prev_enc_a_smpl;
-static uint32_t              enc_a_cnt;
+uint8_t                      curr_enc_a_smpl;
+uint8_t                      curr_enc_b_smpl;
 
-static uint8_t               enc_b;
-static uint8_t               curr_enc_b_smpl;
-static uint8_t               prev_enc_b_smpl;
-static uint32_t              enc_b_cnt;
 
-static T_MaxFlat_1_1000_cbl  flt_cbl_acc_i  ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_psrc_i ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_load_i ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_acc_v  ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_psrc_v ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_load_v ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_sys_v  ;
-static T_MaxFlat_1_1000_cbl  flt_cbl_ref_v  ;
+static T_MaxFlat_1_1000_cbl  flt_cbl_acc_i;
+static T_MaxFlat_1_1000_cbl  flt_cbl_psrc_i;
+static T_MaxFlat_1_1000_cbl  flt_cbl_load_i;
+static T_MaxFlat_1_1000_cbl  flt_cbl_acc_v;
+static T_MaxFlat_1_1000_cbl  flt_cbl_psrc_v;
+static T_MaxFlat_1_1000_cbl  flt_cbl_load_v;
+static T_MaxFlat_1_1000_cbl  flt_cbl_sys_v;
+static T_MaxFlat_1_1000_cbl  flt_cbl_ref_v;
 
 
 uint8_t                      zero_calibr_en;
@@ -175,14 +168,14 @@ static void Measurements_fp_conversion(void)
   fp_meas.cpu_temp   =((110.0f-30.0f) * ((float)adcs.smpl_TERM - TS_CAL1)) / (TS_CAL2 - TS_CAL1)+ 30.0f;
 
 
-  fp_meas.flt_acc_i  = LPF_MaxFlat_1_1000_step(&flt_cbl_acc_i  , fp_meas.acc_i );
+  fp_meas.flt_acc_i  = LPF_MaxFlat_1_1000_step(&flt_cbl_acc_i  , fp_meas.acc_i);
   fp_meas.flt_psrc_i = LPF_MaxFlat_1_1000_step(&flt_cbl_psrc_i , fp_meas.psrc_i);
   fp_meas.flt_load_i = LPF_MaxFlat_1_1000_step(&flt_cbl_load_i , fp_meas.load_i);
-  fp_meas.flt_acc_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_acc_v  , fp_meas.acc_v );
+  fp_meas.flt_acc_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_acc_v  , fp_meas.acc_v);
   fp_meas.flt_psrc_v = LPF_MaxFlat_1_1000_step(&flt_cbl_psrc_v , fp_meas.psrc_v);
   fp_meas.flt_load_v = LPF_MaxFlat_1_1000_step(&flt_cbl_load_v , fp_meas.load_v);
-  fp_meas.flt_sys_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_sys_v  , fp_meas.sys_v );
-  fp_meas.flt_ref_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_ref_v  , fp_meas.ref_v );
+  fp_meas.flt_sys_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_sys_v  , fp_meas.sys_v);
+  fp_meas.flt_ref_v  = LPF_MaxFlat_1_1000_step(&flt_cbl_ref_v  , fp_meas.ref_v);
 
   fp_meas.psrc_pwr   = fp_meas.flt_psrc_i * fp_meas.flt_psrc_v;
   fp_meas.acc_pwr    = -fp_meas.flt_acc_i * fp_meas.flt_acc_v;
@@ -221,91 +214,99 @@ uint32_t Get_measured_val(float *p_val, float *res)
 }
 
 
+typedef struct
+{
+    uint8_t               enc_a_smpl_prev;
+    uint8_t               enc_b_smpl_prev;
+    uint32_t              A_cnt;
+    uint32_t              B_cnt;
+    uint8_t               A_state;
+    uint8_t               B_state;
+    uint8_t               prev_B_state;
+    uint8_t               prev_A_state;
+    uint32_t              A_rising_edge;
+    uint32_t              B_rising_edge;
+} T_enc_cbl;
+
+T_enc_cbl ec;
 /*-----------------------------------------------------------------------------------------------------
   Процедура обработки сигналов энкодера
   Вызывается с частотой в 20 КГц (каждые 50 мкс)
 
   Самый ктороткий импульс у энкодера зафиксирован длительностью 300 мкс
 
+
+
   \param void
 -----------------------------------------------------------------------------------------------------*/
 void Encoder_proc(void)
 {
-
   curr_enc_a_smpl = Get_smpl_enc_a();
   curr_enc_b_smpl = Get_smpl_enc_b();
 
+  // Ведем счетчик длительности состояния линии A
   if (curr_enc_a_smpl == 0)
   {
-    if (prev_enc_a_smpl != 0)
-    {
-      enc_a_cnt = 0;
-    }
-    else
-    {
-      enc_a_cnt++;
-    }
+    if (ec.enc_a_smpl_prev != 0) ec.A_cnt = 0;
+    else ec.A_cnt++;
   }
   else
   {
-    if (prev_enc_a_smpl == 0)
-    {
-      enc_a_cnt = 0;
-    }
-    else
-    {
-      enc_a_cnt++;
-    }
+    if (ec.enc_a_smpl_prev == 0) ec.A_cnt = 0;
+    else ec.A_cnt++;
   }
 
+  // Ведем счетчик длительности состояния линии B
   if (curr_enc_b_smpl == 0)
   {
-    if (prev_enc_b_smpl != 0)
-    {
-      enc_b_cnt = 0;
-    }
-    else
-    {
-      enc_b_cnt++;
-    }
+    if (ec.enc_b_smpl_prev != 0) ec.B_cnt = 0;
+    else ec.B_cnt++;
   }
   else
   {
-    if (prev_enc_b_smpl == 0)
-    {
-      enc_b_cnt = 0;
-    }
-    else
-    {
-      enc_b_cnt++;
-    }
+    if (ec.enc_b_smpl_prev == 0) ec.B_cnt = 0;
+    else ec.B_cnt++;
   }
-  if (enc_b_cnt > 0)
+
+  // Фильтруем дребезг
+  if (ec.B_cnt > 5)
   {
-    enc_b = curr_enc_b_smpl;
+    ec.B_state = curr_enc_b_smpl;
   }
-
-  prev_enc_a_smpl = curr_enc_a_smpl;
-  prev_enc_b_smpl = curr_enc_b_smpl;
-
-
-  // Здесь определяем и считаем импульсы
-  if (enc_a_cnt > 0)
+  if (ec.A_cnt > 5)
   {
-    enc_a = curr_enc_a_smpl;
-    if ((enc_a == 1) && (enc_a_prev == 0))
-    {
-      if (enc_b == 1)
-      {
-        g_encoder_counter--;
-      }
-      else
-      {
-        g_encoder_counter++;
-      }
-    }
-    enc_a_prev = enc_a;
+    ec.A_state = curr_enc_a_smpl;
   }
 
+  // Фиксируем фронт на линии A
+  if ((ec.A_state == 1) && (ec.prev_A_state == 0))
+  {
+    ec.A_rising_edge = 1; // Выставляем флаг фронта
+    // Если фронт случился на высоком уровне B, то это отрицательный импульс
+    if (ec.B_state && ec.B_rising_edge)
+    {
+      g_encoder_counter--;
+      ec.B_rising_edge = 0; // Сбрасываем флаг фронта чтобы не было повторной реакции на колебания сигнала A при устойчивом сигнале B
+    }
+  }
+
+  // Фиксируем фронт на линии B
+  if ((ec.B_state == 1) && (ec.prev_B_state == 0))
+  {
+    ec.B_rising_edge = 1; // Выставляем флаг фронта
+    // Если фронт случился на высоком уровне A, то это положительный импульс
+    if (ec.A_state && ec.A_rising_edge)
+    {
+      g_encoder_counter++;
+      ec.A_rising_edge = 0; // Сбрасываем флаг фронта чтобы не было повторной реакции на колебания сигнала B при устойчивом сигнале A
+    }
+  }
+
+
+  ec.enc_a_smpl_prev = curr_enc_a_smpl;
+  ec.enc_b_smpl_prev = curr_enc_b_smpl;
+
+  ec.prev_A_state = ec.A_state;
+  ec.prev_B_state = ec.B_state;
 }
 

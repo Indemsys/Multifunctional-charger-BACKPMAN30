@@ -36,6 +36,7 @@ extern T_fm_pins_state             pst_prev;
 
 
 uint32_t FreeMaster_task_create(ULONG initial_data);
+void     FreeMaster_task_delete(void);
 void     Task_FreeMaster(uint32_t initial_data);
 
 #endif

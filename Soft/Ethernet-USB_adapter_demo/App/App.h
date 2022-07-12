@@ -79,6 +79,7 @@
   #include   "IDLE_task.h"
   #include   "Net_thread.h"
   #include   "Net_Web_server.h"
+  #include   "Net_Telnet_serv_driver.h"
   #include   "Outputs_control.h"
   #include   "CAN_thread.h"
   #include   "Inputs_controller.h"

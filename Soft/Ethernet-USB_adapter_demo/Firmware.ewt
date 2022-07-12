@@ -1616,10 +1616,10 @@
                     <name>$PROJ_DIR$\App\Network\Net_common.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\App\Network\Net_Telnet.c</name>
+                    <name>$PROJ_DIR$\App\Network\Net_Telnet_serv_driver.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\App\Network\Net_Telnet.h</name>
+                    <name>$PROJ_DIR$\App\Network\Net_Telnet_serv_driver.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\Network\Net_utils.c</name>

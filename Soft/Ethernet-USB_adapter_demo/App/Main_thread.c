@@ -119,6 +119,10 @@ void Thread_main(ULONG initial_input)
   {
     Thread_net_create();
     USB_host_cdc_ecm_init();
+    //if (wvar.en_freemaster_on_telnet!=0)
+    //{
+    //  FreeMaster_task_create((ULONG)Mnsdrv_get_telnet_driver());
+    //}
   }
 
 

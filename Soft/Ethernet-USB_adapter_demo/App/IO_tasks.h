@@ -3,6 +3,9 @@
 
 
 extern volatile int32_t g_encoder_counter;
+extern uint8_t          curr_enc_a_smpl;
+extern uint8_t          curr_enc_b_smpl;
+
 
 void      Thread_IO_create(void);
 uint32_t  Get_measured_val(float *p_val, float *res);

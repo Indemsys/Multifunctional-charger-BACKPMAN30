@@ -5,7 +5,6 @@
 #include   "App.h"
 #include   "nxd_dhcp_server.h"
 
-#include   "Net_Telnet.h"
 
 static UX_SLAVE_CLASS_RNDIS_PARAMETER   rndis_parameter;
 static UX_SLAVE_CLASS_CDC_ECM_PARAMETER cdc_ecm_parameter;

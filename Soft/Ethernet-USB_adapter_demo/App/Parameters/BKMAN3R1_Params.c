@@ -13,7 +13,7 @@ const T_parmenu parmenu[5]=
 };
 
 
-const T_work_params dwvar[14]=
+const T_work_params dwvar[15]=
 {
   {
     "default_ip_addr",
@@ -104,6 +104,24 @@ const T_work_params dwvar[14]=
     sizeof(wvar.this_host_name),
     5,
     0,
+  },
+  {
+    "en_freemaster_on_telnet",
+    "Enable FreeMaster on Telnet (0-No, 1-Yes)",
+    "ENFRONT",
+    (void*)&wvar.en_freemaster_on_telnet,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    BKMAN3R1_CDC_ECM,
+    "",
+    "%d",
+    0,
+    sizeof(wvar.en_freemaster_on_telnet),
+    6,
+    1,
   },
   {
     "name",

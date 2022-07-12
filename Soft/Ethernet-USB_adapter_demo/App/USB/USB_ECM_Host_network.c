@@ -4,7 +4,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include   "App.h"
 #include   "nxd_dhcp_client.h"
-#include   "Net_Telnet.h"
+
 
 extern NX_TELNET_SERVER    telnet_server;
 

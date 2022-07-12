@@ -64,7 +64,9 @@ FMSTR_TSA_RW_VAR(pst.OLED_CS                            ,FMSTR_TSA_UINT8)
 FMSTR_TSA_RW_VAR(pst.EN_CHARGER                         ,FMSTR_TSA_UINT8)
 FMSTR_TSA_RW_VAR(pst.DCDC_MODE                          ,FMSTR_TSA_UINT8)
 
-
+FMSTR_TSA_RW_VAR(g_encoder_counter                      ,FMSTR_TSA_SINT32)
+FMSTR_TSA_RW_VAR(curr_enc_a_smpl                        ,FMSTR_TSA_UINT8)
+FMSTR_TSA_RW_VAR(curr_enc_b_smpl                        ,FMSTR_TSA_UINT8)
 
 FMSTR_TSA_TABLE_END();
 
