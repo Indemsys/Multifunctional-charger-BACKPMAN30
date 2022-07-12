@@ -192,7 +192,7 @@ static void Show_CDC_ECM_link_info(void)
     snprintf(str_1, VAL_STR_LEN, "%04X", uinf.idVendor);
     snprintf(str_2, VAL_STR_LEN, "%04X", uinf.idProduct);
 
-    if (Is_ECM_usb_network_link_up() == NX_FALSE)
+    if (Is_ECM_usb_link_up() == NX_FALSE)
     {
       snprintf(str_4, VAL_STR_LEN, " ");
       snprintf(str_5, VAL_STR_LEN, " ");
