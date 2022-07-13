@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -190,13 +189,13 @@ typedef struct
   */
 typedef struct
 {
-  uint32_t Mode;       /*!< Specifies the output compare mode (toggle, ready_to_send, inactive).
+  uint32_t Mode;       /*!< Specifies the output compare mode (toggle, active, inactive).
                             This parameter can be any value of of @ref HRTIM_Simple_OC_Mode */
   uint32_t Pulse;      /*!< Specifies the compare value to be loaded into the Compare Register.
                             The compare value must be above or equal to 3 periods of the fHRTIM clock */
   uint32_t Polarity;   /*!< Specifies the output polarity.
                             This parameter can be any value of @ref HRTIM_Output_Polarity */
-  uint32_t IdleLevel;  /*!< Specifies whether the output level is ready_to_send or inactive when in IDLE state.
+  uint32_t IdleLevel;  /*!< Specifies whether the output level is active or inactive when in IDLE state.
                             This parameter can be any value of @ref HRTIM_Output_IDLE_Level */
 } HRTIM_SimpleOCChannelCfgTypeDef;
 
@@ -209,7 +208,7 @@ typedef struct
                                   The compare value must be above or equal to 3 periods of the fHRTIM clock */
   uint32_t Polarity;        /*!< Specifies the output polarity.
                                  This parameter can be any value of @ref HRTIM_Output_Polarity */
-  uint32_t IdleLevel;       /*!< Specifies whether the output level is ready_to_send or inactive when in IDLE state.
+  uint32_t IdleLevel;       /*!< Specifies whether the output level is active or inactive when in IDLE state.
                                  This parameter can be any value of @ref HRTIM_Output_IDLE_Level */
 } HRTIM_SimplePWMChannelCfgTypeDef;
 
@@ -237,7 +236,7 @@ typedef struct
                                    The compare value must be above or equal to 3 periods of the fHRTIM clock */
   uint32_t OutputPolarity;    /*!< Specifies the output polarity.
                                    This parameter can be any value of @ref HRTIM_Output_Polarity */
-  uint32_t OutputIdleLevel;   /*!< Specifies whether the output level is ready_to_send or inactive when in IDLE state.
+  uint32_t OutputIdleLevel;   /*!< Specifies whether the output level is active or inactive when in IDLE state.
                                    This parameter can be any value of @ref HRTIM_Output_IDLE_Level */
   uint32_t Event;             /*!< Specifies the external event triggering the pulse generation.
                                    This parameter can be any 'EEVx' value of @ref HRTIM_External_Event_Channels */
@@ -349,15 +348,15 @@ typedef struct
 {
   uint32_t Polarity;                    /*!< Specifies the output polarity.
                                              This parameter can be any value of @ref HRTIM_Output_Polarity */
-  uint32_t SetSource;                   /*!< Specifies the event(s) transitioning the output from its inactive level to its ready_to_send level.
+  uint32_t SetSource;                   /*!< Specifies the event(s) transitioning the output from its inactive level to its active level.
                                              This parameter can be a combination of @ref HRTIM_Output_Set_Source */
-  uint32_t ResetSource;                 /*!< Specifies the event(s) transitioning the output from its ready_to_send level to its inactive level.
+  uint32_t ResetSource;                 /*!< Specifies the event(s) transitioning the output from its active level to its inactive level.
                                              This parameter can be a combination of @ref HRTIM_Output_Reset_Source */
   uint32_t IdleMode;                    /*!< Specifies whether or not the output is affected by a burst mode operation.
                                              This parameter can be any value of @ref HRTIM_Output_Idle_Mode */
-  uint32_t IdleLevel;                   /*!< Specifies whether the output level is ready_to_send or inactive when in IDLE state.
+  uint32_t IdleLevel;                   /*!< Specifies whether the output level is active or inactive when in IDLE state.
                                              This parameter can be any value of @ref HRTIM_Output_IDLE_Level */
-  uint32_t FaultLevel;                  /*!< Specifies whether the output level is ready_to_send or inactive when in FAULT state.
+  uint32_t FaultLevel;                  /*!< Specifies whether the output level is active or inactive when in FAULT state.
                                              This parameter can be any value of @ref HRTIM_Output_FAULT_Level */
   uint32_t ChopperModeEnable;           /*!< Indicates whether or not the chopper mode is enabled
                                              This parameter can be any value of @ref HRTIM_Output_Chopper_Mode_Enable */
@@ -717,9 +716,9 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
 /** @defgroup HRTIM_Register_Preload_Enable HRTIM Register Preload Enable
   * @{
   * @brief Constants defining whether a write access into a preloadable
-  *        register is done into the ready_to_send or the preload register.
+  *        register is done into the active or the preload register.
   */
-#define HRTIM_PRELOAD_DISABLED (0x00000000U)           /*!< Preload disabled: the write access is directly done into the ready_to_send register */
+#define HRTIM_PRELOAD_DISABLED (0x00000000U)           /*!< Preload disabled: the write access is directly done into the active register */
 #define HRTIM_PRELOAD_ENABLED  (HRTIM_MCR_PREEN)       /*!< Preload enabled: the write access is done into the preload register */
 /**
   * @}
@@ -931,7 +930,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
            operates in basic output compare mode
   */
 #define HRTIM_BASICOCMODE_TOGGLE    (0x00000001U)  /*!< Output toggles when the timer counter reaches the compare value */
-#define HRTIM_BASICOCMODE_INACTIVE  (0x00000002U)  /*!< Output forced to ready_to_send level when the timer counter reaches the compare value */
+#define HRTIM_BASICOCMODE_INACTIVE  (0x00000002U)  /*!< Output forced to active level when the timer counter reaches the compare value */
 #define HRTIM_BASICOCMODE_ACTIVE    (0x00000003U)  /*!< Output forced to inactive level when the timer counter reaches the compare value */
 
 #define IS_HRTIM_BASICOCMODE(BASICOCMODE)\
@@ -946,8 +945,8 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining the polarity of a timer output
   */
-#define HRTIM_OUTPUTPOLARITY_HIGH    (0x00000000U)           /*!< Output is ready_to_send HIGH */
-#define HRTIM_OUTPUTPOLARITY_LOW     (HRTIM_OUTR_POL1)       /*!< Output is ready_to_send LOW */
+#define HRTIM_OUTPUTPOLARITY_HIGH    (0x00000000U)           /*!< Output is active HIGH */
+#define HRTIM_OUTPUTPOLARITY_LOW     (HRTIM_OUTR_POL1)       /*!< Output is active LOW */
 /**
   * @}
   */
@@ -958,37 +957,37 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   *        set crossbar of a timer output
   */
 #define HRTIM_OUTPUTSET_NONE       0x00000000U                      /*!< Reset the output set crossbar */
-#define HRTIM_OUTPUTSET_RESYNC     (HRTIM_SET1R_RESYNC)             /*!< Timer reset event coming solely from software or SYNC input forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMPER     (HRTIM_SET1R_PER)                /*!< Timer period event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMCMP1    (HRTIM_SET1R_CMP1)               /*!< Timer compare 1 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMCMP2    (HRTIM_SET1R_CMP2)               /*!< Timer compare 2 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMCMP3    (HRTIM_SET1R_CMP3)               /*!< Timer compare 3 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMCMP4    (HRTIM_SET1R_CMP4)               /*!< Timer compare 4 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_MASTERPER  (HRTIM_SET1R_MSTPER)             /*!< The master timer period event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_MASTERCMP1 (HRTIM_SET1R_MSTCMP1)            /*!< Master Timer compare 1 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_MASTERCMP2 (HRTIM_SET1R_MSTCMP2)            /*!< Master Timer compare 2 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_MASTERCMP3 (HRTIM_SET1R_MSTCMP3)            /*!< Master Timer compare 3 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_MASTERCMP4 (HRTIM_SET1R_MSTCMP4)            /*!< Master Timer compare 4 event forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_1    (HRTIM_SET1R_TIMEVNT1)           /*!< Timer event 1 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_2    (HRTIM_SET1R_TIMEVNT2)           /*!< Timer event 2 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_3    (HRTIM_SET1R_TIMEVNT3)           /*!< Timer event 3 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_4    (HRTIM_SET1R_TIMEVNT4)           /*!< Timer event 4 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_5    (HRTIM_SET1R_TIMEVNT5)           /*!< Timer event 5 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_6    (HRTIM_SET1R_TIMEVNT6)           /*!< Timer event 6 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_7    (HRTIM_SET1R_TIMEVNT7)           /*!< Timer event 7 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_8    (HRTIM_SET1R_TIMEVNT8)           /*!< Timer event 8 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_TIMEV_9    (HRTIM_SET1R_TIMEVNT9)           /*!< Timer event 9 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_1      (HRTIM_SET1R_EXTVNT1)            /*!< External event 1 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_2      (HRTIM_SET1R_EXTVNT2)            /*!< External event 2 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_3      (HRTIM_SET1R_EXTVNT3)            /*!< External event 3 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_4      (HRTIM_SET1R_EXTVNT4)            /*!< External event 4 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_5      (HRTIM_SET1R_EXTVNT5)            /*!< External event 5 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_6      (HRTIM_SET1R_EXTVNT6)            /*!< External event 6 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_7      (HRTIM_SET1R_EXTVNT7)            /*!< External event 7 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_8      (HRTIM_SET1R_EXTVNT8)            /*!< External event 8 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_9      (HRTIM_SET1R_EXTVNT9)            /*!< External event 9 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_EEV_10     (HRTIM_SET1R_EXTVNT10)           /*!< External event 10 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTSET_UPDATE     (HRTIM_SET1R_UPDATE)             /*!< Timer register update event forces the output to its ready_to_send state */
+#define HRTIM_OUTPUTSET_RESYNC     (HRTIM_SET1R_RESYNC)             /*!< Timer reset event coming solely from software or SYNC input forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMPER     (HRTIM_SET1R_PER)                /*!< Timer period event forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMCMP1    (HRTIM_SET1R_CMP1)               /*!< Timer compare 1 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMCMP2    (HRTIM_SET1R_CMP2)               /*!< Timer compare 2 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMCMP3    (HRTIM_SET1R_CMP3)               /*!< Timer compare 3 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMCMP4    (HRTIM_SET1R_CMP4)               /*!< Timer compare 4 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_MASTERPER  (HRTIM_SET1R_MSTPER)             /*!< The master timer period event forces the output to its active state */
+#define HRTIM_OUTPUTSET_MASTERCMP1 (HRTIM_SET1R_MSTCMP1)            /*!< Master Timer compare 1 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_MASTERCMP2 (HRTIM_SET1R_MSTCMP2)            /*!< Master Timer compare 2 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_MASTERCMP3 (HRTIM_SET1R_MSTCMP3)            /*!< Master Timer compare 3 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_MASTERCMP4 (HRTIM_SET1R_MSTCMP4)            /*!< Master Timer compare 4 event forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_1    (HRTIM_SET1R_TIMEVNT1)           /*!< Timer event 1 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_2    (HRTIM_SET1R_TIMEVNT2)           /*!< Timer event 2 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_3    (HRTIM_SET1R_TIMEVNT3)           /*!< Timer event 3 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_4    (HRTIM_SET1R_TIMEVNT4)           /*!< Timer event 4 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_5    (HRTIM_SET1R_TIMEVNT5)           /*!< Timer event 5 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_6    (HRTIM_SET1R_TIMEVNT6)           /*!< Timer event 6 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_7    (HRTIM_SET1R_TIMEVNT7)           /*!< Timer event 7 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_8    (HRTIM_SET1R_TIMEVNT8)           /*!< Timer event 8 forces the output to its active state */
+#define HRTIM_OUTPUTSET_TIMEV_9    (HRTIM_SET1R_TIMEVNT9)           /*!< Timer event 9 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_1      (HRTIM_SET1R_EXTVNT1)            /*!< External event 1 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_2      (HRTIM_SET1R_EXTVNT2)            /*!< External event 2 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_3      (HRTIM_SET1R_EXTVNT3)            /*!< External event 3 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_4      (HRTIM_SET1R_EXTVNT4)            /*!< External event 4 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_5      (HRTIM_SET1R_EXTVNT5)            /*!< External event 5 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_6      (HRTIM_SET1R_EXTVNT6)            /*!< External event 6 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_7      (HRTIM_SET1R_EXTVNT7)            /*!< External event 7 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_8      (HRTIM_SET1R_EXTVNT8)            /*!< External event 8 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_9      (HRTIM_SET1R_EXTVNT9)            /*!< External event 9 forces the output to its active state */
+#define HRTIM_OUTPUTSET_EEV_10     (HRTIM_SET1R_EXTVNT10)           /*!< External event 10 forces the output to its active state */
+#define HRTIM_OUTPUTSET_UPDATE     (HRTIM_SET1R_UPDATE)             /*!< Timer register update event forces the output to its active state */
 /**
   * @}
   */
@@ -996,7 +995,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
 /** @defgroup HRTIM_Output_Reset_Source HRTIM Output Reset Source
   * @{
   * @brief Constants defining the events that can be selected to configure the
-  *        set crossbar of a timer output
+  *        reset crossbar of a timer output
   */
 #define HRTIM_OUTPUTRESET_NONE       0x00000000U                      /*!< Reset the output reset crossbar */
 #define HRTIM_OUTPUTRESET_RESYNC     (HRTIM_RST1R_RESYNC)             /*!< Timer reset event coming solely from software or SYNC input forces the output to its inactive state */
@@ -1010,15 +1009,15 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
 #define HRTIM_OUTPUTRESET_MASTERCMP2 (HRTIM_RST1R_MSTCMP2)            /*!< Master Timer compare 2 event forces the output to its inactive state */
 #define HRTIM_OUTPUTRESET_MASTERCMP3 (HRTIM_RST1R_MSTCMP3)            /*!< Master Timer compare 3 event forces the output to its inactive state */
 #define HRTIM_OUTPUTRESET_MASTERCMP4 (HRTIM_RST1R_MSTCMP4)            /*!< Master Timer compare 4 event forces the output to its inactive state */
-#define HRTIM_OUTPUTRESET_TIMEV_1    (HRTIM_SET1R_TIMEVNT1)           /*!< Timer event 1 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_2    (HRTIM_SET1R_TIMEVNT2)           /*!< Timer event 2 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_3    (HRTIM_SET1R_TIMEVNT3)           /*!< Timer event 3 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_4    (HRTIM_SET1R_TIMEVNT4)           /*!< Timer event 4 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_5    (HRTIM_SET1R_TIMEVNT5)           /*!< Timer event 5 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_6    (HRTIM_SET1R_TIMEVNT6)           /*!< Timer event 6 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_7    (HRTIM_SET1R_TIMEVNT7)           /*!< Timer event 7 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_8    (HRTIM_SET1R_TIMEVNT8)           /*!< Timer event 8 forces the output to its ready_to_send state */
-#define HRTIM_OUTPUTRESET_TIMEV_9    (HRTIM_SET1R_TIMEVNT9)           /*!< Timer event 9 forces the output to its ready_to_send state */
+#define HRTIM_OUTPUTRESET_TIMEV_1    (HRTIM_RST1R_TIMEVNT1)           /*!< Timer event 1 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_2    (HRTIM_RST1R_TIMEVNT2)           /*!< Timer event 2 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_3    (HRTIM_RST1R_TIMEVNT3)           /*!< Timer event 3 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_4    (HRTIM_RST1R_TIMEVNT4)           /*!< Timer event 4 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_5    (HRTIM_RST1R_TIMEVNT5)           /*!< Timer event 5 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_6    (HRTIM_RST1R_TIMEVNT6)           /*!< Timer event 6 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_7    (HRTIM_RST1R_TIMEVNT7)           /*!< Timer event 7 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_8    (HRTIM_RST1R_TIMEVNT8)           /*!< Timer event 8 forces the output to its active state */
+#define HRTIM_OUTPUTRESET_TIMEV_9    (HRTIM_RST1R_TIMEVNT9)           /*!< Timer event 9 forces the output to its active state */
 #define HRTIM_OUTPUTRESET_EEV_1      (HRTIM_RST1R_EXTVNT1)            /*!< External event 1 forces the output to its inactive state */
 #define HRTIM_OUTPUTRESET_EEV_2      (HRTIM_RST1R_EXTVNT2)            /*!< External event 2 forces the output to its inactive state */
 #define HRTIM_OUTPUTRESET_EEV_3      (HRTIM_RST1R_EXTVNT3)            /*!< External event 3 forces the output to its inactive state */
@@ -1050,7 +1049,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @brief Constants defining the output level when output is in IDLE state
   */
 #define HRTIM_OUTPUTIDLELEVEL_INACTIVE   0x00000000U           /*!< Output at inactive level when in IDLE state */
-#define HRTIM_OUTPUTIDLELEVEL_ACTIVE     (HRTIM_OUTR_IDLES1)   /*!< Output at ready_to_send level when in IDLE state */
+#define HRTIM_OUTPUTIDLELEVEL_ACTIVE     (HRTIM_OUTR_IDLES1)   /*!< Output at active level when in IDLE state */
 /**
   * @}
   */
@@ -1060,7 +1059,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @brief Constants defining the output level when output is in FAULT state
   */
 #define HRTIM_OUTPUTFAULTLEVEL_NONE      0x00000000U                                  /*!< The output is not affected by the fault input */
-#define HRTIM_OUTPUTFAULTLEVEL_ACTIVE    (HRTIM_OUTR_FAULT1_0)                        /*!< Output at ready_to_send level when in FAULT state */
+#define HRTIM_OUTPUTFAULTLEVEL_ACTIVE    (HRTIM_OUTR_FAULT1_0)                        /*!< Output at active level when in FAULT state */
 #define HRTIM_OUTPUTFAULTLEVEL_INACTIVE  (HRTIM_OUTR_FAULT1_1)                        /*!< Output at inactive level when in FAULT state */
 #define HRTIM_OUTPUTFAULTLEVEL_HIGHZ     (HRTIM_OUTR_FAULT1_1 | HRTIM_OUTR_FAULT1_0)  /*!< Output is tri-stated when in FAULT state */
 /**
@@ -1107,24 +1106,24 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
 #define HRTIM_CAPTURETRIGGER_EEV_8        (HRTIM_CPT1CR_EXEV8CPT)  /*!< The External event 8 triggers the Capture */
 #define HRTIM_CAPTURETRIGGER_EEV_9        (HRTIM_CPT1CR_EXEV9CPT)  /*!< The External event 9 triggers the Capture */
 #define HRTIM_CAPTURETRIGGER_EEV_10       (HRTIM_CPT1CR_EXEV10CPT) /*!< The External event 10 triggers the Capture */
-#define HRTIM_CAPTURETRIGGER_TA1_SET      (HRTIM_CPT1CR_TA1SET)    /*!< Capture is triggered by TA1 output inactive to ready_to_send transition */
-#define HRTIM_CAPTURETRIGGER_TA1_RESET    (HRTIM_CPT1CR_TA1RST)    /*!< Capture is triggered by TA1 output ready_to_send to inactive transition */
+#define HRTIM_CAPTURETRIGGER_TA1_SET      (HRTIM_CPT1CR_TA1SET)    /*!< Capture is triggered by TA1 output inactive to active transition */
+#define HRTIM_CAPTURETRIGGER_TA1_RESET    (HRTIM_CPT1CR_TA1RST)    /*!< Capture is triggered by TA1 output active to inactive transition */
 #define HRTIM_CAPTURETRIGGER_TIMERA_CMP1  (HRTIM_CPT1CR_TIMACMP1)  /*!< Timer A Compare 1 triggers Capture */
 #define HRTIM_CAPTURETRIGGER_TIMERA_CMP2  (HRTIM_CPT1CR_TIMACMP2)  /*!< Timer A Compare 2 triggers Capture */
-#define HRTIM_CAPTURETRIGGER_TB1_SET      (HRTIM_CPT1CR_TB1SET)    /*!< Capture is triggered by TB1 output inactive to ready_to_send transition */
-#define HRTIM_CAPTURETRIGGER_TB1_RESET    (HRTIM_CPT1CR_TB1RST)    /*!< Capture is triggered by TB1 output ready_to_send to inactive transition */
+#define HRTIM_CAPTURETRIGGER_TB1_SET      (HRTIM_CPT1CR_TB1SET)    /*!< Capture is triggered by TB1 output inactive to active transition */
+#define HRTIM_CAPTURETRIGGER_TB1_RESET    (HRTIM_CPT1CR_TB1RST)    /*!< Capture is triggered by TB1 output active to inactive transition */
 #define HRTIM_CAPTURETRIGGER_TIMERB_CMP1  (HRTIM_CPT1CR_TIMBCMP1)  /*!< Timer B Compare 1 triggers Capture */
 #define HRTIM_CAPTURETRIGGER_TIMERB_CMP2  (HRTIM_CPT1CR_TIMBCMP2)  /*!< Timer B Compare 2 triggers Capture */
-#define HRTIM_CAPTURETRIGGER_TC1_SET      (HRTIM_CPT1CR_TC1SET)    /*!< Capture is triggered by TC1 output inactive to ready_to_send transition */
-#define HRTIM_CAPTURETRIGGER_TC1_RESET    (HRTIM_CPT1CR_TC1RST)    /*!< Capture is triggered by TC1 output ready_to_send to inactive transition */
+#define HRTIM_CAPTURETRIGGER_TC1_SET      (HRTIM_CPT1CR_TC1SET)    /*!< Capture is triggered by TC1 output inactive to active transition */
+#define HRTIM_CAPTURETRIGGER_TC1_RESET    (HRTIM_CPT1CR_TC1RST)    /*!< Capture is triggered by TC1 output active to inactive transition */
 #define HRTIM_CAPTURETRIGGER_TIMERC_CMP1  (HRTIM_CPT1CR_TIMCCMP1)  /*!< Timer C Compare 1 triggers Capture */
 #define HRTIM_CAPTURETRIGGER_TIMERC_CMP2  (HRTIM_CPT1CR_TIMCCMP2)  /*!< Timer C Compare 2 triggers Capture */
-#define HRTIM_CAPTURETRIGGER_TD1_SET      (HRTIM_CPT1CR_TD1SET)    /*!< Capture is triggered by TD1 output inactive to ready_to_send transition */
-#define HRTIM_CAPTURETRIGGER_TD1_RESET    (HRTIM_CPT1CR_TD1RST)    /*!< Capture is triggered by TD1 output ready_to_send to inactive transition */
+#define HRTIM_CAPTURETRIGGER_TD1_SET      (HRTIM_CPT1CR_TD1SET)    /*!< Capture is triggered by TD1 output inactive to active transition */
+#define HRTIM_CAPTURETRIGGER_TD1_RESET    (HRTIM_CPT1CR_TD1RST)    /*!< Capture is triggered by TD1 output active to inactive transition */
 #define HRTIM_CAPTURETRIGGER_TIMERD_CMP1  (HRTIM_CPT1CR_TIMDCMP1)  /*!< Timer D Compare 1 triggers Capture */
 #define HRTIM_CAPTURETRIGGER_TIMERD_CMP2  (HRTIM_CPT1CR_TIMDCMP2)  /*!< Timer D Compare 2 triggers Capture */
-#define HRTIM_CAPTURETRIGGER_TE1_SET      (HRTIM_CPT1CR_TE1SET)    /*!< Capture is triggered by TE1 output inactive to ready_to_send transition */
-#define HRTIM_CAPTURETRIGGER_TE1_RESET    (HRTIM_CPT1CR_TE1RST)    /*!< Capture is triggered by TE1 output ready_to_send to inactive transition */
+#define HRTIM_CAPTURETRIGGER_TE1_SET      (HRTIM_CPT1CR_TE1SET)    /*!< Capture is triggered by TE1 output inactive to active transition */
+#define HRTIM_CAPTURETRIGGER_TE1_RESET    (HRTIM_CPT1CR_TE1RST)    /*!< Capture is triggered by TE1 output active to inactive transition */
 #define HRTIM_CAPTURETRIGGER_TIMERE_CMP1  (HRTIM_CPT1CR_TIMECMP1)  /*!< Timer E Compare 1 triggers Capture */
 #define HRTIM_CAPTURETRIGGER_TIMERE_CMP2  (HRTIM_CPT1CR_TIMECMP2)  /*!< Timer E Compare 2 triggers Capture */
 /**
@@ -1137,21 +1136,21 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   *        by a timer
   */
 #define HRTIM_TIMEVENTFILTER_NONE             (0x00000000U)
-#define HRTIM_TIMEVENTFILTER_BLANKINGCMP1     (HRTIM_EEFR1_EE1FLTR_0)                                                                                                                           /*!< Blanking from counter reset/roll-over to Compare 1U */
-#define HRTIM_TIMEVENTFILTER_BLANKINGCMP2     (HRTIM_EEFR1_EE1FLTR_1)                                                                                                                           /*!< Blanking from counter reset/roll-over to Compare 2U */
-#define HRTIM_TIMEVENTFILTER_BLANKINGCMP3     (HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                                                                                                   /*!< Blanking from counter reset/roll-over to Compare 3U */
-#define HRTIM_TIMEVENTFILTER_BLANKINGCMP4     (HRTIM_EEFR1_EE1FLTR_2)                                                                                                                           /*!< Blanking from counter reset/roll-over to Compare 4U */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR1    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_0)                                                                                                   /*!< Blanking from another timing unit: TIMFLTR1 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR2    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1)                                                                                                   /*!< Blanking from another timing unit: TIMFLTR2 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR3    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                                                                           /*!< Blanking from another timing unit: TIMFLTR3 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR4    (HRTIM_EEFR1_EE1FLTR_3)                                                                                                                           /*!< Blanking from another timing unit: TIMFLTR4 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR5    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_0)                                                                                                   /*!< Blanking from another timing unit: TIMFLTR5 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR6    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_1)                                                                                                   /*!< Blanking from another timing unit: TIMFLTR6 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR7    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                                                                           /*!< Blanking from another timing unit: TIMFLTR7 source */
-#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR8    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2)                                                                                                   /*!< Blanking from another timing unit: TIMFLTR8 source */
-#define HRTIM_TIMEVENTFILTER_WINDOWINGCMP2    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_0)                                                                           /*!< Windowing from counter reset/roll-over to Compare 2U */
-#define HRTIM_TIMEVENTFILTER_WINDOWINGCMP3    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1)                                                                           /*!< Windowing from counter reset/roll-over to Compare 3U */
-#define HRTIM_TIMEVENTFILTER_WINDOWINGTIM     (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_0)  /*!< Windowing from another timing unit: TIMWIN source */
+#define HRTIM_TIMEVENTFILTER_BLANKINGCMP1     (HRTIM_EEFR1_EE1FLTR_0)                                                                          /*!< Blanking from counter reset/roll-over to Compare 1U  */
+#define HRTIM_TIMEVENTFILTER_BLANKINGCMP2     (HRTIM_EEFR1_EE1FLTR_1)                                                                          /*!< Blanking from counter reset/roll-over to Compare 2U  */
+#define HRTIM_TIMEVENTFILTER_BLANKINGCMP3     (HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                                                  /*!< Blanking from counter reset/roll-over to Compare 3U  */
+#define HRTIM_TIMEVENTFILTER_BLANKINGCMP4     (HRTIM_EEFR1_EE1FLTR_2)                                                                          /*!< Blanking from counter reset/roll-over to Compare 4U  */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR1    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_0)                                                  /*!< Blanking from another timing unit: TIMFLTR1 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR2    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1)                                                  /*!< Blanking from another timing unit: TIMFLTR2 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR3    (HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                          /*!< Blanking from another timing unit: TIMFLTR3 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR4    (HRTIM_EEFR1_EE1FLTR_3)                                                                          /*!< Blanking from another timing unit: TIMFLTR4 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR5    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_0)                                                  /*!< Blanking from another timing unit: TIMFLTR5 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR6    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_1)                                                  /*!< Blanking from another timing unit: TIMFLTR6 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR7    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)                          /*!< Blanking from another timing unit: TIMFLTR7 source   */
+#define HRTIM_TIMEVENTFILTER_BLANKINGFLTR8    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2)                                                  /*!< Blanking from another timing unit: TIMFLTR8 source   */
+#define HRTIM_TIMEVENTFILTER_WINDOWINGCMP2    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_0)                          /*!< Windowing from counter reset/roll-over to Compare 2U */
+#define HRTIM_TIMEVENTFILTER_WINDOWINGCMP3    (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1)                          /*!< Windowing from counter reset/roll-over to Compare 3U */
+#define HRTIM_TIMEVENTFILTER_WINDOWINGTIM     (HRTIM_EEFR1_EE1FLTR_3 | HRTIM_EEFR1_EE1FLTR_2 | HRTIM_EEFR1_EE1FLTR_1 | HRTIM_EEFR1_EE1FLTR_0)  /*!< Windowing from another timing unit: TIMWIN source    */
 /**
   * @}
   */
@@ -1346,10 +1345,10 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @brief Constants defining the source and event to be sent on the
   *        synchronization outputs
   */
-#define HRTIM_SYNCOUTPUTSOURCE_MASTER_START 0x00000000U                                    /*!< A pulse is sent on the SYNCOUT output upon master timer start event */
-#define HRTIM_SYNCOUTPUTSOURCE_MASTER_CMP1  (HRTIM_MCR_SYNC_SRC_0)                         /*!< A pulse is sent on the SYNCOUT output upon master timer compare 1 event*/
-#define HRTIM_SYNCOUTPUTSOURCE_TIMA_START   (HRTIM_MCR_SYNC_SRC_1)                         /*!< A pulse is sent on the SYNCOUT output upon timer A start or reset events */
-#define HRTIM_SYNCOUTPUTSOURCE_TIMA_CMP1    (HRTIM_MCR_SYNC_SRC_1 | HRTIM_MCR_SYNC_SRC_0)  /*!< A pulse is sent on the SYNCOUT output upon timer A compare 1 event */
+#define HRTIM_SYNCOUTPUTSOURCE_MASTER_START 0x00000000U                                    /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon master timer start event      */
+#define HRTIM_SYNCOUTPUTSOURCE_MASTER_CMP1  (HRTIM_MCR_SYNC_SRC_0)                         /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon master timer compare 1 event  */
+#define HRTIM_SYNCOUTPUTSOURCE_TIMA_START   (HRTIM_MCR_SYNC_SRC_1)                         /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon timer A start or reset events */
+#define HRTIM_SYNCOUTPUTSOURCE_TIMA_CMP1    (HRTIM_MCR_SYNC_SRC_1 | HRTIM_MCR_SYNC_SRC_0)  /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon timer A compare 1 event       */
 /**
   * @}
   */
@@ -1381,8 +1380,8 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining the polarity of an external event
   */
-#define HRTIM_EVENTPOLARITY_HIGH    (0x00000000U)           /*!< External event is ready_to_send high */
-#define HRTIM_EVENTPOLARITY_LOW     (HRTIM_EECR1_EE1POL)    /*!< External event is ready_to_send low */
+#define HRTIM_EVENTPOLARITY_HIGH    (0x00000000U)           /*!< External event is active high */
+#define HRTIM_EVENTPOLARITY_LOW     (HRTIM_EECR1_EE1POL)    /*!< External event is active low */
 /**
   * @}
   */
@@ -1392,10 +1391,10 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @brief Constants defining the sensitivity (level-sensitive or edge-sensitive)
   *        of an external event
   */
-#define HRTIM_EVENTSENSITIVITY_LEVEL          (0x00000000U)                                  /*!< External event is ready_to_send on level */
-#define HRTIM_EVENTSENSITIVITY_RISINGEDGE     (HRTIM_EECR1_EE1SNS_0)                         /*!< External event is ready_to_send on Rising edge */
-#define HRTIM_EVENTSENSITIVITY_FALLINGEDGE    (HRTIM_EECR1_EE1SNS_1)                         /*!< External event is ready_to_send on Falling edge */
-#define HRTIM_EVENTSENSITIVITY_BOTHEDGES      (HRTIM_EECR1_EE1SNS_1 | HRTIM_EECR1_EE1SNS_0)  /*!< External event is ready_to_send on Rising and Falling edges */
+#define HRTIM_EVENTSENSITIVITY_LEVEL          (0x00000000U)                                  /*!< External event is active on level */
+#define HRTIM_EVENTSENSITIVITY_RISINGEDGE     (HRTIM_EECR1_EE1SNS_0)                         /*!< External event is active on Rising edge */
+#define HRTIM_EVENTSENSITIVITY_FALLINGEDGE    (HRTIM_EECR1_EE1SNS_1)                         /*!< External event is active on Falling edge */
+#define HRTIM_EVENTSENSITIVITY_BOTHEDGES      (HRTIM_EECR1_EE1SNS_1 | HRTIM_EECR1_EE1SNS_0)  /*!< External event is active on Rising and Falling edges */
 /**
   * @}
   */
@@ -1465,8 +1464,8 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining the polarity of a fault event
   */
-#define HRTIM_FAULTPOLARITY_LOW     (0x00000000U)            /*!< Fault input is ready_to_send low */
-#define HRTIM_FAULTPOLARITY_HIGH    (HRTIM_FLTINR1_FLT1P)    /*!< Fault input is ready_to_send high */
+#define HRTIM_FAULTPOLARITY_LOW     (0x00000000U)            /*!< Fault input is active low */
+#define HRTIM_FAULTPOLARITY_HIGH    (HRTIM_FLTINR1_FLT1P)    /*!< Fault input is active high */
 /**
   * @}
   */
@@ -1579,9 +1578,9 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining whether or not burst mode registers preload
            mechanism is enabled, i.e. a write access into a preloadable register
-          (HRTIM_BMCMPR, HRTIM_BMPER) is done into the ready_to_send or the preload register
+          (HRTIM_BMCMPR, HRTIM_BMPER) is done into the active or the preload register
   */
-#define HRIM_BURSTMODEPRELOAD_DISABLED (0x00000000U)  /*!< Preload disabled: the write access is directly done into ready_to_send registers */
+#define HRIM_BURSTMODEPRELOAD_DISABLED (0x00000000U)  /*!< Preload disabled: the write access is directly done into active registers */
 #define HRIM_BURSTMODEPRELOAD_ENABLED  (HRTIM_BMCR_BMPREN)     /*!< Preload enabled: the write access is done into preload registers */
 /**
   * @}
@@ -1631,7 +1630,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
 /** @defgroup HRTIM_ADC_Trigger_Update_Source HRTIM ADC Trigger Update Source
   * @{
   * @brief constants defining the source triggering the update of the
-     HRTIM_ADCxR register (transfer from preload to ready_to_send register).
+     HRTIM_ADCxR register (transfer from preload to active register).
   */
 #define HRTIM_ADCTRIGGERUPDATE_MASTER  0x00000000U                                   /*!< Master timer */
 #define HRTIM_ADCTRIGGERUPDATE_TIMER_A (HRTIM_CR1_ADC1USRC_0)                        /*!< Timer A */
@@ -1776,12 +1775,12 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants used to force timer registers update
   */
-#define HRTIM_TIMERUPDATE_MASTER    (HRTIM_CR2_MSWU)     /*!< Force an immediate transfer from the preload to the ready_to_send register in the master timer */
-#define HRTIM_TIMERUPDATE_A         (HRTIM_CR2_TASWU)    /*!< Force an immediate transfer from the preload to the ready_to_send register in the timer A */
-#define HRTIM_TIMERUPDATE_B         (HRTIM_CR2_TBSWU)    /*!< Force an immediate transfer from the preload to the ready_to_send register in the timer B */
-#define HRTIM_TIMERUPDATE_C         (HRTIM_CR2_TCSWU)    /*!< Force an immediate transfer from the preload to the ready_to_send register in the timer C */
-#define HRTIM_TIMERUPDATE_D         (HRTIM_CR2_TDSWU)    /*!< Force an immediate transfer from the preload to the ready_to_send register in the timer D */
-#define HRTIM_TIMERUPDATE_E         (HRTIM_CR2_TESWU)    /*!< Force an immediate transfer from the preload to the ready_to_send register in the timer E */
+#define HRTIM_TIMERUPDATE_MASTER    (HRTIM_CR2_MSWU)     /*!< Force an immediate transfer from the preload to the active register in the master timer */
+#define HRTIM_TIMERUPDATE_A         (HRTIM_CR2_TASWU)    /*!< Force an immediate transfer from the preload to the active register in the timer A */
+#define HRTIM_TIMERUPDATE_B         (HRTIM_CR2_TBSWU)    /*!< Force an immediate transfer from the preload to the active register in the timer B */
+#define HRTIM_TIMERUPDATE_C         (HRTIM_CR2_TCSWU)    /*!< Force an immediate transfer from the preload to the active register in the timer C */
+#define HRTIM_TIMERUPDATE_D         (HRTIM_CR2_TDSWU)    /*!< Force an immediate transfer from the preload to the active register in the timer D */
+#define HRTIM_TIMERUPDATE_E         (HRTIM_CR2_TESWU)    /*!< Force an immediate transfer from the preload to the active register in the timer E */
 /**
   * @}
   */
@@ -1804,7 +1803,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining the level of a timer output
   */
-#define HRTIM_OUTPUTLEVEL_ACTIVE     (0x00000001U) /*!< Force the output to its ready_to_send state */
+#define HRTIM_OUTPUTLEVEL_ACTIVE     (0x00000001U) /*!< Force the output to its active state */
 #define HRTIM_OUTPUTLEVEL_INACTIVE   (0x00000002U) /*!< Force the output to its inactive state */
 
 #define IS_HRTIM_OUTPUTLEVEL(OUTPUTLEVEL)\
@@ -1818,7 +1817,7 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   * @{
   * @brief Constants defining the state of a timer output
   */
-#define HRTIM_OUTPUTSTATE_IDLE     (0x00000001U)  /*!< Main operating mode, where the output can take the ready_to_send or
+#define HRTIM_OUTPUTSTATE_IDLE     (0x00000001U)  /*!< Main operating mode, where the output can take the active or
                                                               inactive level as programmed in the crossbar unit */
 #define HRTIM_OUTPUTSTATE_RUN      (0x00000002U)  /*!< Default operating state (e.g. after an HRTIM reset, when the
                                                               outputs are disabled by software or during a burst mode operation */
@@ -1855,8 +1854,8 @@ typedef void (* pHRTIM_TIMxCallbackTypeDef)(HRTIM_HandleTypeDef *hhrtim,    /*!<
   *        push-pull mode balanced fault mode or delayed idle mode, when the
   *        protection was triggered
   */
-#define HRTIM_PUSHPULL_IDLESTATUS_OUTPUT1    0x00000000U               /*!< Protection occurred when the output 1 was ready_to_send and output 2 forced inactive */
-#define HRTIM_PUSHPULL_IDLESTATUS_OUTPUT2   (HRTIM_TIMISR_IPPSTAT)     /*!< Protection occurred when the output 2 was ready_to_send and output 1 forced inactive */
+#define HRTIM_PUSHPULL_IDLESTATUS_OUTPUT1    0x00000000U               /*!< Protection occurred when the output 1 was active and output 2 forced inactive */
+#define HRTIM_PUSHPULL_IDLESTATUS_OUTPUT2   (HRTIM_TIMISR_IPPSTAT)     /*!< Protection occurred when the output 2 was active and output 1 forced inactive */
 /**
   * @}
   */
@@ -3642,5 +3641,3 @@ HAL_StatusTypeDef HAL_HRTIM_TIMxUnRegisterCallback(HRTIM_HandleTypeDef *       h
 #endif
 
 #endif /* STM32H7xx_HAL_HRTIM_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -228,8 +227,8 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 /** @defgroup DCMI_PIXCK_Polarity DCMI PIXCK Polarity
   * @{
   */
-#define DCMI_PCKPOLARITY_FALLING    (0x00000000U)      /*!< Pixel clock ready_to_send on Falling edge */
-#define DCMI_PCKPOLARITY_RISING     ((uint32_t)DCMI_CR_PCKPOL)  /*!< Pixel clock ready_to_send on Rising edge  */
+#define DCMI_PCKPOLARITY_FALLING    (0x00000000U)      /*!< Pixel clock active on Falling edge */
+#define DCMI_PCKPOLARITY_RISING     ((uint32_t)DCMI_CR_PCKPOL)  /*!< Pixel clock active on Rising edge  */
 
 /**
   * @}
@@ -238,8 +237,8 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 /** @defgroup DCMI_VSYNC_Polarity DCMI VSYNC Polarity
   * @{
   */
-#define DCMI_VSPOLARITY_LOW     (0x00000000U)     /*!< Vertical synchronization ready_to_send Low  */
-#define DCMI_VSPOLARITY_HIGH    ((uint32_t)DCMI_CR_VSPOL)  /*!< Vertical synchronization ready_to_send High */
+#define DCMI_VSPOLARITY_LOW     (0x00000000U)     /*!< Vertical synchronization active Low  */
+#define DCMI_VSPOLARITY_HIGH    ((uint32_t)DCMI_CR_VSPOL)  /*!< Vertical synchronization active High */
 
 /**
   * @}
@@ -248,8 +247,8 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 /** @defgroup DCMI_HSYNC_Polarity DCMI HSYNC Polarity
   * @{
   */
-#define DCMI_HSPOLARITY_LOW     (0x00000000U)     /*!< Horizontal synchronization ready_to_send Low  */
-#define DCMI_HSPOLARITY_HIGH    ((uint32_t)DCMI_CR_HSPOL)  /*!< Horizontal synchronization ready_to_send High */
+#define DCMI_HSPOLARITY_LOW     (0x00000000U)     /*!< Horizontal synchronization active Low  */
+#define DCMI_HSPOLARITY_HIGH    ((uint32_t)DCMI_CR_HSPOL)  /*!< Horizontal synchronization active High */
 
 /**
   * @}
@@ -325,8 +324,8 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
 /**
   * @brief   DCMI SR register
   */
-#define DCMI_FLAG_HSYNC     ((uint32_t)DCMI_SR_INDEX|DCMI_SR_HSYNC) /*!< HSYNC pin state (ready_to_send line / synchronization between lines)   */
-#define DCMI_FLAG_VSYNC     ((uint32_t)DCMI_SR_INDEX|DCMI_SR_VSYNC) /*!< VSYNC pin state (ready_to_send frame / synchronization between frames) */
+#define DCMI_FLAG_HSYNC     ((uint32_t)DCMI_SR_INDEX|DCMI_SR_HSYNC) /*!< HSYNC pin state (active line / synchronization between lines)   */
+#define DCMI_FLAG_VSYNC     ((uint32_t)DCMI_SR_INDEX|DCMI_SR_VSYNC) /*!< VSYNC pin state (active frame / synchronization between frames) */
 #define DCMI_FLAG_FNE       ((uint32_t)DCMI_SR_INDEX|DCMI_SR_FNE)   /*!< FIFO not empty flag                                                 */
 /**
   * @brief   DCMI RIS register
@@ -433,8 +432,8 @@ typedef  void (*pDCMI_CallbackTypeDef)(DCMI_HandleTypeDef * hdcmi); /*!< pointer
   * @param  __HANDLE__ DCMI handle
   * @param  __FLAG__ Get the specified flag.
   *         This parameter can be one of the following values (no combination allowed)
-  *            @arg DCMI_FLAG_HSYNC: HSYNC pin state (ready_to_send line / synchronization between lines)
-  *            @arg DCMI_FLAG_VSYNC: VSYNC pin state (ready_to_send frame / synchronization between frames)
+  *            @arg DCMI_FLAG_HSYNC: HSYNC pin state (active line / synchronization between lines)
+  *            @arg DCMI_FLAG_VSYNC: VSYNC pin state (active frame / synchronization between frames)
   *            @arg DCMI_FLAG_FNE: FIFO empty flag
   *            @arg DCMI_FLAG_FRAMERI: Frame capture complete flag mask
   *            @arg DCMI_FLAG_OVRRI: Overrun flag mask
@@ -668,4 +667,3 @@ uint32_t              HAL_DCMI_GetError(DCMI_HandleTypeDef *hdcmi);
 
 #endif /* STM32H7xx_HAL_DCMI_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

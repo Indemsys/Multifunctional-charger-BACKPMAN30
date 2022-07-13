@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -522,9 +521,9 @@ typedef struct
   * @{
   */
 #define LL_RTC_TAMPER_FILTER_DISABLE       0x00000000U             /*!< Tamper filter is disabled */
-#define LL_RTC_TAMPER_FILTER_2SAMPLE       TAMP_FLTCR_TAMPFLT_0    /*!< Tamper is activated after 2 consecutive samples at the ready_to_send level */
-#define LL_RTC_TAMPER_FILTER_4SAMPLE       TAMP_FLTCR_TAMPFLT_1    /*!< Tamper is activated after 4 consecutive samples at the ready_to_send level */
-#define LL_RTC_TAMPER_FILTER_8SAMPLE       TAMP_FLTCR_TAMPFLT      /*!< Tamper is activated after 8 consecutive samples at the ready_to_send level. */
+#define LL_RTC_TAMPER_FILTER_2SAMPLE       TAMP_FLTCR_TAMPFLT_0    /*!< Tamper is activated after 2 consecutive samples at the active level */
+#define LL_RTC_TAMPER_FILTER_4SAMPLE       TAMP_FLTCR_TAMPFLT_1    /*!< Tamper is activated after 4 consecutive samples at the active level */
+#define LL_RTC_TAMPER_FILTER_8SAMPLE       TAMP_FLTCR_TAMPFLT      /*!< Tamper is activated after 8 consecutive samples at the active level. */
 /**
   * @}
   */
@@ -629,9 +628,9 @@ typedef struct
   * @{
   */
 #define LL_RTC_TAMPER_FILTER_DISABLE       0x00000000U                              /*!< Tamper filter is disabled */
-#define LL_RTC_TAMPER_FILTER_2SAMPLE       RTC_TAMPCR_TAMPFLT_0    /*!< Tamper is activated after 2 consecutive samples at the ready_to_send level */
-#define LL_RTC_TAMPER_FILTER_4SAMPLE       RTC_TAMPCR_TAMPFLT_1    /*!< Tamper is activated after 4 consecutive samples at the ready_to_send level */
-#define LL_RTC_TAMPER_FILTER_8SAMPLE       RTC_TAMPCR_TAMPFLT      /*!< Tamper is activated after 8 consecutive samples at the ready_to_send level. */
+#define LL_RTC_TAMPER_FILTER_2SAMPLE       RTC_TAMPCR_TAMPFLT_0    /*!< Tamper is activated after 2 consecutive samples at the active level */
+#define LL_RTC_TAMPER_FILTER_4SAMPLE       RTC_TAMPCR_TAMPFLT_1    /*!< Tamper is activated after 4 consecutive samples at the active level */
+#define LL_RTC_TAMPER_FILTER_8SAMPLE       RTC_TAMPCR_TAMPFLT      /*!< Tamper is activated after 8 consecutive samples at the active level. */
 /**
   * @}
   */
@@ -674,13 +673,13 @@ typedef struct
   * @{
   */
 #if defined(TAMP_ATCR1_TAMP1AM)
-#define LL_RTC_TAMPER_ATAMP_TAMP1AM               TAMP_ATCR1_TAMP1AM /*!< tamper 1 is ready_to_send */
+#define LL_RTC_TAMPER_ATAMP_TAMP1AM               TAMP_ATCR1_TAMP1AM /*!< tamper 1 is active */
 #endif /* TAMP_ATCR1_TAMP1AM */
 #if defined(TAMP_ATCR1_TAMP2AM)
-#define LL_RTC_TAMPER_ATAMP_TAMP2AM               TAMP_ATCR1_TAMP2AM /*!< tamper 2 is ready_to_send */
+#define LL_RTC_TAMPER_ATAMP_TAMP2AM               TAMP_ATCR1_TAMP2AM /*!< tamper 2 is active */
 #endif /* TAMP_ATCR1_TAMP2AM */
 #if defined(TAMP_ATCR1_TAMP3AM)
-#define LL_RTC_TAMPER_ATAMP_TAMP3AM               TAMP_ATCR1_TAMP3AM /*!< tamper 3 is ready_to_send */
+#define LL_RTC_TAMPER_ATAMP_TAMP3AM               TAMP_ATCR1_TAMP3AM /*!< tamper 3 is active */
 #endif /* TAMP_ATCR1_TAMP3AM */
 /**
   * @}
@@ -2757,7 +2756,7 @@ __STATIC_INLINE void LL_RTC_TS_Disable(RTC_TypeDef *RTCx)
 }
 
 /**
-  * @brief  Set Time-stamp event ready_to_send edge
+  * @brief  Set Time-stamp event active edge
   * @note   Bit is write-protected. @ref LL_RTC_DisableWriteProtection function should be called before.
   * @note TSE must be reset when TSEDGE is changed to avoid unwanted TSF setting
   * @rmtoll RTC_CR           TSEDGE        LL_RTC_TS_SetActiveEdge
@@ -2773,7 +2772,7 @@ __STATIC_INLINE void LL_RTC_TS_SetActiveEdge(RTC_TypeDef *RTCx, uint32_t Edge)
 }
 
 /**
-  * @brief  Get Time-stamp event ready_to_send edge
+  * @brief  Get Time-stamp event active edge
   * @note   Bit is write-protected. @ref LL_RTC_DisableWriteProtection function should be called before.
   * @rmtoll RTC_CR           TSEDGE        LL_RTC_TS_GetActiveEdge
   * @param  RTCx RTC Instance
@@ -3776,7 +3775,7 @@ __STATIC_INLINE uint32_t LL_RTC_BAK_GetRegister(RTC_TypeDef *RTCx, uint32_t Back
 }
 #endif /* RTC_BKP0R */
 
-#if defined(TAMP_BKP0R_BKP)
+#if defined(TAMP_BKP0R)
 /**
   * @brief  Writes a data in a specified Backup data register.
   * @rmtoll TAMP_BKPxR        BKP           LL_RTC_BKP_SetRegister
@@ -3877,7 +3876,7 @@ __STATIC_INLINE uint32_t LL_RTC_BKP_GetRegister(TAMP_TypeDef *TAMPx, uint32_t Ba
   /* Read the specified register */
   return (*(__IO uint32_t *)tmp);
 }
-#endif /* TAMP_BKP0R_BKP */
+#endif /* TAMP_BKP0R */
 
 /**
   * @}
@@ -5152,11 +5151,11 @@ __STATIC_INLINE uint32_t LL_RTC_IsEnabledIT_TAMP3(TAMP_TypeDef *TAMPx)
   * @{
   */
 /**
-  * @brief  Enable tamper ready_to_send mode.
+  * @brief  Enable tamper active mode.
   * @rmtoll TAMP_ATCR1     TAMP1AM       LL_RTC_TAMPER_ATAMP_EnableActiveMode
   * @rmtoll TAMP_ATCR1     TAMP2AM       LL_RTC_TAMPER_ATAMP_EnableActiveMode
   * @rmtoll TAMP_ATCR1     TAMPxAM       LL_RTC_TAMPER_ATAMP_EnableActiveMode
-  * @param  Tamper to configure as ready_to_send. This parameter can be a combination of the following values:
+  * @param  Tamper to configure as active. This parameter can be a combination of the following values:
   *         @arg @ref RTC_LL_EC_ACTIVE_MODE
   *
   * @retval None
@@ -5167,11 +5166,11 @@ __STATIC_INLINE void LL_RTC_TAMPER_ATAMP_EnableActiveMode(uint32_t Tamper)
 }
 
 /**
-  * @brief  Disable tamper ready_to_send mode.
+  * @brief  Disable tamper active mode.
   * @rmtoll TAMP_ATCR1     TAMP1AM       LL_RTC_TAMPER_ATAMP_DisableActiveMode
   * @rmtoll TAMP_ATCR1     TAMP2AM       LL_RTC_TAMPER_ATAMP_DisableActiveMode
   * @rmtoll TAMP_ATCR1     TAMPxAM       LL_RTC_TAMPER_ATAMP_DisableActiveMode
-  * @param  Tamper to configure as ready_to_send. This parameter can be a combination of the following values:
+  * @param  Tamper to configure as active. This parameter can be a combination of the following values:
   *         @arg @ref RTC_LL_EC_ACTIVE_MODE
   *
   * @retval None
@@ -5182,7 +5181,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_ATAMP_DisableActiveMode(uint32_t Tamper)
 }
 
 /**
-  * @brief  Enable ready_to_send tamper filter.
+  * @brief  Enable active tamper filter.
   * @rmtoll TAMP_ATCR1     FLTEN         LL_RTC_TAMPER_ATAMP_EnableFilter
   * @retval None
   */
@@ -5192,7 +5191,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_ATAMP_EnableFilter(void)
 }
 
 /**
-  * @brief  Disable ready_to_send tamper filter.
+  * @brief  Disable active tamper filter.
   * @rmtoll TAMP_ATCR1     FLTEN         LL_RTC_TAMPER_ATAMP_DisableFilter
   * @retval None
   */
@@ -5246,7 +5245,7 @@ __STATIC_INLINE uint32_t LL_RTC_TAMPER_ATAMP_GetAsyncPrescaler(void)
 }
 
 /**
-  * @brief  Enable ready_to_send tamper output sharing.
+  * @brief  Enable active tamper output sharing.
   * @rmtoll TAMP_ATCR1     ATOSHARE      LL_RTC_TAMPER_ATAMP_EnableOutputSharing
   * @retval None
   */
@@ -5256,7 +5255,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_ATAMP_EnableOutputSharing(void)
 }
 
 /**
-  * @brief  Disable ready_to_send tamper output sharing.
+  * @brief  Disable active tamper output sharing.
   * @rmtoll TAMP_ATCR1     ATOSHARE      LL_RTC_TAMPER_ATAMP_DisableOutputSharing
   * @retval None
   */
@@ -5292,7 +5291,7 @@ __STATIC_INLINE uint32_t LL_RTC_TAMPER_ATAMP_GetSharedOuputSelection(void)
 
 #if defined(ATSEEDR)
 /**
-  * @brief  Write ready_to_send tamper seed.
+  * @brief  Write active tamper seed.
   * @rmtoll TAMP_ATSEEDR   SEED          LL_RTC_TAMPER_ATAMP_WriteSeed
   * @param  Seed
   * @retval None
@@ -5305,7 +5304,7 @@ __STATIC_INLINE void LL_RTC_TAMPER_ATAMP_WriteSeed(uint32_t Seed)
 
 #if defined(TAMP_ATOR_INITS)
 /**
-  * @brief  Get ready_to_send tamper initialization status flag.
+  * @brief  Get active tamper initialization status flag.
   * @rmtoll TAMP_ATOR      INITS         LL_RTC_IsActiveFlag_ATAMP_INITS
   * @retval State of bit (1 or 0).
   */
@@ -5315,7 +5314,7 @@ __STATIC_INLINE uint32_t LL_RTC_IsActiveFlag_ATAMP_INITS(void)
 }
 
 /**
-  * @brief  Get ready_to_send tamper seed running status flag.
+  * @brief  Get active tamper seed running status flag.
   * @rmtoll TAMP_ATOR      INITS         LL_RTC_IsActiveFlag_ATAMP_INITS
   * @retval State of bit (1 or 0).
   */
@@ -5375,4 +5374,3 @@ ErrorStatus LL_RTC_WaitForSynchro(RTC_TypeDef *RTCx);
 
 #endif /* STM32H7xx_LL_RTC_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

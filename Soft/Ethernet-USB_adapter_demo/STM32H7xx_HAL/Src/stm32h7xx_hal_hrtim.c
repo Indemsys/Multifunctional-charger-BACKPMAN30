@@ -49,6 +49,18 @@
   *           + Waveform Timer Burst Status Get
   *           + Waveform Timer Push-Pull Status Get
   *           + Peripheral State Get
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
 ==============================================================================
                       ##### Simple mode v.s. waveform mode #####
@@ -70,6 +82,8 @@
        operates in waveform mode, all the HRTIM features are accessible without
        any restriction. HRTIM waveform modes are managed through the set of
        functions named HAL_HRTIM_Waveform<Function>
+
+==============================================================================
                       ##### How to use this driver #####
 ==============================================================================
     [..]
@@ -184,7 +198,7 @@
               (++)HAL_HRTIM_DeadTimeConfig(): configures the dead-time insertion
                   unit for a HRTIM timer. Allows to generate a couple of
                   complementary signals from a single reference waveform,
-                  with programmable delays between ready_to_send state.
+                  with programmable delays between active state.
               (++)HAL_HRTIM_ChopperModeConfig(): configures the parameters of
                   the high-frequency carrier signal added on top of the timing
                   unit output. Chopper mode can be enabled or disabled for each
@@ -207,13 +221,13 @@
                   timer related events).
               (++)HAL_HRTIM_WaveformOutputConfig(): configuration of a HRTIM timer
                   output mainly consists in:
-                (+++)Setting the output polarity (ready_to_send high or ready_to_send low),
+                (+++)Setting the output polarity (active high or active low),
                 (+++)Defining the set/reset crossbar for the output,
-                (+++)Specifying the fault level (ready_to_send or inactive) in IDLE and FAULT states.,
+                (+++)Specifying the fault level (active or inactive) in IDLE and FAULT states.,
 
      (#) Set waveform timer output(s) level
               (++)HAL_HRTIM_WaveformSetOutputLevel(): forces the output to its
-                  ready_to_send or inactive level. For example, when deadtime insertion
+                  active or inactive level. For example, when deadtime insertion
                   is enabled it is necessary to force the output level by software
                   to have the outputs in a complementary state as soon as the RUN mode is entered.
 
@@ -254,13 +268,13 @@
               (++)HAL_HRTIM_GetCurrentPushPullStatus(): when the push-pull mode
                  is enabled for the HRTIM timer (see HAL_HRTIM_WaveformTimerConfig()),
                  the push-pull status indicates on which output the signal is currently
-                 ready_to_send (e.g signal applied on output 1 and output 2 forced
+                 active (e.g signal applied on output 1 and output 2 forced
                  inactive or vice versa).
              (++)HAL_HRTIM_GetIdlePushPullStatus(): when the push-pull mode
                  is enabled for the HRTIM timer (see HAL_HRTIM_WaveformTimerConfig()),
                  the idle push-pull status indicates during which period the
                  delayed protection request occurred (e.g. protection occurred
-                 when the output 1 was ready_to_send and output 2 forced inactive or
+                 when the output 1 was active and output 2 forced inactive or
                  vice versa).
 
      (#) Some functions can be used any time to retrieve actual HRTIM status
@@ -339,18 +353,6 @@
      callbacks are set to the corresponding weak functions.
 
   @endverbatim
-
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -1475,7 +1477,7 @@ HAL_StatusTypeDef HAL_HRTIM_SimpleOCStop(HRTIM_HandleTypeDef * hhrtim,
   *                    @arg HRTIM_OUTPUT_TE2: Timer E - Output 2
   * @note Interrupt enabling depends on the chosen output compare mode
   *          Output toggle: compare match interrupt is enabled
-  *          Output set ready_to_send:  output set interrupt is enabled
+  *          Output set active:  output set interrupt is enabled
   *          Output set inactive:  output reset interrupt is enabled
   * @retval HAL status
   */
@@ -1601,7 +1603,7 @@ HAL_StatusTypeDef HAL_HRTIM_SimpleOCStop_IT(HRTIM_HandleTypeDef * hhrtim,
   *                     from source to destination
   * @note  DMA request enabling depends on the chosen output compare mode
   *          Output toggle: compare match DMA request is enabled
-  *          Output set ready_to_send:  output set DMA request is enabled
+  *          Output set active:  output set DMA request is enabled
   *          Output set inactive:  output reset DMA request is enabled
   * @retval HAL status
   */
@@ -1618,11 +1620,11 @@ HAL_StatusTypeDef HAL_HRTIM_SimpleOCStart_DMA(HRTIM_HandleTypeDef * hhrtim,
   /* Check the parameters */
   assert_param(IS_HRTIM_TIMER_OUTPUT(TimerIdx, OCChannel));
 
-  if((hhrtim->State == HAL_HRTIM_STATE_BUSY))
+  if(hhrtim->State == HAL_HRTIM_STATE_BUSY)
   {
      return HAL_BUSY;
   }
-  if((hhrtim->State == HAL_HRTIM_STATE_READY))
+  if(hhrtim->State == HAL_HRTIM_STATE_READY)
   {
     if((SrcAddr == 0U ) || (DestAddr == 0U ) || (Length == 0U))
     {
@@ -2235,11 +2237,11 @@ HAL_StatusTypeDef HAL_HRTIM_SimplePWMStart_DMA(HRTIM_HandleTypeDef * hhrtim,
   /* Check the parameters */
   assert_param(IS_HRTIM_TIMER_OUTPUT(TimerIdx, PWMChannel));
 
-  if((hhrtim->State == HAL_HRTIM_STATE_BUSY))
+  if(hhrtim->State == HAL_HRTIM_STATE_BUSY)
   {
      return HAL_BUSY;
   }
-  if((hhrtim->State == HAL_HRTIM_STATE_READY))
+  if(hhrtim->State == HAL_HRTIM_STATE_READY)
   {
     if((SrcAddr == 0U ) || (DestAddr == 0U ) || (Length == 0U))
     {
@@ -2554,7 +2556,7 @@ HAL_StatusTypeDef HAL_HRTIM_SimpleCaptureChannelConfig(HRTIM_HandleTypeDef * hhr
   *                    @arg HRTIM_CAPTUREUNIT_2: Capture unit 2
   * @retval HAL status
   * @note  The external event triggering the capture is available for all timing
-  *        units. It can be used directly and is ready_to_send as soon as the timing
+  *        units. It can be used directly and is active as soon as the timing
   *        unit counter is enabled.
   */
 HAL_StatusTypeDef HAL_HRTIM_SimpleCaptureStart(HRTIM_HandleTypeDef * hhrtim,
@@ -4902,7 +4904,7 @@ HAL_StatusTypeDef HAL_HRTIM_WaveformOutputConfig(HRTIM_HandleTypeDef * hhrtim,
 }
 
 /**
-  * @brief  Force the timer output to its ready_to_send or inactive state
+  * @brief  Force the timer output to its active or inactive state
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  TimerIdx Timer index
   *                   This parameter can be one of the following values:
@@ -4923,9 +4925,9 @@ HAL_StatusTypeDef HAL_HRTIM_WaveformOutputConfig(HRTIM_HandleTypeDef * hhrtim,
   *                    @arg HRTIM_OUTPUT_TD2: Timer D - Output 2
   *                    @arg HRTIM_OUTPUT_TE1: Timer E - Output 1
   *                    @arg HRTIM_OUTPUT_TE2: Timer E - Output 2
-  * @param OutputLevel indicates whether the output is forced to its ready_to_send or inactive level
+  * @param OutputLevel indicates whether the output is forced to its active or inactive level
   *                    This parameter can be one of the following values:
-  *                    @arg HRTIM_OUTPUTLEVEL_ACTIVE: output is forced to its ready_to_send level
+  *                    @arg HRTIM_OUTPUTLEVEL_ACTIVE: output is forced to its active level
   *                    @arg HRTIM_OUTPUTLEVEL_INACTIVE: output is forced to its inactive level
   * @retval HAL status
   * @note The 'software set/reset trigger' bit in the output set/reset registers
@@ -4961,7 +4963,7 @@ HAL_StatusTypeDef HAL_HRTIM_WaveformSetOutputLevel(HRTIM_HandleTypeDef * hhrtim,
     {
       if (OutputLevel == HRTIM_OUTPUTLEVEL_ACTIVE)
       {
-        /* Force output to its ready_to_send state */
+        /* Force output to its active state */
         SET_BIT(hhrtim->Instance->sTimerxRegs[TimerIdx].SETx1R,HRTIM_SET1R_SST);
       }
       else
@@ -4980,7 +4982,7 @@ HAL_StatusTypeDef HAL_HRTIM_WaveformSetOutputLevel(HRTIM_HandleTypeDef * hhrtim,
     {
       if (OutputLevel == HRTIM_OUTPUTLEVEL_ACTIVE)
       {
-        /* Force output to its ready_to_send state */
+        /* Force output to its active state */
         SET_BIT(hhrtim->Instance->sTimerxRegs[TimerIdx].SETx2R, HRTIM_SET2R_SST);
       }
       else
@@ -5329,7 +5331,7 @@ HAL_StatusTypeDef HAL_HRTIM_WaveformCountStart_DMA(HRTIM_HandleTypeDef * hhrtim,
   /* Check the parameters */
   assert_param(IS_HRTIM_TIMERID(Timers));
 
-  if((hhrtim->State == HAL_HRTIM_STATE_BUSY))
+  if(hhrtim->State == HAL_HRTIM_STATE_BUSY)
   {
      return HAL_BUSY;
   }
@@ -5764,11 +5766,11 @@ HAL_StatusTypeDef HAL_HRTIM_BurstDMATransfer(HRTIM_HandleTypeDef *hhrtim,
   /* Check the parameters */
   assert_param(IS_HRTIM_TIMERINDEX(TimerIdx));
 
-  if((hhrtim->State == HAL_HRTIM_STATE_BUSY))
+  if(hhrtim->State == HAL_HRTIM_STATE_BUSY)
   {
      return HAL_BUSY;
   }
-  if((hhrtim->State == HAL_HRTIM_STATE_READY))
+  if(hhrtim->State == HAL_HRTIM_STATE_READY)
   {
     if((BurstBufferAddress == 0U ) || (BurstBufferLength == 0U))
     {
@@ -5825,7 +5827,7 @@ HAL_StatusTypeDef HAL_HRTIM_BurstDMATransfer(HRTIM_HandleTypeDef *hhrtim,
 }
 
 /**
-  * @brief  Enable the transfer from preload to ready_to_send registers for one
+  * @brief  Enable the transfer from preload to active registers for one
   *         or several timing units (including master timer).
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  Timers Timer(s) concerned by the register preload enabling command
@@ -5861,7 +5863,7 @@ HAL_StatusTypeDef HAL_HRTIM_UpdateEnable(HRTIM_HandleTypeDef *hhrtim,
   }
 
 /**
-  * @brief  Disable the transfer from preload to ready_to_send registers for one
+  * @brief  Disable the transfer from preload to active registers for one
   *         or several timing units (including master timer).
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  Timers Timer(s) concerned by the register preload disabling command
@@ -5991,7 +5993,7 @@ uint32_t HAL_HRTIM_GetCapturedValue(HRTIM_HandleTypeDef * hhrtim,
 
 
 /**
-  * @brief  Return actual level (ready_to_send or inactive) of the designated output
+  * @brief  Return actual level (active or inactive) of the designated output
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  TimerIdx Timer index
   *                   This parameter can be one of the following values:
@@ -6115,6 +6117,9 @@ uint32_t HAL_HRTIM_WaveformGetOutputState(HRTIM_HandleTypeDef * hhrtim,
   /* Check parameters */
   assert_param(IS_HRTIM_TIMER_OUTPUT(TimerIdx, Output));
 
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(TimerIdx);
+
   /* Set output state according to output control status and output disable status */
   switch (Output)
   {
@@ -6217,7 +6222,7 @@ uint32_t HAL_HRTIM_WaveformGetOutputState(HRTIM_HandleTypeDef * hhrtim,
 }
 
 /**
-  * @brief  Return the level (ready_to_send or inactive) of the designated output
+  * @brief  Return the level (active or inactive) of the designated output
   *         when the delayed protection was triggered.
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  TimerIdx Timer index
@@ -6261,7 +6266,7 @@ uint32_t HAL_HRTIM_GetDelayedProtectionStatus(HRTIM_HandleTypeDef * hhrtim,
     {
       if ((hhrtim->Instance->sTimerxRegs[TimerIdx].TIMxISR & HRTIM_TIMISR_O1STAT) != (uint32_t)RESET)
       {
-        /* Output 1 was ready_to_send when the delayed idle protection was triggered */
+        /* Output 1 was active when the delayed idle protection was triggered */
         delayed_protection_status = HRTIM_OUTPUTLEVEL_ACTIVE;
       }
       else
@@ -6280,7 +6285,7 @@ uint32_t HAL_HRTIM_GetDelayedProtectionStatus(HRTIM_HandleTypeDef * hhrtim,
     {
       if ((hhrtim->Instance->sTimerxRegs[TimerIdx].TIMxISR & HRTIM_TIMISR_O2STAT) != (uint32_t)RESET)
       {
-        /* Output 2 was ready_to_send when the delayed idle protection was triggered */
+        /* Output 2 was active when the delayed idle protection was triggered */
         delayed_protection_status = HRTIM_OUTPUTLEVEL_ACTIVE;
       }
       else
@@ -6311,7 +6316,7 @@ uint32_t HAL_HRTIM_GetDelayedProtectionStatus(HRTIM_HandleTypeDef * hhrtim,
 }
 
 /**
-  * @brief  Return the actual status (ready_to_send or inactive) of the burst mode controller
+  * @brief  Return the actual status (active or inactive) of the burst mode controller
   * @param  hhrtim pointer to HAL HRTIM handle
   * @retval Burst mode controller status
   */
@@ -6326,7 +6331,7 @@ uint32_t HAL_HRTIM_GetBurstStatus(HRTIM_HandleTypeDef * hhrtim)
 }
 
 /**
-  * @brief  Indicate on which output the signal is currently ready_to_send (when the
+  * @brief  Indicate on which output the signal is currently active (when the
   *         push pull mode is enabled).
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  TimerIdx Timer index
@@ -6394,8 +6399,8 @@ uint32_t HAL_HRTIM_GetIdlePushPullStatus(HRTIM_HandleTypeDef * hhrtim,
  *          14 interrupts can be generated by each timing unit:
  *            - Delayed protection triggered
  *            - Counter reset or roll-over event
- *            - Output 1 and output 2 reset (transition ready_to_send to inactive)
- *            - Output 1 and output 2 set (transition inactive to ready_to_send)
+ *            - Output 1 and output 2 reset (transition active to inactive)
+ *            - Output 1 and output 2 set (transition inactive to active)
  *            - Capture 1 and 2 events
  *            - Timing unit registers update
  *            - Repetition event
@@ -7928,7 +7933,7 @@ static void  HRTIM_OutputConfig(HRTIM_HandleTypeDef * hhrtim,
   /* Set the burst mode entry mode : deadtime insertion when entering the idle
      state during a burst mode operation is allowed only under the following
      conditions:
-     - the outputs is ready_to_send during the burst mode (IDLES=1U)
+     - the outputs is active during the burst mode (IDLES=1U)
      - positive deadtimes (SDTR/SDTF set to 0U)
   */
   if ((pOutputCfg->IdleLevel == HRTIM_OUTPUTIDLELEVEL_ACTIVE) &&
@@ -8495,7 +8500,7 @@ static uint32_t GetTimerIdxFromDMAHandle(HRTIM_HandleTypeDef * hhrtim,
 }
 
 /**
-  * @brief  Force an immediate transfer from the preload to the ready_to_send
+  * @brief  Force an immediate transfer from the preload to the active
   *         registers.
   * @param  hhrtim pointer to HAL HRTIM handle
   * @param  TimerIdx Timer index
@@ -9290,5 +9295,3 @@ static void HRTIM_BurstDMACplt(DMA_HandleTypeDef *hdma)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

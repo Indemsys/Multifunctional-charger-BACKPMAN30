@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -377,10 +376,10 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @{
   * @brief Constants defining the source and event to be sent on the synchronization output.
   */
-#define LL_HRTIM_SYNCOUT_SRC_MASTER_START  0x00000000U                        /*!< A pulse is sent on the SYNCOUT output upon master timer start event */
-#define LL_HRTIM_SYNCOUT_SRC_MASTER_CMP1   (HRTIM_MCR_SYNC_SRC_0)                         /*!< A pulse is sent on the SYNCOUT output upon master timer compare 1 event*/
-#define LL_HRTIM_SYNCOUT_SRC_TIMA_START    (HRTIM_MCR_SYNC_SRC_1)                         /*!< A pulse is sent on the SYNCOUT output upon timer A start or reset events */
-#define LL_HRTIM_SYNCOUT_SRC_TIMA_CMP1     (HRTIM_MCR_SYNC_SRC_1 | HRTIM_MCR_SYNC_SRC_0)  /*!< A pulse is sent on the SYNCOUT output upon timer A compare 1 event */
+#define LL_HRTIM_SYNCOUT_SRC_MASTER_START  0x00000000U                                    /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon master timer start event      */
+#define LL_HRTIM_SYNCOUT_SRC_MASTER_CMP1   (HRTIM_MCR_SYNC_SRC_0)                         /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon master timer compare 1 event  */
+#define LL_HRTIM_SYNCOUT_SRC_TIMA_START    (HRTIM_MCR_SYNC_SRC_1)                         /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon timer A start or reset events */
+#define LL_HRTIM_SYNCOUT_SRC_TIMA_CMP1     (HRTIM_MCR_SYNC_SRC_1 | HRTIM_MCR_SYNC_SRC_0)  /*!< A pulse is sent on HRTIM_SCOUT output and hrtim_out_sync2 upon timer A compare 1 event       */
 /**
   * @}
   */
@@ -489,7 +488,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @{
   * @brief Constants defining the state of an HRTIM output.
   */
-#define LL_HRTIM_OUTPUTSTATE_IDLE          ((uint32_t)0x00000001U) /*!< Main operating mode, where the output can take the ready_to_send or inactive level as programmed in the crossbar unit */
+#define LL_HRTIM_OUTPUTSTATE_IDLE          ((uint32_t)0x00000001U) /*!< Main operating mode, where the output can take the active or inactive level as programmed in the crossbar unit */
 #define LL_HRTIM_OUTPUTSTATE_RUN           ((uint32_t)0x00000002U) /*!< Default operating state (e.g. after an HRTIM reset, when the outputs are disabled by software or during a burst mode operation) */
 #define LL_HRTIM_OUTPUTSTATE_FAULT         ((uint32_t)0x00000003U) /*!< Safety state, entered in case of a shut-down request on FAULTx inputs */
 /**
@@ -510,7 +509,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
 
 /** @defgroup HRTIM_LL_EC_ADCTRIG_UPDATE ADC TRIGGER UPDATE
   * @{
-  * @brief constants defining the source triggering the update of the HRTIM_ADCxR register (transfer from preload to ready_to_send register).
+  * @brief constants defining the source triggering the update of the HRTIM_ADCxR register (transfer from preload to active register).
   */
 #define LL_HRTIM_ADCTRIG_UPDATE_MASTER  0x00000000U                       /*!< HRTIM_ADCxR register update is triggered by the Master timer */
 #define LL_HRTIM_ADCTRIG_UPDATE_TIMER_A (HRTIM_CR1_ADC1USRC_0)                        /*!< HRTIM_ADCxR register update is triggered by the Timer A */
@@ -739,24 +738,24 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
 #define LL_HRTIM_CAPTURETRIG_EEV_8        HRTIM_CPT1CR_EXEV8CPT  /*!< The External event 8 triggers the Capture */
 #define LL_HRTIM_CAPTURETRIG_EEV_9        HRTIM_CPT1CR_EXEV9CPT  /*!< The External event 9 triggers the Capture */
 #define LL_HRTIM_CAPTURETRIG_EEV_10       HRTIM_CPT1CR_EXEV10CPT /*!< The External event 10 triggers the Capture */
-#define LL_HRTIM_CAPTURETRIG_TA1_SET      HRTIM_CPT1CR_TA1SET    /*!< Capture is triggered by TA1 output inactive to ready_to_send transition */
-#define LL_HRTIM_CAPTURETRIG_TA1_RESET    HRTIM_CPT1CR_TA1RST    /*!< Capture is triggered by TA1 output ready_to_send to inactive transition */
+#define LL_HRTIM_CAPTURETRIG_TA1_SET      HRTIM_CPT1CR_TA1SET    /*!< Capture is triggered by TA1 output inactive to active transition */
+#define LL_HRTIM_CAPTURETRIG_TA1_RESET    HRTIM_CPT1CR_TA1RST    /*!< Capture is triggered by TA1 output active to inactive transition */
 #define LL_HRTIM_CAPTURETRIG_TIMA_CMP1    HRTIM_CPT1CR_TIMACMP1  /*!< Timer A Compare 1 triggers Capture */
 #define LL_HRTIM_CAPTURETRIG_TIMA_CMP2    HRTIM_CPT1CR_TIMACMP2  /*!< Timer A Compare 2 triggers Capture */
-#define LL_HRTIM_CAPTURETRIG_TB1_SET      HRTIM_CPT1CR_TB1SET    /*!< Capture is triggered by TB1 output inactive to ready_to_send transition */
-#define LL_HRTIM_CAPTURETRIG_TB1_RESET    HRTIM_CPT1CR_TB1RST    /*!< Capture is triggered by TB1 output ready_to_send to inactive transition */
+#define LL_HRTIM_CAPTURETRIG_TB1_SET      HRTIM_CPT1CR_TB1SET    /*!< Capture is triggered by TB1 output inactive to active transition */
+#define LL_HRTIM_CAPTURETRIG_TB1_RESET    HRTIM_CPT1CR_TB1RST    /*!< Capture is triggered by TB1 output active to inactive transition */
 #define LL_HRTIM_CAPTURETRIG_TIMB_CMP1    HRTIM_CPT1CR_TIMBCMP1  /*!< Timer B Compare 1 triggers Capture */
 #define LL_HRTIM_CAPTURETRIG_TIMB_CMP2    HRTIM_CPT1CR_TIMBCMP2  /*!< Timer B Compare 2 triggers Capture */
-#define LL_HRTIM_CAPTURETRIG_TC1_SET      HRTIM_CPT1CR_TC1SET    /*!< Capture is triggered by TC1 output inactive to ready_to_send transition */
-#define LL_HRTIM_CAPTURETRIG_TC1_RESET    HRTIM_CPT1CR_TC1RST    /*!< Capture is triggered by TC1 output ready_to_send to inactive transition */
+#define LL_HRTIM_CAPTURETRIG_TC1_SET      HRTIM_CPT1CR_TC1SET    /*!< Capture is triggered by TC1 output inactive to active transition */
+#define LL_HRTIM_CAPTURETRIG_TC1_RESET    HRTIM_CPT1CR_TC1RST    /*!< Capture is triggered by TC1 output active to inactive transition */
 #define LL_HRTIM_CAPTURETRIG_TIMC_CMP1    HRTIM_CPT1CR_TIMCCMP1  /*!< Timer C Compare 1 triggers Capture */
 #define LL_HRTIM_CAPTURETRIG_TIMC_CMP2    HRTIM_CPT1CR_TIMCCMP2  /*!< Timer C Compare 2 triggers Capture */
-#define LL_HRTIM_CAPTURETRIG_TD1_SET      HRTIM_CPT1CR_TD1SET    /*!< Capture is triggered by TD1 output inactive to ready_to_send transition */
-#define LL_HRTIM_CAPTURETRIG_TD1_RESET    HRTIM_CPT1CR_TD1RST    /*!< Capture is triggered by TD1 output ready_to_send to inactive transition */
+#define LL_HRTIM_CAPTURETRIG_TD1_SET      HRTIM_CPT1CR_TD1SET    /*!< Capture is triggered by TD1 output inactive to active transition */
+#define LL_HRTIM_CAPTURETRIG_TD1_RESET    HRTIM_CPT1CR_TD1RST    /*!< Capture is triggered by TD1 output active to inactive transition */
 #define LL_HRTIM_CAPTURETRIG_TIMD_CMP1    HRTIM_CPT1CR_TIMDCMP1  /*!< Timer D Compare 1 triggers Capture */
 #define LL_HRTIM_CAPTURETRIG_TIMD_CMP2    HRTIM_CPT1CR_TIMDCMP2  /*!< Timer D Compare 2 triggers Capture */
-#define LL_HRTIM_CAPTURETRIG_TE1_SET      HRTIM_CPT1CR_TE1SET    /*!< Capture is triggered by TE1 output inactive to ready_to_send transition */
-#define LL_HRTIM_CAPTURETRIG_TE1_RESET    HRTIM_CPT1CR_TE1RST    /*!< Capture is triggered by TE1 output ready_to_send to inactive transition */
+#define LL_HRTIM_CAPTURETRIG_TE1_SET      HRTIM_CPT1CR_TE1SET    /*!< Capture is triggered by TE1 output inactive to active transition */
+#define LL_HRTIM_CAPTURETRIG_TE1_RESET    HRTIM_CPT1CR_TE1RST    /*!< Capture is triggered by TE1 output active to inactive transition */
 #define LL_HRTIM_CAPTURETRIG_TIME_CMP1    HRTIM_CPT1CR_TIMECMP1  /*!< Timer E Compare 1 triggers Capture */
 #define LL_HRTIM_CAPTURETRIG_TIME_CMP2    HRTIM_CPT1CR_TIMECMP2  /*!< Timer E Compare 2 triggers Capture */
 /**
@@ -852,8 +851,8 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @{
   * @brief Constants defining on which output the signal was applied, in push-pull mode balanced fault mode or delayed idle mode, when the protection was triggered.
   */
-#define LL_HRTIM_IPPSTAT_OUTPUT1   ((uint32_t) 0x00000000U)    /*!< Protection occurred when the output 1 was ready_to_send and output 2 forced inactive */
-#define LL_HRTIM_IPPSTAT_OUTPUT2   (HRTIM_TIMISR_IPPSTAT)     /*!< Protection occurred when the output 2 was ready_to_send and output 1 forced inactive */
+#define LL_HRTIM_IPPSTAT_OUTPUT1   ((uint32_t) 0x00000000U)    /*!< Protection occurred when the output 1 was active and output 2 forced inactive */
+#define LL_HRTIM_IPPSTAT_OUTPUT2   (HRTIM_TIMISR_IPPSTAT)     /*!< Protection occurred when the output 2 was active and output 1 forced inactive */
 /**
   * @}
   */
@@ -1036,8 +1035,8 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @{
   * @brief Constants defining the polarity of a timer output.
   */
-#define LL_HRTIM_OUT_POSITIVE_POLARITY    0x00000000U             /*!< Output is ready_to_send HIGH */
-#define LL_HRTIM_OUT_NEGATIVE_POLARITY    (HRTIM_OUTR_POL1)       /*!< Output is ready_to_send LOW */
+#define LL_HRTIM_OUT_POSITIVE_POLARITY    0x00000000U             /*!< Output is active HIGH */
+#define LL_HRTIM_OUT_NEGATIVE_POLARITY    (HRTIM_OUTR_POL1)       /*!< Output is active LOW */
 /**
   * @}
   */
@@ -1067,7 +1066,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @brief Constants defining the output level when output is in IDLE state
   */
 #define LL_HRTIM_OUT_IDLELEVEL_INACTIVE   0x00000000U           /*!< Output at inactive level when in IDLE state */
-#define LL_HRTIM_OUT_IDLELEVEL_ACTIVE     (HRTIM_OUTR_IDLES1)   /*!< Output at ready_to_send level when in IDLE state */
+#define LL_HRTIM_OUT_IDLELEVEL_ACTIVE     (HRTIM_OUTR_IDLES1)   /*!< Output at active level when in IDLE state */
 /**
   * @}
   */
@@ -1077,7 +1076,7 @@ static const uint8_t REG_SHIFT_TAB_FLTxE[] =
   * @brief Constants defining the output level when output is in FAULT state.
   */
 #define LL_HRTIM_OUT_FAULTSTATE_NO_ACTION 0x00000000U                      /*!< The output is not affected by the fault input */
-#define LL_HRTIM_OUT_FAULTSTATE_ACTIVE    (HRTIM_OUTR_FAULT1_0)                        /*!< Output at ready_to_send level when in FAULT state */
+#define LL_HRTIM_OUT_FAULTSTATE_ACTIVE    (HRTIM_OUTR_FAULT1_0)                        /*!< Output at active level when in FAULT state */
 #define LL_HRTIM_OUT_FAULTSTATE_INACTIVE  (HRTIM_OUTR_FAULT1_1)                        /*!< Output at inactive level when in FAULT state */
 #define LL_HRTIM_OUT_FAULTSTATE_HIGHZ     (HRTIM_OUTR_FAULT1_1 | HRTIM_OUTR_FAULT1_0)  /*!< Output is tri-stated when in FAULT state */
 /**
@@ -1129,8 +1128,8 @@ during a programmable period before the output takes its idle state.
   * @{
   * @brief Constants defining the polarity of an external event.
   */
-#define LL_HRTIM_EE_POLARITY_HIGH    0x00000000U             /*!< External event is ready_to_send high */
-#define LL_HRTIM_EE_POLARITY_LOW     (HRTIM_EECR1_EE1POL)    /*!< External event is ready_to_send low */
+#define LL_HRTIM_EE_POLARITY_HIGH    0x00000000U             /*!< External event is active high */
+#define LL_HRTIM_EE_POLARITY_LOW     (HRTIM_EECR1_EE1POL)    /*!< External event is active low */
 /**
   * @}
   */
@@ -1139,10 +1138,10 @@ during a programmable period before the output takes its idle state.
   * @{
   * @brief Constants defining the sensitivity (level-sensitive or edge-sensitive) of an external event.
   */
-#define LL_HRTIM_EE_SENSITIVITY_LEVEL          0x00000000U                        /*!< External event is ready_to_send on level */
-#define LL_HRTIM_EE_SENSITIVITY_RISINGEDGE     (HRTIM_EECR1_EE1SNS_0)                         /*!< External event is ready_to_send on Rising edge */
-#define LL_HRTIM_EE_SENSITIVITY_FALLINGEDGE    (HRTIM_EECR1_EE1SNS_1)                         /*!< External event is ready_to_send on Falling edge */
-#define LL_HRTIM_EE_SENSITIVITY_BOTHEDGES      (HRTIM_EECR1_EE1SNS_1 | HRTIM_EECR1_EE1SNS_0)  /*!< External event is ready_to_send on Rising and Falling edges */
+#define LL_HRTIM_EE_SENSITIVITY_LEVEL          0x00000000U                        /*!< External event is active on level */
+#define LL_HRTIM_EE_SENSITIVITY_RISINGEDGE     (HRTIM_EECR1_EE1SNS_0)                         /*!< External event is active on Rising edge */
+#define LL_HRTIM_EE_SENSITIVITY_FALLINGEDGE    (HRTIM_EECR1_EE1SNS_1)                         /*!< External event is active on Falling edge */
+#define LL_HRTIM_EE_SENSITIVITY_BOTHEDGES      (HRTIM_EECR1_EE1SNS_1 | HRTIM_EECR1_EE1SNS_0)  /*!< External event is active on Rising and Falling edges */
 /**
   * @}
   */
@@ -1207,8 +1206,8 @@ during a programmable period before the output takes its idle state.
   * @{
   * @brief Constants defining the polarity of a fault event.
   */
-#define LL_HRTIM_FLT_POLARITY_LOW     0x00000000U                /*!< Fault input is ready_to_send low */
-#define LL_HRTIM_FLT_POLARITY_HIGH    (HRTIM_FLTINR1_FLT1P)      /*!< Fault input is ready_to_send high */
+#define LL_HRTIM_FLT_POLARITY_LOW     0x00000000U                /*!< Fault input is active low */
+#define LL_HRTIM_FLT_POLARITY_HIGH    (HRTIM_FLTINR1_FLT1P)      /*!< Fault input is active high */
 /**
   * @}
   */
@@ -1535,7 +1534,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_GetSyncOutSrc(HRTIM_TypeDef *HRTIMx)
   *         CR1          TCUDIS        LL_HRTIM_SuspendUpdate\n
   *         CR1          TDUDIS        LL_HRTIM_SuspendUpdate\n
   *         CR1          TEUDIS        LL_HRTIM_SuspendUpdate
-  * @note Allow to temporarily disable the transfer from preload to ready_to_send
+  * @note Allow to temporarily disable the transfer from preload to active
   *      registers, whatever the selected update event. This allows to modify
   *      several registers in multiple timers.
   * @param  HRTIMx High Resolution Timer instance
@@ -1578,7 +1577,7 @@ __STATIC_INLINE void LL_HRTIM_ResumeUpdate(HRTIM_TypeDef *HRTIMx, uint32_t Timer
 }
 
 /**
-  * @brief  Force an immediate transfer from the preload to the ready_to_send register .
+  * @brief  Force an immediate transfer from the preload to the active register .
   * @rmtoll CR2          MSWU          LL_HRTIM_ForceUpdate\n
   *         CR2          TASWU         LL_HRTIM_ForceUpdate\n
   *         CR2          TBSWU         LL_HRTIM_ForceUpdate\n
@@ -2657,7 +2656,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_TIM_GetCounterMode(HRTIM_TypeDef *HRTIMx, uint
   * @rmtoll MCR        HALF         LL_HRTIM_TIM_EnableHalfMode\n
   *         TIMxCR     HALF         LL_HRTIM_TIM_EnableHalfMode
   * @note When the half mode is enabled, HRTIM_MCMP1R (or HRTIM_CMP1xR)
-  *       ready_to_send register is automatically updated with HRTIM_MPER/2
+  *       active register is automatically updated with HRTIM_MPER/2
   *       (or HRTIM_PERxR/2) value when HRTIM_MPER (or HRTIM_PERxR) register is written.
   * @param  HRTIMx High Resolution Timer instance
   * @param  Timer This parameter can be one of the following values:
@@ -2902,7 +2901,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_TIM_GetDACTrig(HRTIM_TypeDef *HRTIMx, uint32_t
   * @rmtoll MCR        PREEN        LL_HRTIM_TIM_EnablePreload\n
   *         TIMxCR     PREEN        LL_HRTIM_TIM_EnablePreload
   * @note When the preload mode is enabled, accessed registers are shadow registers.
-  *       Their content is transferred into the ready_to_send register after an update request,
+  *       Their content is transferred into the active register after an update request,
   *       either software or synchronized with an event.
   * @param  HRTIMx High Resolution Timer instance
   * @param  Timer This parameter can be one of the following values:
@@ -5860,7 +5859,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_OUT_GetPolarity(HRTIM_TypeDef *HRTIMx, uint32_
   * @brief  Set the output IDLE mode.
   * @rmtoll OUTxR      IDLEM1          LL_HRTIM_OUT_SetIdleMode\n
   *         OUTxR      IDLEM2          LL_HRTIM_OUT_SetIdleMode
-  * @note This function must not be called when the burst mode is ready_to_send
+  * @note This function must not be called when the burst mode is active
   * @param  HRTIMx High Resolution Timer instance
   * @param  Output This parameter can be one of the following values:
   *         @arg @ref LL_HRTIM_OUTPUT_TA1
@@ -6153,7 +6152,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_OUT_GetBMEntryMode(HRTIM_TypeDef *HRTIMx, uint
 }
 
 /**
-  * @brief  Get the level (ready_to_send or inactive) of the designated output when the
+  * @brief  Get the level (active or inactive) of the designated output when the
   *         delayed protection was triggered.
   * @rmtoll TIMxISR      O1SRSR          LL_HRTIM_OUT_GetDLYPRTOutStatus\n
   *         TIMxISR      O2SRSR          LL_HRTIM_OUT_GetDLYPRTOutStatus
@@ -6183,7 +6182,7 @@ __STATIC_INLINE uint32_t LL_HRTIM_OUT_GetDLYPRTOutStatus(HRTIM_TypeDef *HRTIMx, 
 }
 
 /**
-  * @brief  Force the timer output to its ready_to_send or inactive level.
+  * @brief  Force the timer output to its active or inactive level.
   * @rmtoll SETx1R      SST          LL_HRTIM_OUT_ForceLevel\n
   *         RSTx1R      SRT          LL_HRTIM_OUT_ForceLevel\n
   *         SETx2R      SST          LL_HRTIM_OUT_ForceLevel\n
@@ -10473,7 +10472,5 @@ ErrorStatus LL_HRTIM_DeInit(HRTIM_TypeDef* HRTIMx);
 #endif
 
 #endif /* STM32H7xx_LL_HRTIM_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
 

@@ -6,14 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
-  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
 
@@ -307,7 +305,7 @@ typedef struct
   * @{
   */
 #define OB_IWDG_STOP_FREEZE  0x00000000U /*!< Freeze IWDG counter in STOP mode */
-#define OB_IWDG_STOP_ACTIVE  FLASH_OPTSR_FZ_IWDG_STOP /*!< IWDG counter ready_to_send in STOP mode */
+#define OB_IWDG_STOP_ACTIVE  FLASH_OPTSR_FZ_IWDG_STOP /*!< IWDG counter active in STOP mode */
 /**
   * @}
   */
@@ -316,7 +314,7 @@ typedef struct
   * @{
   */
 #define OB_IWDG_STDBY_FREEZE 0x00000000U /*!< Freeze IWDG counter in STANDBY mode */
-#define OB_IWDG_STDBY_ACTIVE FLASH_OPTSR_FZ_IWDG_SDBY  /*!< IWDG counter ready_to_send in STANDBY mode */
+#define OB_IWDG_STDBY_ACTIVE FLASH_OPTSR_FZ_IWDG_SDBY  /*!< IWDG counter active in STANDBY mode */
 /**
   * @}
   */
@@ -359,6 +357,8 @@ typedef struct
 #define FLASH_LATENCY_5          FLASH_ACR_LATENCY_5WS   /*!< FLASH Five Latency cycles     */
 #define FLASH_LATENCY_6          FLASH_ACR_LATENCY_6WS   /*!< FLASH Six Latency cycles      */
 #define FLASH_LATENCY_7          FLASH_ACR_LATENCY_7WS   /*!< FLASH Seven Latency cycles    */
+
+/* Unused FLASH Latency defines */
 #define FLASH_LATENCY_8          FLASH_ACR_LATENCY_8WS   /*!< FLASH Eight Latency cycle     */
 #define FLASH_LATENCY_9          FLASH_ACR_LATENCY_9WS   /*!< FLASH Nine Latency cycle      */
 #define FLASH_LATENCY_10         FLASH_ACR_LATENCY_10WS  /*!< FLASH Ten Latency cycles      */
@@ -1012,4 +1012,3 @@ void FLASH_Erase_Sector(uint32_t Sector, uint32_t Banks, uint32_t VoltageRange);
 
 #endif /* STM32H7xx_HAL_FLASH_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

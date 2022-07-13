@@ -389,7 +389,7 @@ typedef union
   {
     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used */
-    uint32_t FPCA:1;                     /*!< bit:      2  FP extension ready_to_send flag */
+    uint32_t FPCA:1;                     /*!< bit:      2  FP extension active flag */
     uint32_t _reserved0:29;              /*!< bit:  3..31  Reserved */
   } b;                                   /*!< Structure used for bit  access */
   uint32_t w;                            /*!< Type      used for word access */
@@ -1555,13 +1555,13 @@ typedef struct
 #define FPU_FPCCR_HFRDY_Msk                (1UL << FPU_FPCCR_HFRDY_Pos)                   /*!< FPCCR: HFRDY bit Mask */
 
 #define FPU_FPCCR_THREAD_Pos                3U                                            /*!< FPCCR: processor mode bit Position */
-#define FPU_FPCCR_THREAD_Msk               (1UL << FPU_FPCCR_THREAD_Pos)                  /*!< FPCCR: processor mode ready_to_send bit Mask */
+#define FPU_FPCCR_THREAD_Msk               (1UL << FPU_FPCCR_THREAD_Pos)                  /*!< FPCCR: processor mode active bit Mask */
 
 #define FPU_FPCCR_USER_Pos                  1U                                            /*!< FPCCR: privilege level bit Position */
 #define FPU_FPCCR_USER_Msk                 (1UL << FPU_FPCCR_USER_Pos)                    /*!< FPCCR: privilege level bit Mask */
 
-#define FPU_FPCCR_LSPACT_Pos                0U                                            /*!< FPCCR: Lazy state preservation ready_to_send bit Position */
-#define FPU_FPCCR_LSPACT_Msk               (1UL /*<< FPU_FPCCR_LSPACT_Pos*/)              /*!< FPCCR: Lazy state preservation ready_to_send bit Mask */
+#define FPU_FPCCR_LSPACT_Pos                0U                                            /*!< FPCCR: Lazy state preservation active bit Position */
+#define FPU_FPCCR_LSPACT_Msk               (1UL /*<< FPU_FPCCR_LSPACT_Pos*/)              /*!< FPCCR: Lazy state preservation active bit Mask */
 
 /* Floating-Point Context Address Register Definitions */
 #define FPU_FPCAR_ADDRESS_Pos               3U                                            /*!< FPCAR: ADDRESS bit Position */
@@ -2001,10 +2001,10 @@ __STATIC_INLINE void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
 
 /**
   \brief   Get Active Interrupt
-  \details Reads the ready_to_send register in the NVIC and returns the ready_to_send bit for the device specific interrupt.
+  \details Reads the active register in the NVIC and returns the active bit for the device specific interrupt.
   \param [in]      IRQn  Device specific interrupt number.
-  \return             0  Interrupt status is not ready_to_send.
-  \return             1  Interrupt status is ready_to_send.
+  \return             0  Interrupt status is not active.
+  \return             1  Interrupt status is active.
   \note    IRQn must not be negative.
  */
 __STATIC_INLINE uint32_t __NVIC_GetActive(IRQn_Type IRQn)

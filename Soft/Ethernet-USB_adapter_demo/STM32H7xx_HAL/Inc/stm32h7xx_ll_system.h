@@ -3,6 +3,18 @@
   * @file    stm32h7xx_ll_system.h
   * @author  MCD Application Team
   * @brief   Header file of SYSTEM LL module.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                      ##### How to use this driver #####
@@ -15,17 +27,6 @@
       (+) Access to SYSCFG registers
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -813,7 +814,7 @@ __STATIC_INLINE uint32_t LL_SYSCFG_IsActiveFlag_CMPCR(void)
 /**
   * @brief  Enable the I/O speed optimization when the product voltage is low.
   * @rmtoll CCCSR   HSLV    LL_SYSCFG_EnableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -831,7 +832,7 @@ __STATIC_INLINE void LL_SYSCFG_EnableIOSpeedOptimization(void)
 /**
   * @brief  Enable the I/O speed optimization when the product voltage is low.
   * @rmtoll CCCSR   HSLV1    LL_SYSCFG_EnableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -844,7 +845,7 @@ __STATIC_INLINE void LL_SYSCFG_EnableIOSpeedOptimization1(void)
 /**
   * @brief  Enable the I/O speed optimization when the product voltage is low.
   * @rmtoll CCCSR   HSLV2    LL_SYSCFG_EnableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -857,7 +858,7 @@ __STATIC_INLINE void LL_SYSCFG_EnableIOSpeedOptimization2(void)
 /**
   * @brief  Enable the I/O speed optimization when the product voltage is low.
   * @rmtoll CCCSR   HSLV3    LL_SYSCFG_EnableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -872,7 +873,7 @@ __STATIC_INLINE void LL_SYSCFG_EnableIOSpeedOptimization3(void)
 /**
   * @brief  To Disable optimize the I/O speed when the product voltage is low.
   * @rmtoll CCCSR   HSLV    LL_SYSCFG_DisableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -890,7 +891,7 @@ __STATIC_INLINE void LL_SYSCFG_DisableIOSpeedOptimization(void)
 /**
   * @brief  To Disable optimize the I/O speed when the product voltage is low.
   * @rmtoll CCCSR   HSLV1    LL_SYSCFG_DisableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -903,7 +904,7 @@ __STATIC_INLINE void LL_SYSCFG_DisableIOSpeedOptimization1(void)
 /**
   * @brief  To Disable optimize the I/O speed when the product voltage is low.
   * @rmtoll CCCSR   HSLV2    LL_SYSCFG_DisableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -916,7 +917,7 @@ __STATIC_INLINE void LL_SYSCFG_DisableIOSpeedOptimization2(void)
 /**
   * @brief  To Disable optimize the I/O speed when the product voltage is low.
   * @rmtoll CCCSR   HSLV3    LL_SYSCFG_DisableIOSpeedOptimize
-  * @note   This bit is ready_to_send only if IO_HSLV user option bit is set. It must be used only if the
+  * @note   This bit is active only if IO_HSLV user option bit is set. It must be used only if the
   *         product supply voltage is below 2.7 V. Setting this bit when VDD is higher than 2.7 V
   *         might be destructive.
   * @retval None
@@ -2439,4 +2440,3 @@ __STATIC_INLINE uint32_t LL_ART_GetBaseAddress(void)
 
 #endif /* __STM32H7xx_LL_SYSTEM_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

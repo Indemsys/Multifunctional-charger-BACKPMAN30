@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -73,7 +72,7 @@ typedef struct
   uint8_t Mode;                 /*!< Specifies the mode for the EXTI lines.
                                      This parameter can be a value of @ref EXTI_LL_EC_MODE. */
 
-  uint8_t Trigger;              /*!< Specifies the trigger signal ready_to_send edge for the EXTI lines.
+  uint8_t Trigger;              /*!< Specifies the trigger signal active edge for the EXTI lines.
                                      This parameter can be a value of @ref EXTI_LL_EC_TRIGGER. */
 } LL_EXTI_InitTypeDef;
 
@@ -3284,4 +3283,3 @@ void LL_EXTI_StructInit(LL_EXTI_InitTypeDef *EXTI_InitStruct);
 
 #endif /* __STM32H7xx_LL_EXTI_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

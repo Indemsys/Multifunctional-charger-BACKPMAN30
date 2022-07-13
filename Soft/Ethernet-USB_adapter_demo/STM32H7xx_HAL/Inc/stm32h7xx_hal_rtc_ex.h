@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -120,7 +119,7 @@ typedef struct
   */
 typedef struct
 {
-  uint32_t Enable;                      /*!< Specifies the Tamper input is ready_to_send.
+  uint32_t Enable;                      /*!< Specifies the Tamper input is active.
                                              This parameter can be a value of @ref RTCEx_ActiveTamper_Enable */
 
   uint32_t Interrupt;                    /*!< Specifies the interrupt mode
@@ -158,7 +157,7 @@ typedef struct
        This parameter can be a value from 0 to (2^32-1) */
 
   RTC_ATampInputTypeDef TampInput[RTC_TAMP_NB];
-  /*!< Specifies configuration of all ready_to_send tampers.
+  /*!< Specifies configuration of all active tampers.
        The index of TampInput[RTC_TAMP_NB] can be a value of RTCEx_ActiveTamper_Sel */
 } RTC_ActiveTampersTypeDef;
 
@@ -502,11 +501,11 @@ typedef struct
 #define RTC_TAMPERFILTER_DISABLE   0x00000000U             /*!< Tamper filter is disabled */
 
 #define RTC_TAMPERFILTER_2SAMPLE   TAMP_FLTCR_TAMPFLT_0    /*!< Tamper is activated after 2
-                                                                 consecutive samples at the ready_to_send level */
+                                                                 consecutive samples at the active level */
 #define RTC_TAMPERFILTER_4SAMPLE   TAMP_FLTCR_TAMPFLT_1    /*!< Tamper is activated after 4
-                                                                 consecutive samples at the ready_to_send level */
+                                                                 consecutive samples at the active level */
 #define RTC_TAMPERFILTER_8SAMPLE   TAMP_FLTCR_TAMPFLT      /*!< Tamper is activated after 8
-                                                                 consecutive samples at the ready_to_send level */
+                                                                 consecutive samples at the active level */
 #define RTC_TAMPERFILTER_MASK      TAMP_FLTCR_TAMPFLT      /*!< Masking all bits except those of
                                                                  field TAMPFLT[1:0]. */
 #endif /* TAMP_FLTCR_TAMPFLT */
@@ -514,11 +513,11 @@ typedef struct
 #define RTC_TAMPERFILTER_DISABLE   0x00000000u             /*!< Tamper filter is disabled */
 
 #define RTC_TAMPERFILTER_2SAMPLE   RTC_TAMPCR_TAMPFLT_0    /*!< Tamper is activated after 2
-                                                                 consecutive samples at the ready_to_send level */
+                                                                 consecutive samples at the active level */
 #define RTC_TAMPERFILTER_4SAMPLE   RTC_TAMPCR_TAMPFLT_1    /*!< Tamper is activated after 4
-                                                                 consecutive samples at the ready_to_send level */
+                                                                 consecutive samples at the active level */
 #define RTC_TAMPERFILTER_8SAMPLE   RTC_TAMPCR_TAMPFLT      /*!< Tamper is activated after 8
-                                                                 consecutive samples at the ready_to_send level. */
+                                                                 consecutive samples at the active level. */
 #define RTC_TAMPERFILTER_MASK      RTC_TAMPCR_TAMPFLT      /*!< Masking all bits except those of
                                                                  field TAMPFLT[1:0]. */
 #endif /* RTC_TAMPCR_TAMPFLT */
@@ -2090,4 +2089,3 @@ HAL_StatusTypeDef HAL_RTCEx_PollForAlarmBEvent(RTC_HandleTypeDef *hrtc, uint32_t
 
 #endif /* STM32H7xx_HAL_RTC_EX_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

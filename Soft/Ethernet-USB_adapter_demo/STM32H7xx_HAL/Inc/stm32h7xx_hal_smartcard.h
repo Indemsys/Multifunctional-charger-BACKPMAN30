@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -121,10 +120,10 @@ typedef struct
                                            advanced features may be initialized at the same time. This parameter
                                            can be a value of @ref SMARTCARDEx_Advanced_Features_Initialization_Type */
 
-  uint32_t TxPinLevelInvert;          /*!< Specifies whether the TX pin ready_to_send level is inverted.
+  uint32_t TxPinLevelInvert;          /*!< Specifies whether the TX pin active level is inverted.
                                            This parameter can be a value of @ref SMARTCARD_Tx_Inv  */
 
-  uint32_t RxPinLevelInvert;          /*!< Specifies whether the RX pin ready_to_send level is inverted.
+  uint32_t RxPinLevelInvert;          /*!< Specifies whether the RX pin active level is inverted.
                                            This parameter can be a value of @ref SMARTCARD_Rx_Inv  */
 
   uint32_t DataInvert;                /*!< Specifies whether data are inverted (positive/direct logic
@@ -202,7 +201,7 @@ typedef struct __SMARTCARD_HandleTypeDef
 
   SMARTCARD_AdvFeatureInitTypeDef   AdvancedInit;          /*!< SmartCard advanced features initialization parameters */
 
-  uint8_t                           *pTxBuffPtr;           /*!< Pointer to SmartCard Tx transfer Buffer               */
+  const uint8_t                     *pTxBuffPtr;           /*!< Pointer to SmartCard Tx transfer Buffer               */
 
   uint16_t                          TxXferSize;            /*!< SmartCard Tx Transfer size                            */
 
@@ -471,20 +470,20 @@ typedef enum
   * @}
   */
 
-/** @defgroup SMARTCARD_Tx_Inv SMARTCARD advanced feature TX pin ready_to_send level inversion
+/** @defgroup SMARTCARD_Tx_Inv SMARTCARD advanced feature TX pin active level inversion
   * @{
   */
-#define SMARTCARD_ADVFEATURE_TXINV_DISABLE  0x00000000U                  /*!< TX pin ready_to_send level inversion disable */
-#define SMARTCARD_ADVFEATURE_TXINV_ENABLE   USART_CR2_TXINV              /*!< TX pin ready_to_send level inversion enable  */
+#define SMARTCARD_ADVFEATURE_TXINV_DISABLE  0x00000000U                  /*!< TX pin active level inversion disable */
+#define SMARTCARD_ADVFEATURE_TXINV_ENABLE   USART_CR2_TXINV              /*!< TX pin active level inversion enable  */
 /**
   * @}
   */
 
-/** @defgroup SMARTCARD_Rx_Inv SMARTCARD advanced feature RX pin ready_to_send level inversion
+/** @defgroup SMARTCARD_Rx_Inv SMARTCARD advanced feature RX pin active level inversion
   * @{
   */
-#define SMARTCARD_ADVFEATURE_RXINV_DISABLE  0x00000000U                  /*!< RX pin ready_to_send level inversion disable */
-#define SMARTCARD_ADVFEATURE_RXINV_ENABLE   USART_CR2_RXINV              /*!< RX pin ready_to_send level inversion enable  */
+#define SMARTCARD_ADVFEATURE_RXINV_DISABLE  0x00000000U                  /*!< RX pin active level inversion disable */
+#define SMARTCARD_ADVFEATURE_RXINV_ENABLE   USART_CR2_RXINV              /*!< RX pin active level inversion enable  */
 /**
   * @}
   */
@@ -1345,13 +1344,13 @@ HAL_StatusTypeDef HAL_SMARTCARD_UnRegisterCallback(SMARTCARD_HandleTypeDef *hsma
   * @{
   */
 
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size,
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size,
                                          uint32_t Timeout);
 HAL_StatusTypeDef HAL_SMARTCARD_Receive(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size,
                                         uint32_t Timeout);
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit_IT(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size);
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit_IT(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size);
 HAL_StatusTypeDef HAL_SMARTCARD_Receive_IT(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size);
-HAL_StatusTypeDef HAL_SMARTCARD_Transmit_DMA(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size);
+HAL_StatusTypeDef HAL_SMARTCARD_Transmit_DMA(SMARTCARD_HandleTypeDef *hsmartcard, const uint8_t *pData, uint16_t Size);
 HAL_StatusTypeDef HAL_SMARTCARD_Receive_DMA(SMARTCARD_HandleTypeDef *hsmartcard, uint8_t *pData, uint16_t Size);
 /* Transfer Abort functions */
 HAL_StatusTypeDef HAL_SMARTCARD_Abort(SMARTCARD_HandleTypeDef *hsmartcard);
@@ -1403,4 +1402,3 @@ uint32_t                   HAL_SMARTCARD_GetError(SMARTCARD_HandleTypeDef *hsmar
 
 #endif /* STM32H7xx_HAL_SMARTCARD_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

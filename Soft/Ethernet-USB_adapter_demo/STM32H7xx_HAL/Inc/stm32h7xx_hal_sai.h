@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -167,9 +166,9 @@ typedef struct
                                           should be aligned to a number equal to power of 2 in order to keep
                                           in an audio frame, an integer number of MCLK pulses by bit Clock. */
 
-  uint32_t ActiveFrameLength;  /*!< Specifies the Frame synchronization ready_to_send level length.
+  uint32_t ActiveFrameLength;  /*!< Specifies the Frame synchronization active level length.
                                     This Parameter specifies the length in number of bit clock (SCK + 1)
-                                    of the ready_to_send level of FS signal in audio frame.
+                                    of the active level of FS signal in audio frame.
                                     This parameter must be a number between Min_Data = 1 and Max_Data = 128 */
 
   uint32_t FSDefinition;       /*!< Specifies the Frame synchronization definition.
@@ -984,4 +983,3 @@ uint32_t HAL_SAI_GetError(SAI_HandleTypeDef *hsai);
 
 #endif /* STM32H7xx_HAL_SAI_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

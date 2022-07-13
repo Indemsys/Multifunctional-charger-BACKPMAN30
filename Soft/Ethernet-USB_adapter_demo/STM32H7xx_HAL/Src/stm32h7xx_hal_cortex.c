@@ -68,13 +68,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -425,7 +424,7 @@ void HAL_NVIC_ClearPendingIRQ(IRQn_Type IRQn)
 }
 
 /**
-  * @brief Gets ready_to_send interrupt ( reads the ready_to_send register in NVIC and returns the ready_to_send bit).
+  * @brief Gets active interrupt ( reads the active register in NVIC and returns the active bit).
   * @param IRQn External interrupt number
   *         This parameter can be an enumerator of IRQn_Type enumeration
   *         (For the complete STM32 Devices IRQ Channels list, please refer to the appropriate CMSIS device file (stm32h7xxxx.h))
@@ -437,7 +436,7 @@ uint32_t HAL_NVIC_GetActive(IRQn_Type IRQn)
   /* Check the parameters */
   assert_param(IS_NVIC_DEVICE_IRQ(IRQn));
 
-  /* Return 1 if ready_to_send else 0 */
+  /* Return 1 if active else 0 */
   return NVIC_GetActive(IRQn);
 }
 
@@ -530,4 +529,3 @@ uint32_t HAL_GetCurrentCPUID(void)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -298,7 +297,7 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
   */
 
 /* Exported constants --------------------------------------------------------*/
-/** @defgroup SD_Exported_Constants Exported Constants
+/** @defgroup SD_Exported_Constants SD Exported Constants
   * @{
   */
 
@@ -495,8 +494,8 @@ typedef void (*pSD_TransceiverCallbackTypeDef)(FlagStatus status);
   *            @arg SDMMC_FLAG_DHOLD:      Data transfer Hold
   *            @arg SDMMC_FLAG_DBCKEND:    Data block sent/received (CRC check passed)
   *            @arg SDMMC_FLAG_DABORT:     Data transfer aborted by CMD12
-  *            @arg SDMMC_FLAG_DPSMACT:    Data path state machine ready_to_send
-  *            @arg SDMMC_FLAG_CPSMACT:    Command path state machine ready_to_send
+  *            @arg SDMMC_FLAG_DPSMACT:    Data path state machine active
+  *            @arg SDMMC_FLAG_CPSMACT:    Command path state machine active
   *            @arg SDMMC_FLAG_TXFIFOHE:   Transmit FIFO Half Empty
   *            @arg SDMMC_FLAG_RXFIFOHF:   Receive FIFO Half Full
   *            @arg SDMMC_FLAG_TXFIFOF:    Transmit FIFO full
@@ -799,5 +798,3 @@ HAL_StatusTypeDef HAL_SD_Abort_IT(SD_HandleTypeDef *hsd);
 
 
 #endif /* STM32H7xx_HAL_SD_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

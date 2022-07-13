@@ -8,6 +8,17 @@
   *           + Initialization and de-initialization functions.
   *           + Peripheral Control functions.
   *           + Interrupt Handling functions.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                         ##### PWR peripheral overview #####
@@ -59,7 +70,7 @@
                         ##### How to use this driver #####
   ==============================================================================
   [..]
-   (#) Power management peripheral is ready_to_send by default at startup level in
+   (#) Power management peripheral is active by default at startup level in
        STM32h7xx lines.
 
    (#) Call HAL_PWR_EnableBkUpAccess() and HAL_PWR_DisableBkUpAccess() functions
@@ -129,18 +140,6 @@
       (+) __HAL_PWR_CLEAR_FLAG()            : Clear the PWR pending flags.
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -287,7 +286,7 @@ void HAL_PWR_DisableBkUpAccess (void)
           The pin pull is configurable through the WKUPEPR register to be in
           No-pull, Pull-up and Pull-down.
           The pin polarity is configurable through the WKUPEPR register to be
-          ready_to_send on rising or falling edges.
+          active on rising or falling edges.
 
       (+) There are up to six Wake-up pin in the STM32H7 devices family.
 
@@ -296,7 +295,7 @@ void HAL_PWR_DisableBkUpAccess (void)
     [..]
      The device present 3 principles low-power modes features:
       (+) SLEEP mode   : Cortex-Mx is stopped and all PWR domains are remaining
-                         ready_to_send (Powered and Clocked).
+                         active (Powered and Clocked).
 
       (+) STOP mode    : Cortex-Mx is stopped, clocks are stopped and the
                          regulator is running. The Main regulator or the LP
@@ -872,4 +871,3 @@ __weak void HAL_PWR_PVDCallback (void)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
