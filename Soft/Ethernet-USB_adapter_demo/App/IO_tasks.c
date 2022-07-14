@@ -81,23 +81,36 @@ static void Application_function(void)
     }
   }
 
+  #define MIN_VOIUT (1.265f)
+  #define MAX_VOIUT (32.774f)
+  #define STEP_V    ((MAX_VOIUT - MIN_VOIUT)/65536.0f)
+
+  #define STEP_SET  (0.1f)
+  #define MIN_V_SET (1.3f)
+  #define MAX_V_SET (32.7f)
+  #define STEPS_NUM ((int32_t)((MAX_V_SET-MIN_V_SET)/STEP_SET)-1)
+
   tmp = g_encoder_counter;
+
   if (prev_encoder_counter != tmp)
   {
-    int32_t delta = -(0x10000 / 205) * (tmp - prev_encoder_counter); // Знак устанавливаем чтобы вращение по часовой стрелке энкодера увеличивало напряжение
+    int32_t delta = tmp - prev_encoder_counter; //
 
-    if  ((g_dac_data + delta) > 0xFFFF)
+    if  ((g_dac_steps + delta) > STEPS_NUM)
     {
-      g_dac_data = 0xFFFF;
+      g_dac_steps = STEPS_NUM;
     }
-    else if  ((g_dac_data + delta) < 0)
+    else if  ((g_dac_steps + delta) < 1)
     {
-      g_dac_data = 0;
+      g_dac_steps = 1;
     }
     else
     {
-      g_dac_data += delta;
+      g_dac_steps += delta;
     }
+
+    g_dac_data = 0xFFFF - (uint16_t)(roundf(((STEP_SET*g_dac_steps)-0.06f)/STEP_V));
+
     prev_encoder_counter = tmp;
   }
   DAC_proc(g_dac_data);

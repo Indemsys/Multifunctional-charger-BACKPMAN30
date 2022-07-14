@@ -1993,8 +1993,8 @@ HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num)
   uint32_t USBx_BASE = (uint32_t)USBx;
   uint32_t hcnum = (uint32_t)hc_num;
   __IO uint32_t count = 0U;
-  uint32_t HcEpType = (USBx_HC(hcnum)->HCCHAR & USB_OTG_HCCHAR_EPTYP) >> 18;
-  uint32_t ChannelEna = (USBx_HC(hcnum)->HCCHAR & USB_OTG_HCCHAR_CHENA) >> 31;
+  uint32_t HcEpType = (USBx_HC(hcnum)->HCCHAR & USB_OTG_HCCHAR_EPTYP) >> 18; // Endpoint type. 00: Control 01: Isochronous 10: Bulk 11: Interrupt
+  uint32_t ChannelEna = (USBx_HC(hcnum)->HCCHAR & USB_OTG_HCCHAR_CHENA) >> 31; // 0: Channel disabled  1: Channel enabled
 
   if (((USBx->GAHBCFG & USB_OTG_GAHBCFG_DMAEN) == USB_OTG_GAHBCFG_DMAEN) &&
       (ChannelEna == 0U))
@@ -2005,14 +2005,14 @@ HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num)
   /* Check for space in the request queue to issue the halt. */
   if ((HcEpType == HCCHAR_CTRL) || (HcEpType == HCCHAR_BULK))
   {
-    USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHDIS;
+    USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHDIS; // CHDIS The application sets this bit to stop transmitting/receiving data on a channel
 
     if ((USBx->GAHBCFG & USB_OTG_GAHBCFG_DMAEN) == 0U)
     {
-      if ((USBx->HNPTXSTS & (0xFFU << 16)) == 0U)
+      if ((USBx->HNPTXSTS & (0xFFU << 16)) == 0U) // NPTQXSAV[7:0]:Indicates the amount of free space available in the non-periodic transmit request queue. This queue holds both IN and OUT requests.
       {
-        USBx_HC(hcnum)->HCCHAR &= ~USB_OTG_HCCHAR_CHENA;
-        USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;
+        USBx_HC(hcnum)->HCCHAR &= ~USB_OTG_HCCHAR_CHENA; // CHENA 0: Channel disabled
+        USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;  // CHENA 1: Channel enabled
         do
         {
           count++;
@@ -2025,7 +2025,7 @@ HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num)
       }
       else
       {
-        USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;
+        USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA; // CHENA 1: Channel enabled
       }
     }
   }
@@ -2035,8 +2035,8 @@ HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num)
 
     if ((USBx_HOST->HPTXSTS & (0xFFU << 16)) == 0U)
     {
-      USBx_HC(hcnum)->HCCHAR &= ~USB_OTG_HCCHAR_CHENA;
-      USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;
+      USBx_HC(hcnum)->HCCHAR &= ~USB_OTG_HCCHAR_CHENA; // CHENA 0: Channel disabled
+      USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;  // CHENA 1: Channel enabled
       do
       {
         count++;
@@ -2049,7 +2049,7 @@ HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num)
     }
     else
     {
-      USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA;
+      USBx_HC(hcnum)->HCCHAR |= USB_OTG_HCCHAR_CHENA; // CHENA 1: Channel enabled
     }
   }
 

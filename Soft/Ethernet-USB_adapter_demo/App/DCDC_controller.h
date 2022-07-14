@@ -10,8 +10,8 @@ typedef struct
 
 
 extern T_power_controller_state  pwr_cbl;
+extern uint16_t                  g_dac_steps;
 extern uint16_t                  g_dac_data;
-
 
 void DCDC_toggle_state(void);
 void DAC_proc(uint16_t dac_data);

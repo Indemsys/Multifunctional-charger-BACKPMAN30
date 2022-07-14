@@ -14,6 +14,7 @@ uint8_t                       thread_hmi_stack[THREAD_HMI_STACK_SIZE];
 
 GX_WINDOW_ROOT            *root;
 GX_WINDOW                 *first_screen;
+GX_WINDOW                 *second_screen;
 #define SCREEN_HANDLE      0x12345679
 
 uint16_t                   frame_buffer[DISPLAY_1_X_RESOLUTION*DISPLAY_1_Y_RESOLUTION];
@@ -249,12 +250,17 @@ static void Show_CDC_ECM_link_info(void)
 -----------------------------------------------------------------------------------------------------*/
 static void Thread_HMI(ULONG initial_input)
 {
+  static uint32_t scr_mode = 0;
+
   TFT_init();
   gx_system_initialize();
 
   gx_studio_display_configure(DISPLAY_1, _565rgb_driver_setup, LANGUAGE_RUSSIAN, DISPLAY_1_THEME_1,&root);
   root->gx_window_root_canvas->gx_canvas_memory = (ULONG *)frame_buffer;
   gx_studio_named_widget_create("window_LAN_info", (GX_WIDGET *) root, (GX_WIDGET **)&first_screen);
+  gx_studio_named_widget_create("window", (GX_WIDGET *) root, (GX_WIDGET **)&second_screen);
+  gx_widget_hide(second_screen);
+
   gx_widget_show(root);
   gx_system_start();
 
@@ -262,9 +268,35 @@ static void Thread_HMI(ULONG initial_input)
   do
   {
 
-    //Show_live_values();
+    switch (scr_mode)
+    {
+    case 0:
+      Show_CDC_ECM_link_info();
+      break;
+    case 1:
+      Show_live_values();
+      break;
+    }
 
-    Show_CDC_ECM_link_info();
+    if (g_encoder_counter != 0)
+    {
+      if (scr_mode == 0)
+      {
+        scr_mode = 1;
+        gx_widget_hide(first_screen);
+        gx_widget_show(second_screen);
+      }
+    }
+    else
+    {
+      if (scr_mode == 1)
+      {
+        scr_mode = 0;
+        gx_widget_show(first_screen);
+        gx_widget_hide(second_screen);
+      }
+    }
+
 
     //ITM_EVENT8(2,1);
     gx_system_canvas_refresh();
