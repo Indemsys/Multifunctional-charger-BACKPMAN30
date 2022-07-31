@@ -257,7 +257,7 @@ NX_NAT_TRANSLATION_ENTRY      *entry_ptr;
         entry_ptr ++;
     }
 
-    /* Setup the head pointers of the available and dynamic (ready_to_send) lists in the NAT Device.  */
+    /* Setup the head pointers of the available and dynamic (active) lists in the NAT Device.  */    
     nat_ptr -> nx_nat_dynamic_available_entry_head = (NX_NAT_TRANSLATION_ENTRY *) dynamic_cache_memory; 
     nat_ptr -> nx_nat_dynamic_active_entry_head = NX_NULL;
     nat_ptr -> nx_nat_dynamic_available_entries = dynamic_entries;
@@ -1089,7 +1089,7 @@ NX_NAT_TRANSLATION_ENTRY *next_entry_ptr;
                 nat_ptr -> nx_nat_dynamic_active_entry_head = next_entry_ptr;
             }           
 
-            /* Update the static ready_to_send entry count.  */
+            /* Update the static active entry count.  */      
             nat_ptr -> nx_nat_static_active_entries --;
 
             /* Release the IP mutex.  */
@@ -3683,7 +3683,7 @@ NX_NAT_TRANSLATION_ENTRY    *previous_ptr;
            this entry in the table. */
         *match_entry_ptr = entry_ptr;
 
-        /* The entry is ready_to_send, reset the timeout to the present.  */
+        /* The entry is active, reset the timeout to the present.  */
         entry_ptr -> response_timestamp = tx_time_get(); 
 
         /* Yes; check if this is the first entry in the list. */
@@ -3714,7 +3714,7 @@ NX_NAT_TRANSLATION_ENTRY    *previous_ptr;
 /*  DESCRIPTION                                                           */ 
 /*                                                                        */ 
 /*    This function attempts to check the entry's timeout, and remove the */ 
-/*    expiration entries from dynamic ready_to_send translation list.            */
+/*    expiration entries from dynamic active translation list.            */
 /*                                                                        */ 
 /*  INPUT                                                                 */ 
 /*                                                                        */ 
@@ -3779,7 +3779,7 @@ NX_NAT_TRANSLATION_ENTRY    *next_entry_ptr;
             if (elapsed_time >= entry_ptr -> response_timeout)
             {
 
-                /* Delete this entry from ready_to_send entry list.  */
+                /* Delete this entry from active entry list.  */
 
                 /* Check if this is the first entry in the list). */
                 if (previous_ptr)

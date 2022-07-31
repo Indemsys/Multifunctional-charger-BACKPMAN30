@@ -164,7 +164,7 @@ ULONG                  trace_timestamp;
         else
         {
 
-            /* Determine if we are at the end of the list of ready_to_send ARP entries.  */
+            /* Determine if we are at the end of the list of active ARP entries.  */
             if (count >=  ip_ptr -> nx_ip_arp_dynamic_active_count)
             {
 
@@ -179,7 +179,7 @@ ULONG                  trace_timestamp;
                 /* Just move to the next ARP entry on the dynamic list.  */
                 arp_entry =  arp_entry -> nx_arp_pool_next;
 
-                /* Increment the ready_to_send count.  */
+                /* Increment the active count.  */
                 count++;
             }
         }

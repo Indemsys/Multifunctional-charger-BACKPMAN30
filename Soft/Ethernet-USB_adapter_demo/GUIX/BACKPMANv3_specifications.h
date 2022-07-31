@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.1.11.0                                              */
-/*  Date (dd.mm.yyyy): 11. 7.2022   Time (hh:mm): 13:02                        */
+/*  Date (dd.mm.yyyy): 24. 7.2022   Time (hh:mm): 15:35                        */
 /*******************************************************************************/
 
 

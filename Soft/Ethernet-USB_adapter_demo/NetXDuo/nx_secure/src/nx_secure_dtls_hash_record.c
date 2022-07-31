@@ -92,7 +92,7 @@ NX_SECURE_TLS_SESSION                *tls_session;
     NX_PARAMETER_NOT_USED(sequence_num);
     NX_PARAMETER_NOT_USED(header_length);
 
-    /* We need to generate a Message Authentication Code (MAC) for each record during an "ready_to_send" TLS session
+    /* We need to generate a Message Authentication Code (MAC) for each record during an "active" TLS session
        (following a ChangeCipherSpec message). The hash algorithm is determined by the ciphersuite, and HMAC
        is used with that hash algorithm to protect the TLS record contents from tampering.
 

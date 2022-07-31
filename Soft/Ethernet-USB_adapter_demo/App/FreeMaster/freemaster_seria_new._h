@@ -1,0 +1,67 @@
+#ifndef __FREEMASTER_SERIAL_H
+  #define __FREEMASTER_SERIAL_H
+
+
+/* Switch serial for single wire communication */
+  #ifndef FMSTR_SERIAL_SINGLEWIRE
+    #define FMSTR_SERIAL_SINGLEWIRE 0
+  #endif
+
+  #if FMSTR_COMM_BUFFER_SIZE > 254
+    #error FMSTR_COMM_BUFFER_SIZE must be set less than 254 on Serial transport.
+  #endif
+
+  #if FMSTR_SHORT_INTR > 0
+    /* default short-interrupt FIFO size */
+    #ifndef FMSTR_COMM_RQUEUE_SIZE
+      #define FMSTR_COMM_RQUEUE_SIZE 32
+    #endif
+
+    #if FMSTR_COMM_RQUEUE_SIZE == 0
+      #undef  FMSTR_COMM_RQUEUE_SIZE
+      #define FMSTR_COMM_RQUEUE_SIZE 32
+    #endif
+  #endif
+
+
+  #ifdef __cplusplus
+extern "C"
+{
+  #endif
+
+/******************************************************************************
+* Types definition
+******************************************************************************/
+
+/* Serial Driver interface between the Serial layer and hardware driver */
+  typedef struct FMSTR_SERIAL_DRV_INTF_S
+  {
+      FMSTR_BOOL   (*Init)(void);                                         /* Initialization */
+      void         (*EnableTransmit)(FMSTR_BOOL enable);                  /* Enable/Disable transmitter */
+      void         (*EnableReceive)(FMSTR_BOOL enable);                   /* Enable/Disable receiver */
+      void         (*EnableTransmitInterrupt)(FMSTR_BOOL enable);         /* Enable/Disable interrupt from transmit register empty event */
+      void         (*EnableTransmitCompleteInterrupt)(FMSTR_BOOL enable); /* Enable/Disable interrupt from transmit complete event */
+      void         (*EnableReceiveInterrupt)(FMSTR_BOOL enable);          /* Enable/Disable interrupt from receive register full event */
+      FMSTR_BOOL   (*IsTransmitRegEmpty)(void);                           /* Returns TRUE if the transmit register is empty, and it's possible to put next char */
+      FMSTR_BOOL   (*IsReceiveRegFull)(void);                             /* Returns TRUE if the receive register is full, and it's possible to get received char */
+      FMSTR_BOOL   (*IsTransmitterActive)(void);                          /* Returns TRUE if the transmitter is still active */
+      void         (*PutChar)(FMSTR_BCHR  ch);                            /* Transmit character */
+      FMSTR_BCHR   (*GetChar)(void);                                      /* Receive character */
+      void         (*Flush)(void);                                        /* Transmit-flush all buffered data */
+      void         (*Poll)(void);                                         /* General poll call (optional) */
+  } FMSTR_SERIAL_DRV_INTF;
+
+/******************************************************************************
+* Functions definitions
+******************************************************************************/
+
+/* Serial Process function - This function is called by communication sub system, in case of new data received or next data byte has been transmitted. */
+  void FMSTR_ProcessSerial(void);
+
+extern const FMSTR_SERIAL_DRV_INTF FMSTR_SERIAL_DRV;
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

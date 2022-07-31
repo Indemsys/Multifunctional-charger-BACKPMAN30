@@ -284,10 +284,11 @@
 
 /* Defined, this value will only enable the host side of usbx.  */
 
-/* #define UX_HOST_SIDE_ONLY */
+// Класс Device RNDIS работает при обоих закоментированных макросах или при раскоментированном макросе UX_DEVICE_SIDE_ONLY
+//  #define UX_HOST_SIDE_ONLY
+//  #define UX_DEVICE_SIDE_ONLY
 
-  #define UX_HOST_SIDE_ONLY
-//#define UX_DEVICE_SIDE_ONLY
+
 
 /* Defined, this value will include the OTG polling thread. OTG can only be ready_to_send if both host/device are present.
 */
@@ -348,6 +349,8 @@
 /* Determine if tracing is enabled.  */
 
 /*#define UX_TRACE_INSERT_MACROS*/
+
+#define UX_ENABLE_MEMORY_STATISTICS
 
 #endif
 

@@ -108,7 +108,7 @@ UINT status = NX_SUCCESS;
         }
 #endif
 
-        /* The remote session is now ready_to_send - all incoming records from this point will be hashed and encrypted. */
+        /* The remote session is now active - all incoming records from this point will be hashed and encrypted. */
         tls_session -> nx_secure_tls_remote_session_active = 1;
 
         /* Reset the sequence number now that we are starting a new session. */

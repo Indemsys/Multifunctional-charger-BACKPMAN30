@@ -26,7 +26,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */
 /*                                                                        */
 /*    nx_secure_x509.h                                    PORTABLE C      */
-/*                                                           6.1.6        */
+/*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -47,6 +47,14 @@
 /*  04-02-2021     Timothy Stapko           Modified comment(s),          */
 /*                                            removed dependency on TLS,  */
 /*                                            resulting in version 6.1.6  */
+/*  06-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            supported hardware EC       */
+/*                                            private key,                */
+/*                                            resulting in version 6.1.7  */
+/*  01-31-2022     Timothy Stapko           Modified comment(s),          */
+/*                                            ignored public key in EC    */
+/*                                            private key,                */
+/*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -63,7 +71,6 @@ extern   "C" {
 #endif
 
 #include "nx_crypto.h"
-#include "nx_secure.h"
 
 /* Enable ECC by default. */
 #ifndef NX_SECURE_DISABLE_ECC_CIPHERSUITE
@@ -180,6 +187,7 @@ extern   "C" {
 #define NX_SECURE_X509_KEY_TYPE_NONE                              0x00000000 /* Default value for no key. */
 #define NX_SECURE_X509_KEY_TYPE_RSA_PKCS1_DER                     0x00000001 /* DER-encoded PKCS-1 RSA private key. */
 #define NX_SECURE_X509_KEY_TYPE_EC_DER                            0x00000002 /* DER-encoded EC private key. */
+#define NX_SECURE_X509_KEY_TYPE_HARDWARE                          0x00000003 /* Hardware private key */
 
 
 /*  ASN.1 Format:
@@ -534,13 +542,6 @@ typedef struct NX_SECURE_EC_PRIVATE_KEY_STRUCT
 
     /* Size of the EC private key. */
     USHORT nx_secure_ec_private_key_length;
-
-    /* Public key for EC. */
-    /* This field is optional and it can be NX_NULL. */
-    const UCHAR *nx_secure_ec_public_key;
-
-    /* Size of the key used by the algorithm. */
-    USHORT nx_secure_ec_public_key_length;
 
     /* Named curve used. */
     UINT nx_secure_ec_named_curve;

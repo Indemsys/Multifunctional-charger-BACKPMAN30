@@ -15,36 +15,39 @@
 /**                                                                       */
 /** NetX Component                                                        */
 /**                                                                       */
-/**   TELNET Server Protocol (TELNET Server)                              */
+/**   TELNET Server Protocol (TELNET Server)                              */ 
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
-/*                                                                        */
-/*    nxd_telnet_server.h                                  PORTABLE C     */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  APPLICATION INTERFACE DEFINITION                       RELEASE        */ 
+/*                                                                        */ 
+/*    nxd_telnet_server.h                                  PORTABLE C     */ 
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This file defines the NetX Duo TELNET Protocol (TELNET) component,  */
-/*    including all data types and external references.                   */
-/*    It is assumed that nx_api.h and nx_port.h have already been         */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This file defines the NetX Duo TELNET Protocol (TELNET) component,  */ 
+/*    including all data types and external references.                   */ 
+/*    It is assumed that nx_api.h and nx_port.h have already been         */ 
 /*    included.                                                           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s), included */
+/*                                            necessary header file,      */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -61,11 +64,13 @@ extern   "C" {
 
 #endif
 
+#include "nx_api.h"
+
 /* Define the Server TELNET ID.  */
 
 #define NX_TELNET_SERVER_ID                 0x54454C4EUL
 
-/* Defined, option negotiation is disabled.
+/* Defined, option negotiation is disabled. 
 #define NX_TELNET_SERVER_OPTION_DISABLE
 */
 
@@ -74,16 +79,16 @@ extern   "C" {
 
 /* If NX_TELNET_SERVER_OPTION_DISABLE is not defined, and Telnet Server
    needs a packet pool, this option lets the application create the packet
-   pool instead of the Telnet Server.
+   pool instead of the Telnet Server. 
+#define NX_TELNET_SERVER_USER_CREATE_PACKET_POOL 
 */
-#define NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
 
 #endif /* NX_TELNET_SERVER_OPTION_DISABLE */
 
 /* Define the maximum number of clients the TELNET Server can accommodate.  */
 
 #ifndef NX_TELNET_MAX_CLIENTS
-#define NX_TELNET_MAX_CLIENTS               1
+#define NX_TELNET_MAX_CLIENTS               4
 #endif
 
 
@@ -95,7 +100,7 @@ extern   "C" {
 
 #ifndef NX_TELNET_FRAGMENT_OPTION
 #define NX_TELNET_FRAGMENT_OPTION           NX_DONT_FRAGMENT
-#endif
+#endif  
 
 #ifndef NX_TELNET_SERVER_WINDOW_SIZE
 #define NX_TELNET_SERVER_WINDOW_SIZE        2048
@@ -105,7 +110,7 @@ extern   "C" {
 #define NX_TELNET_TIME_TO_LIVE              0x80
 #endif
 
-#ifndef NX_TELNET_SERVER_TIMEOUT
+#ifndef NX_TELNET_SERVER_TIMEOUT       
 #define NX_TELNET_SERVER_TIMEOUT            (10 * NX_IP_PERIODIC_RATE)
 #endif
 
@@ -113,8 +118,8 @@ extern   "C" {
 #define NX_TELNET_SERVER_PRIORITY           16
 #endif
 
-#ifndef NX_TELNET_ACTIVITY_TIMEOUT
-#define NX_TELNET_ACTIVITY_TIMEOUT          600         /* Seconds allowed with no activity                     */
+#ifndef NX_TELNET_ACTIVITY_TIMEOUT       
+#define NX_TELNET_ACTIVITY_TIMEOUT          600         /* Seconds allowed with no activity                     */ 
 #endif
 
 #ifndef NX_TELNET_TIMEOUT_PERIOD
@@ -136,23 +141,23 @@ extern   "C" {
 
 /* Define TELNET Negotiation Commands - Immediately follows IAC.  */
 
-#define NX_TELNET_WILL                      251         /* TELNET WILL - Sender wants to enable the option      */
+#define NX_TELNET_WILL                      251         /* TELNET WILL - Sender wants to enable the option      */ 
 #define NX_TELNET_WONT                      252         /* TELNET WONT - Sender wants to disable the option     */
-#define NX_TELNET_DO                        253         /* TELNET DO -   Sender wants receiver to enable option */
-#define NX_TELNET_DONT                      254         /* TELNET DONT - Sender wants receiver to disable option*/
+#define NX_TELNET_DO                        253         /* TELNET DO -   Sender wants receiver to enable option */ 
+#define NX_TELNET_DONT                      254         /* TELNET DONT - Sender wants receiver to disable option*/ 
 
 
 /* Define the Telnet Server packet payload. */
 
 #ifndef NX_TELNET_SERVER_PACKET_PAYLOAD
-#define NX_TELNET_SERVER_PACKET_PAYLOAD     300
+#define NX_TELNET_SERVER_PACKET_PAYLOAD     300         
 #endif
 
 /* Define the size of the Telnet Server packet pool. This will allow room for about
     5-6 packets of 300 byte payload. */
 
 #ifndef NX_TELNET_SERVER_PACKET_POOL_SIZE
-#define NX_TELNET_SERVER_PACKET_POOL_SIZE   2048
+#define NX_TELNET_SERVER_PACKET_POOL_SIZE   2048          
 #endif
 
 
@@ -166,20 +171,20 @@ extern   "C" {
 /* Define Server thread events.  */
 
 #define NX_TELNET_SERVER_CONNECT            0x01        /* TELNET connection is present                         */
-#define NX_TELNET_SERVER_DISCONNECT         0x02        /* TELNET disconnection is present                      */
-#define NX_TELNET_SERVER_DATA               0x04        /* TELNET receive data is present                       */
-#define NX_TELNET_SERVER_ACTIVITY_TIMEOUT   0x08        /* TELNET activity timeout check                        */
+#define NX_TELNET_SERVER_DISCONNECT         0x02        /* TELNET disconnection is present                      */ 
+#define NX_TELNET_SERVER_DATA               0x04        /* TELNET receive data is present                       */ 
+#define NX_TELNET_SERVER_ACTIVITY_TIMEOUT   0x08        /* TELNET activity timeout check                        */ 
 #define NX_TELNET_STOP_EVENT                0x10        /* TELNET stop service                                  */
 #define NX_TELNET_ANY_EVENT                 0xFF        /* Any TELNET event                                     */
 
 
 /* Define return code constants.  */
 
-#define NX_TELNET_ERROR                     0xF0        /* TELNET internal error                                */
-#define NX_TELNET_TIMEOUT                   0xF1        /* TELNET timeout occurred                              */
-#define NX_TELNET_FAILED                    0xF2        /* TELNET error                                         */
-#define NX_TELNET_NOT_CONNECTED             0xF3        /* TELNET not connected error                           */
-#define NX_TELNET_NOT_DISCONNECTED          0xF4        /* TELNET not disconnected error                        */
+#define NX_TELNET_ERROR                     0xF0        /* TELNET internal error                                */ 
+#define NX_TELNET_TIMEOUT                   0xF1        /* TELNET timeout occurred                              */ 
+#define NX_TELNET_FAILED                    0xF2        /* TELNET error                                         */ 
+#define NX_TELNET_NOT_CONNECTED             0xF3        /* TELNET not connected error                           */ 
+#define NX_TELNET_NOT_DISCONNECTED          0xF4        /* TELNET not disconnected error                        */ 
 #define NX_TELNET_INVALID_PARAMETER         0xF5        /* Invalid non pointer input to Telnet function         */
 #define NX_TELNET_NO_PACKET_POOL            0xF6        /* Telnet server packet pool not set                    */
 
@@ -195,9 +200,9 @@ extern   "C" {
 typedef struct NX_TELNET_CLIENT_REQUEST_STRUCT
 {
     UINT            nx_telnet_client_request_connection;                /* Logical connection number            */
-    ULONG           nx_telnet_client_request_activity_timeout;          /* Timeout for client activity          */
-    ULONG           nx_telnet_client_request_total_bytes;               /* Total bytes read or written          */
-    NX_TCP_SOCKET   nx_telnet_client_request_socket;                    /* Client request socket                */
+    ULONG           nx_telnet_client_request_activity_timeout;          /* Timeout for client activity          */ 
+    ULONG           nx_telnet_client_request_total_bytes;               /* Total bytes read or written          */ 
+    NX_TCP_SOCKET   nx_telnet_client_request_socket;                    /* Client request socket                */ 
 #ifndef NX_TELNET_SERVER_OPTION_DISABLE
     USHORT          nx_telnet_client_agree_server_will_echo_success;    /* True if server will echo negotiation success      */
     USHORT          nx_telnet_client_agree_server_will_SGA_success;     /* True if server will SGA negotiation success      */
@@ -208,34 +213,34 @@ typedef struct NX_TELNET_CLIENT_REQUEST_STRUCT
 
 /* Define the TELNET Server data structure.  */
 
-typedef struct NX_TELNET_SERVER_STRUCT
+typedef struct NX_TELNET_SERVER_STRUCT 
 {
     ULONG           nx_telnet_server_id;                               /* TELNET Server ID                      */
     CHAR           *nx_telnet_server_name;                             /* Name of this TELNET server            */
-    NX_IP          *nx_telnet_server_ip_ptr;                           /* Pointer to associated IP structure    */
-    ULONG           nx_telnet_server_connection_requests;              /* Number of connection requests         */
-    ULONG           nx_telnet_server_disconnection_requests;           /* Number of disconnection requests      */
-    ULONG           nx_telnet_server_total_bytes_sent;                 /* Number of total bytes sent            */
-    ULONG           nx_telnet_server_total_bytes_received;             /* Number of total bytes received        */
-    ULONG           nx_telnet_server_relisten_errors;                  /* Number of relisten errors             */
-    ULONG           nx_telnet_server_activity_timeouts;                /* Number of activity timeouts           */
-    ULONG           nx_telnet_server_open_connections;                 /* Number of currently open connections  */
+    NX_IP          *nx_telnet_server_ip_ptr;                           /* Pointer to associated IP structure    */ 
+    ULONG           nx_telnet_server_connection_requests;              /* Number of connection requests         */ 
+    ULONG           nx_telnet_server_disconnection_requests;           /* Number of disconnection requests      */ 
+    ULONG           nx_telnet_server_total_bytes_sent;                 /* Number of total bytes sent            */ 
+    ULONG           nx_telnet_server_total_bytes_received;             /* Number of total bytes received        */ 
+    ULONG           nx_telnet_server_relisten_errors;                  /* Number of relisten errors             */ 
+    ULONG           nx_telnet_server_activity_timeouts;                /* Number of activity timeouts           */ 
+    ULONG           nx_telnet_server_open_connections;                 /* Number of currently open connections  */ 
 
 #ifndef NX_TELNET_SERVER_OPTION_DISABLE
 #ifndef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
     UCHAR           nx_telnet_server_pool_area[NX_TELNET_SERVER_PACKET_POOL_SIZE];
-    NX_PACKET_POOL  nx_telnet_server_packet_pool;                       /* Server TCP packet pool
-                                                                           for telnet  option messages          */
+    NX_PACKET_POOL  nx_telnet_server_packet_pool;                       /* Server TCP packet pool                  
+                                                                           for telnet  option messages          */ 
 #endif /* NX_TELNET_SERVER_USER_CREATE_PACKET_POOL */
     NX_PACKET_POOL *nx_telnet_server_packet_pool_ptr;                   /* Pointer to packet pool               */
 #endif /* NX_TELNET_SERVER_OPTION_DISABLE */
-    NX_TELNET_CLIENT_REQUEST                                           /* TELNET client request array           */
-                    nx_telnet_server_client_list[NX_TELNET_MAX_CLIENTS];
+    NX_TELNET_CLIENT_REQUEST                                           /* TELNET client request array           */ 
+                    nx_telnet_server_client_list[NX_TELNET_MAX_CLIENTS]; 
     TX_EVENT_FLAGS_GROUP
-                    nx_telnet_server_event_flags;                      /* TELNET server thread events           */
-    TX_TIMER        nx_telnet_server_timer;                            /* TELNET server activity timeout timer  */
-    TX_THREAD       nx_telnet_server_thread;                           /* TELNET server thread                  */
-    void            (*nx_telnet_new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection);
+                    nx_telnet_server_event_flags;                      /* TELNET server thread events           */ 
+    TX_TIMER        nx_telnet_server_timer;                            /* TELNET server activity timeout timer  */ 
+    TX_THREAD       nx_telnet_server_thread;                           /* TELNET server thread                  */ 
+    void            (*nx_telnet_new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection); 
     void            (*nx_telnet_receive_data)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection, NX_PACKET *packet_ptr);
     void            (*nx_telnet_connection_end)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection);
     void            (*nx_telnet_set_echo)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection, UINT echo_flag);
@@ -245,9 +250,9 @@ typedef struct NX_TELNET_SERVER_STRUCT
 
 /* Application caller is present, perform API mapping.  */
 
-/* Determine if error checking is desired.  If so, map API functions
+/* Determine if error checking is desired.  If so, map API functions 
    to the appropriate error checking front-ends.  Otherwise, map API
-   functions to the core functions that actually perform the work.
+   functions to the core functions that actually perform the work. 
    Note: error checking is enabled by default.  */
 
 #ifdef NX_DISABLE_ERROR_CHECKING
@@ -258,7 +263,7 @@ typedef struct NX_TELNET_SERVER_STRUCT
 #define nx_telnet_server_delete                     _nx_telnet_server_delete
 #define nx_telnet_server_disconnect                 _nx_telnet_server_disconnect
 #define nx_telnet_server_packet_send                _nx_telnet_server_packet_send
-#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
+#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL 
 #define nx_telnet_server_packet_pool_set            _nx_telnet_server_packet_pool_set
 #endif /* NX_TELNET_SERVER_USER_CREATE_PACKET_POOL */
 #define nx_telnet_server_start                      _nx_telnet_server_start
@@ -273,7 +278,7 @@ typedef struct NX_TELNET_SERVER_STRUCT
 #define nx_telnet_server_delete                     _nxe_telnet_server_delete
 #define nx_telnet_server_disconnect                 _nxe_telnet_server_disconnect
 #define nx_telnet_server_packet_send                _nxe_telnet_server_packet_send
-#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
+#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL 
 #define nx_telnet_server_packet_pool_set            _nxe_telnet_server_packet_pool_set
 #endif /* NX_TELNET_SERVER_USER_CREATE_PACKET_POOL */
 #define nx_telnet_server_start                      _nxe_telnet_server_start
@@ -284,14 +289,14 @@ typedef struct NX_TELNET_SERVER_STRUCT
 
 /* Define the prototypes accessible to the application software.  */
 
-UINT    nx_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size,
-            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection),
+UINT    nx_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size, 
+            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection), 
             void (*receive_data)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection, NX_PACKET *packet_ptr),
             void (*connection_end)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection));
 UINT    nx_telnet_server_delete(NX_TELNET_SERVER *server_ptr);
 UINT    nx_telnet_server_disconnect(NX_TELNET_SERVER *server_ptr, UINT logical_connection);
 UINT    nx_telnet_server_packet_send(NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr, ULONG wait_option);
-#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
+#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL 
 UINT    nx_telnet_server_packet_pool_set(NX_TELNET_SERVER *server_ptr, NX_PACKET_POOL *pool_ptr);
 #endif /* NX_TELNET_SERVER_USER_CREATE_PACKET_POOL */
 UINT    nx_telnet_server_start(NX_TELNET_SERVER *server_ptr);
@@ -303,12 +308,12 @@ UINT    nx_telnet_server_get_open_connection_count(NX_TELNET_SERVER *server_ptr,
 
 /* TELNET source code is being compiled, do not perform any API mapping.  */
 
-UINT    _nxe_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size,
-            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection),
+UINT    _nxe_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size, 
+            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection), 
             void (*receive_data)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection, NX_PACKET *packet_ptr),
             void (*connection_end)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection));
-UINT    _nx_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size,
-            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection),
+UINT    _nx_telnet_server_create(NX_TELNET_SERVER *server_ptr, CHAR *server_name, NX_IP *ip_ptr, VOID *stack_ptr, ULONG stack_size, 
+            void (*new_connection)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection), 
             void (*receive_data)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection, NX_PACKET *packet_ptr),
             void (*connection_end)(struct NX_TELNET_SERVER_STRUCT *telnet_server_ptr, UINT logical_connection));
 UINT    _nxe_telnet_server_delete(NX_TELNET_SERVER *server_ptr);
@@ -317,7 +322,7 @@ UINT    _nxe_telnet_server_disconnect(NX_TELNET_SERVER *server_ptr, UINT logical
 UINT    _nx_telnet_server_disconnect(NX_TELNET_SERVER *server_ptr, UINT logical_connection);
 UINT    _nxe_telnet_server_packet_send(NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr, ULONG wait_option);
 UINT    _nx_telnet_server_packet_send(NX_TELNET_SERVER *server_ptr, UINT logical_connection, NX_PACKET *packet_ptr, ULONG wait_option);
-#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
+#ifdef NX_TELNET_SERVER_USER_CREATE_PACKET_POOL 
 UINT    _nxe_telnet_server_packet_pool_set(NX_TELNET_SERVER *server_ptr, NX_PACKET_POOL *pool_ptr);
 UINT    _nx_telnet_server_packet_pool_set(NX_TELNET_SERVER *server_ptr, NX_PACKET_POOL *pool_ptr);
 #endif /* NX_TELNET_SERVER_USER_CREATE_PACKET_POOL */

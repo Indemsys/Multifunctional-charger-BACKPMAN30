@@ -39,8 +39,8 @@
 /*    This function creates an instance of a DTLS server to handle        */
 /*    incoming DTLS requests on a particular UDP port. Due to the fact    */
 /*    that UDP is stateless, DTLS requests from multiple clients can come */
-/*    in on a single port while other DTLS sessions are ready_to_send. Thus, the */
-/*    server is needed to maintain ready_to_send sessions and properly route     */
+/*    in on a single port while other DTLS sessions are active. Thus, the */
+/*    server is needed to maintain active sessions and properly route     */
 /*    incoming messages to the proper handler.                            */
 /*                                                                        */
 /*    The session buffer parameter is used to hold the control blocks for */

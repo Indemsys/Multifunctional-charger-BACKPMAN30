@@ -35,7 +35,7 @@ static UINT _nx_secure_x509_crl_parse_entry(const UCHAR *buffer, ULONG length, U
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_x509_crl_revocation_check                PORTABLE C      */
-/*                                                           6.1.6        */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -90,6 +90,13 @@ static UINT _nx_secure_x509_crl_parse_entry(const UCHAR *buffer, ULONG length, U
 /*  04-02-2021     Timothy Stapko           Modified comment(s),          */
 /*                                            removed dependency on TLS,  */
 /*                                            resulting in version 6.1.6  */
+/*  08-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            fixed compiler warnings,    */
+/*                                            resulting in version 6.1.8  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s),          */
+/*                                            modified to improve code    */
+/*                                            coverage result,            */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_x509_crl_revocation_check(const UCHAR *crl_data, UINT crl_length,
@@ -106,7 +113,7 @@ UINT                 length;
 const UCHAR         *current_buffer;
 NX_SECURE_X509_CERT *issuer_certificate;
 UINT                 issuer_location;
-const UCHAR         *serial_number;
+const UCHAR         *serial_number = NX_NULL;
 UINT                 serial_number_length;
 
     NX_SECURE_MEMSET(&crl, 0, sizeof(NX_SECURE_X509_CRL));
@@ -181,10 +188,7 @@ UINT                 serial_number_length;
         }
 
         /* Make sure we don't run past the end of the sequence if one of the entries was too big. */
-        if (length < bytes_processed)
-        {
-            return(NX_SECURE_X509_ASN1_LENGTH_TOO_LONG);
-        }
+        NX_ASSERT(bytes_processed <= length);
 
         /* Compare the serial number we got from the list (if it exists) to the one in our certificate. */
         compare_value = NX_SECURE_MEMCMP(serial_number, certificate -> nx_secure_x509_serial_number,

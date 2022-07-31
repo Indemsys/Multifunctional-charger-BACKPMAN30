@@ -26,7 +26,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */  
 /*                                                                        */   
 /*    nxd_dhcp_server.h                                   PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -49,6 +49,9 @@
 /*                                            improved buffer length      */
 /*                                            verification,               */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s), included */
+/*                                            necessary header file,      */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -65,6 +68,7 @@ extern   "C" {
 
 #endif
 
+#include "nx_api.h"
 
 /* Define the DHCP Server ID that is used to mark the DHCP Server structure as created.  */
 
@@ -138,7 +142,7 @@ extern   "C" {
 
 
 /* Define an interval in seconds for the session timer to check the time remaining on 
-   all the ready_to_send clients in the server database. */
+   all the active clients in the server database. */
 
 #ifndef NX_DHCP_FAST_PERIODIC_TIME_INTERVAL
 #define NX_DHCP_FAST_PERIODIC_TIME_INTERVAL     10

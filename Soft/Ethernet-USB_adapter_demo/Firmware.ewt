@@ -1469,13 +1469,10 @@
                     <name>$PROJ_DIR$\App\FreeMaster\freemaster_appcmd.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_can.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_can.h</name>
-                </file>
-                <file>
                     <name>$PROJ_DIR$\App\FreeMaster\freemaster_cfg.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_cfg_PREV.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\FreeMaster\freemaster_defcfg.h</name>
@@ -1484,7 +1481,16 @@
                     <name>$PROJ_DIR$\App\FreeMaster\freemaster_gen32le.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_pdbdm.c</name>
+                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_net.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_net.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_netx_tcp.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\FreeMaster\freemaster_netx_tcp.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\FreeMaster\freemaster_pipes.c</name>
@@ -1614,6 +1620,12 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\Network\Net_common.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\Network\Net_TCP_server.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\Network\Net_TCP_server.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\Network\Net_Telnet_serv_driver.c</name>
@@ -1784,12 +1796,6 @@
                     <name>$PROJ_DIR$\App\USB\USB_descriptors_builder.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\App\USB\USB_device_init.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\App\USB\USB_device_init.h</name>
-                </file>
-                <file>
                     <name>$PROJ_DIR$\App\USB\USB_ECM_Host_network.c</name>
                 </file>
                 <file>
@@ -1800,6 +1806,12 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\USB\USB_host_cdc_ecm.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\USB\USB_init.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\App\USB\USB_init.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\App\USB\USB_MSC_driver.c</name>
@@ -6842,6 +6854,15 @@
                     </file>
                 </group>
                 <group>
+                    <name>BSD</name>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\addons\BSD\nxd_bsd.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\addons\BSD\nxd_bsd.h</name>
+                    </file>
+                </group>
+                <group>
                     <name>cloud</name>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\addons\cloud\nx_cloud.c</name>
@@ -7142,6 +7163,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\common\inc\nx_udp.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\common\inc\nx_user_sample.h</name>
                     </file>
                 </group>
                 <group>
@@ -7819,6 +7843,9 @@
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_server_socket_accept.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_server_socket_driver_listen.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_server_socket_listen.c</name>
                     </file>
                     <file>
@@ -7850,6 +7877,12 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_socket_disconnect_complete_notify.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_socket_driver_establish.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_socket_driver_packet_receive.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_tcp_socket_establish_notify.c</name>
@@ -8003,6 +8036,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_udp_socket_delete.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\common\src\nx_udp_socket_driver_packet_receive.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\common\src\nx_udp_socket_info_get.c</name>
@@ -8899,9 +8935,6 @@
                         <name>$PROJ_DIR$\NetXDuo\crypto_libraries\src\nx_crypto_methods.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\NetXDuo\crypto_libraries\src\nx_crypto_module_start.c</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\NetXDuo\crypto_libraries\src\nx_crypto_null_cipher.c</name>
                     </file>
                     <file>
@@ -8957,6 +8990,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\nx_secure\inc\nx_secure_tls_api.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\nx_secure\inc\nx_secure_user_sample.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\nx_secure\inc\nx_secure_x509.h</name>
@@ -9149,6 +9185,12 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\nx_secure\src\nx_secure_dtls_session_send.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\nx_secure\src\nx_secure_dtls_session_sliding_window_check.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\NetXDuo\nx_secure\src\nx_secure_dtls_session_sliding_window_update.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\NetXDuo\nx_secure\src\nx_secure_dtls_session_start.c</name>
@@ -10121,6 +10163,9 @@
                     <name>$PROJ_DIR$\STM32H7xx_HAL\Inc\stm32h7xx_hal_smbus.h</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\STM32H7xx_HAL\Inc\stm32h7xx_hal_smbus_ex.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\STM32H7xx_HAL\Inc\stm32h7xx_hal_spdifrx.h</name>
                 </file>
                 <file>
@@ -10500,6 +10545,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\STM32H7xx_HAL\Src\stm32h7xx_hal_smbus.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\STM32H7xx_HAL\Src\stm32h7xx_hal_smbus_ex.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\STM32H7xx_HAL\Src\stm32h7xx_hal_spdifrx.c</name>

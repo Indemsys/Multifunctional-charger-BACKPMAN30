@@ -3148,7 +3148,7 @@ UINT status;
 /*                                                                        */ 
 /*    This function is scheduled by the ThreadX scheduler on a user       */
 /*    configurable time interval.  It sets a flag which the DHCPv6 server */
-/*    thread task updates all ready_to_send client session times and checks if   */
+/*    thread task updates all active client session times and checks if   */
 /*    any have exceeded the session timeout without sending a response    */
 /*    back to the server.                                                 */
 /*                                                                        */ 
@@ -3719,7 +3719,7 @@ NXD_ADDRESS             client_address;
 
         if (dhcpv6_events & NX_DHCPV6_CHECK_SESSION_PERIODIC_EVENT)
         {
-            /* Check the ready_to_send clients whose sessions that have timed out. */
+            /* Check the active clients whose sessions that have timed out. */
             for (i = 0; i < NX_DHCPV6_MAX_CLIENTS; i++)
             {
 
@@ -3758,7 +3758,7 @@ NXD_ADDRESS             client_address;
         if (dhcpv6_events & NX_DHCPV6_IP_LEASE_CHECK_PERIODIC_EVENT)
         {
 
-            /* Check the ready_to_send clients for the time remaining in their leased IP address. */
+            /* Check the active clients for the time remaining in their leased IP address. */
             for (i = 0; i < NX_DHCPV6_MAX_CLIENTS; i++)
             {
 

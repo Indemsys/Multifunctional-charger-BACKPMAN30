@@ -1,14 +1,16 @@
 #include "App.h"
 
 
+
 char                 cpu_id_str[25];
 
 
 uint8_t              request_save_to_NV_mem;
 uint8_t              request_to_reset_log;
+uint8_t              g_start_freemaster;
 
 T_app_state          app_state;
-
+uint8_t              g_usb_mode;
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -97,32 +99,23 @@ void Thread_main(ULONG initial_input)
   STfs_init(INT_FLASH_BANK2,&stfs_info);
 
   Restore_NV_parameters();
+  g_usb_mode = wvar.usb_mode;
 
   Thread_IO_create();
 
 
-  if (wvar.usb_mode == USB_MODE_DEVICE)
+  App_USBX_Init();
+
+  if (g_usb_mode == USB_MODE_DEVICE)
   {
     Thread_net_create();
     App_USBX_Device_Init();
-
-    if (wvar.vcom_mode == 0)
-    {
-      Task_VT100_create(Mnsdrv_get_usbfs_vcom0_driver(),0);
-    }
-    else
-    {
-      FreeMaster_task_create((ULONG)Mnsdrv_get_usbfs_vcom0_driver());
-    }
+    Task_VT100_create(Mnsdrv_get_usbfs_vcom0_driver(),0);
   }
   else
   {
     Thread_net_create();
     USB_host_cdc_ecm_init();
-    //if (wvar.en_freemaster_on_telnet!=0)
-    //{
-    //  FreeMaster_task_create((ULONG)Mnsdrv_get_telnet_driver());
-    //}
   }
 
 
@@ -131,8 +124,7 @@ void Thread_main(ULONG initial_input)
 
   for (;;)
   {
-
-
+    static uint32_t mem_log_div = 100;
     if (request_save_to_NV_mem)
     {
       request_save_to_NV_mem = 0;
@@ -146,9 +138,25 @@ void Thread_main(ULONG initial_input)
       }
     }
 
+    mem_log_div--;
+    if (mem_log_div == 0)
+    {
+      Mem_man_log_statistic();
+      mem_log_div = 300000;
+    }
+
+    if (wvar.en_freemaster == BINARY_YES)
+    {
+      if (g_start_freemaster)
+      {
+        g_start_freemaster = 0;
+        FreeMaster_task_create((uint32_t)&FMSTR_NET);
+      }
+    }
+
+
     // Задержка на один тик RTOS, для обеспечения периодичности выполнения цикла с частото 1000 Гц
     tx_thread_sleep(1);
-
   }
 }
 

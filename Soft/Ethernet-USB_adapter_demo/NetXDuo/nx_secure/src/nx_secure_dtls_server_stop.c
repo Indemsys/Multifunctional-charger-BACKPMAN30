@@ -75,7 +75,7 @@ UINT status;
     /* Setup the UDP socket with our internal receive callback. */
     nx_udp_socket_receive_notify(&(server_ptr->nx_dtls_server_udp_socket), NX_NULL);
 
-    /* Reset all DTLS sessions. This clears any ready_to_send sessions and allows the
+    /* Reset all DTLS sessions. This clears any active sessions and allows the
        server to be re-used. */
     for(i = 0; i < server_ptr->nx_dtls_server_sessions_count; ++i)
     {

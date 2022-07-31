@@ -36,7 +36,7 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function ends an ready_to_send TLS session by sending the TLS         */
+/*    This function ends an active TLS session by sending the TLS         */
 /*    CloseNotify alert to the remote host, then waiting for the response */
 /*    CloseNotify before returning.                                       */
 /*                                                                        */

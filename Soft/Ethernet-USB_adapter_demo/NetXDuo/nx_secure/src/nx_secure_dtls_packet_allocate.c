@@ -116,7 +116,7 @@ NX_SECURE_TLS_SESSION *tls_session;
     /* Get a pointer to TLS state. */
     tls_session = &dtls_session -> nx_secure_dtls_tls_session;
 
-    /* If TLS session is ready_to_send, allocate space for the IV that precedes the data in
+    /* If TLS session is active, allocate space for the IV that precedes the data in
        certain ciphersuites. */
     if (tls_session -> nx_secure_tls_local_session_active)
     {

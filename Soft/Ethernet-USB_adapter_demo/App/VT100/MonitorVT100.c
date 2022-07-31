@@ -187,7 +187,6 @@ uint32_t Task_VT100_delete(int32_t *alloc_indx)
 
   if (tx_thread_terminate(&(p_vt100_task_cbls[indx]->VT100_thread)) != TX_SUCCESS) return RES_ERROR;
 
-
   tx_thread_delete(&(p_vt100_task_cbls[indx]->VT100_thread));
   p_vt100_task_cbls[indx]->mcbl.pdrv->_deinit(&(p_vt100_task_cbls[indx]->mcbl.pdrv->pdrvcbl));
 

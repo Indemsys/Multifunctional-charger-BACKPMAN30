@@ -123,11 +123,11 @@ ULONG          timer_rate;
             }
         }
 
-        /* Determine if a timeout is ready_to_send.  */
+        /* Determine if a timeout is active.  */
         if (socket_ptr -> nx_tcp_socket_timeout)
         {
 
-            /* Yes, a timeout is ready_to_send.  Determine if it has expired.  */
+            /* Yes, a timeout is active.  Determine if it has expired.  */
             if (socket_ptr -> nx_tcp_socket_timeout > timer_rate)
             {
 

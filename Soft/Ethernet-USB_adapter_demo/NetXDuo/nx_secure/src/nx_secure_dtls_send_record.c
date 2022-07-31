@@ -114,7 +114,7 @@ UCHAR                  epoch_seq_num[8];
     /* Get a pointer to TLS state. */
     tls_session = &dtls_session -> nx_secure_dtls_tls_session;
 
-    /* See if this is an ready_to_send session, we need to account for the IV if the session cipher
+    /* See if this is an active session, we need to account for the IV if the session cipher
        uses one. */
     if (tls_session -> nx_secure_tls_local_session_active)
     {
@@ -177,7 +177,7 @@ UCHAR                  epoch_seq_num[8];
     record_header[11] = (UCHAR)((message_length & 0xFF00) >> 8);
     record_header[12] = (UCHAR)(message_length & 0x00FF);
 
-    /* If the session is ready_to_send, hash and encrypt the record payload using
+    /* If the session is active, hash and encrypt the record payload using
        the session keys and chosen ciphersuite. */
     if (tls_session -> nx_secure_tls_local_session_active)
     {

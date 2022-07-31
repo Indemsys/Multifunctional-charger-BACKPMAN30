@@ -5,7 +5,6 @@
 #include   "App.h"
 
 
-extern void FMSTR_Recorder(void);
 
 uint32_t  smpl_enc_a;
 uint32_t  smpl_enc_b;

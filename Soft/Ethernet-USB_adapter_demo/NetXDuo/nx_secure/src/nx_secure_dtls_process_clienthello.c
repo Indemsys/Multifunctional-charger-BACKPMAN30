@@ -171,7 +171,7 @@ NX_SECURE_TLS_ECDHE_HANDSHAKE_DATA   *ecdhe_data;
 
     if (status != NX_SECURE_TLS_SUCCESS)
     {
-        /* If we have an ready_to_send session, this is a renegotiation attempt, treat the protocol error as
+        /* If we have an active session, this is a renegotiation attempt, treat the protocol error as
            if we are starting a new session. */
         if (status == NX_SECURE_TLS_UNSUPPORTED_TLS_VERSION || tls_session -> nx_secure_tls_local_session_active)
         {

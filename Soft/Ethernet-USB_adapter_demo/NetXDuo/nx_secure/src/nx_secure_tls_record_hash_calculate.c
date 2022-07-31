@@ -74,7 +74,7 @@ UINT                                  hash_size;
 UINT                                  status;
 const NX_CRYPTO_METHOD               *authentication_method;
 
-    /* We need to generate a Message Authentication Code (MAC) for each record during an "ready_to_send" TLS session
+    /* We need to generate a Message Authentication Code (MAC) for each record during an "active" TLS session
        (following a ChangeCipherSpec message). The hash algorithm is determined by the ciphersuite, and HMAC
        is used with that hash algorithm to protect the TLS record contents from tampering.
 

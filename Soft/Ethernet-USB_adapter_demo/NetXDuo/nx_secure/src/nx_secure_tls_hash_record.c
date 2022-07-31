@@ -29,7 +29,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_tls_hash_record                          PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -73,6 +73,9 @@
 /*  09-30-2020     Timothy Stapko           Modified comment(s),          */
 /*                                            supported chained packet,   */
 /*                                            resulting in version 6.1    */
+/*  06-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            fixed compiler warning,     */
+/*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_tls_hash_record(NX_SECURE_TLS_SESSION *tls_session,
@@ -82,7 +85,7 @@ UINT _nx_secure_tls_hash_record(NX_SECURE_TLS_SESSION *tls_session,
                                 UCHAR *mac_secret)
 {
 UINT                                  hash_size;
-UINT                                  status = NX_SECURE_TLS_MISSING_CRYPTO_ROUTINE;;
+UINT                                  status = NX_SECURE_TLS_MISSING_CRYPTO_ROUTINE;
 const NX_CRYPTO_METHOD               *authentication_method;
 UCHAR                                 adjusted_sequence_num[8];
 VOID                                 *metadata;
@@ -92,7 +95,7 @@ ULONG                                 current_length;
 
     NX_PARAMETER_NOT_USED(header_length);
 
-    /* We need to generate a Message Authentication Code (MAC) for each record during an "ready_to_send" TLS session
+    /* We need to generate a Message Authentication Code (MAC) for each record during an "active" TLS session
        (following a ChangeCipherSpec message). The hash algorithm is determined by the ciphersuite, and HMAC
        is used with that hash algorithm to protect the TLS record contents from tampering.
 

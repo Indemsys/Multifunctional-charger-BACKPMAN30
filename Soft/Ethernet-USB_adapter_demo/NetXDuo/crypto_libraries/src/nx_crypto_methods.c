@@ -51,7 +51,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    nx_crypto_methods                                   PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -86,6 +86,11 @@
 /*  05-19-2020     Timothy Stapko           Initial Version 6.0           */
 /*  09-30-2020     Timothy Stapko           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Timothy Stapko           Modified comments(s), added   */
+/*                                            warning supression for      */
+/*                                            obsolete DES/3DES,          */
+/*                                            added x25519 curve,         */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -275,19 +280,19 @@ NX_CRYPTO_METHOD crypto_method_ecdh =
     _nx_crypto_method_ecdh_operation             /* ECDH operation                         */
 };
 
-///* Declare the ECDHE crypto method */
-//NX_CRYPTO_METHOD crypto_method_ecdhe =
-//{
-//    NX_CRYPTO_KEY_EXCHANGE_ECDHE,                /* ECDHE crypto algorithm                 */
-//    0,                                           /* Key size in bits                       */
-//    0,                                           /* IV size in bits                        */
-//    0,                                           /* ICV size in bits, not used             */
-//    0,                                           /* Block size in bytes                    */
-//    sizeof(NX_CRYPTO_ECDH),                      /* Metadata size in bytes                 */
-//    _nx_crypto_method_ecdh_init,                 /* ECDH initialization routine            */
-//    _nx_crypto_method_ecdh_cleanup,              /* ECDH cleanup routine                   */
-//    _nx_crypto_method_ecdh_operation             /* ECDH operation                         */
-//};
+/* Declare the ECDHE crypto method */
+NX_CRYPTO_METHOD crypto_method_ecdhe =
+{
+    NX_CRYPTO_KEY_EXCHANGE_ECDHE,                /* ECDHE crypto algorithm                 */
+    0,                                           /* Key size in bits                       */
+    0,                                           /* IV size in bits                        */
+    0,                                           /* ICV size in bits, not used             */
+    0,                                           /* Block size in bytes                    */
+    sizeof(NX_CRYPTO_ECDH),                      /* Metadata size in bytes                 */
+    _nx_crypto_method_ecdh_init,                 /* ECDH initialization routine            */
+    _nx_crypto_method_ecdh_cleanup,              /* ECDH cleanup routine                   */
+    _nx_crypto_method_ecdh_operation             /* ECDH operation                         */
+};
 
 /* Declare the HMAC SHA1 authentication method */
 NX_CRYPTO_METHOD crypto_method_hmac_sha1 =
@@ -513,6 +518,23 @@ NX_CRYPTO_METHOD crypto_method_ec_secp521 =
     _nx_crypto_method_ec_secp521r1_operation, /* Operation                              */
 };
 
+#ifdef NX_CRYPTO_ENABLE_CURVE25519_448
+
+/* Declare a placeholder for EC x25519. */
+NX_CRYPTO_METHOD crypto_method_ec_x25519 =
+{
+    NX_CRYPTO_EC_X25519,                      /* EC placeholder                         */
+    255,                                      /* Key size in bits                       */
+    0,                                        /* IV size in bits                        */
+    0,                                        /* ICV size in bits, not used.            */
+    0,                                        /* Block size in bytes.                   */
+    0,                                        /* Metadata size in bytes                 */
+    NX_CRYPTO_NULL,                           /* Initialization routine.                */
+    NX_CRYPTO_NULL,                           /* Cleanup routine, not used.             */
+    _nx_crypto_method_ec_x25519_operation,    /* Operation                              */
+};
+#endif /* NX_CRYPTO_ENABLE_CURVE25519_448 */
+
 /* Declare the public NULL cipher (not to be confused with the NULL methods above). This
  * is used as a placeholder in ciphersuites that do not use a cipher method for a
  * particular operation (e.g. some PSK ciphersuites don't use a public-key algorithm
@@ -588,7 +610,6 @@ NX_CRYPTO_METHOD crypto_method_sha256 =
     _nx_crypto_method_sha256_cleanup,              /* SHA256 cleanup routine                */
     _nx_crypto_method_sha256_operation             /* SHA256 operation                      */
 };
-
 
 /* Declare the SHA384 hash method */
 NX_CRYPTO_METHOD crypto_method_sha384 =
@@ -705,42 +726,42 @@ NX_CRYPTO_METHOD crypto_method_tls_prf_sha512 =
 };
 
 /* Define generic HMAC cryptographic routine. */
-//NX_CRYPTO_METHOD crypto_method_hmac =
-//{
-//    NX_CRYPTO_HASH_HMAC,                            /* HMAC algorithm                        */
-//    0,                                              /* Key size in bits, not used            */
-//    0,                                              /* IV size in bits, not used             */
-//    0,                                              /* Transmitted ICV size in bits, not used*/
-//    0,                                              /* Block size in bytes, not used         */
-//    sizeof(NX_CRYPTO_HMAC),                         /* Metadata size in bytes                */
-//    _nx_crypto_method_hmac_init,                    /* HKDF initialization routine           */
-//    _nx_crypto_method_hmac_cleanup,                 /* HKDF cleanup routine                  */
-//    _nx_crypto_method_hmac_operation                /* HKDF operation                        */
-//};
+NX_CRYPTO_METHOD crypto_method_hmac =
+{
+    NX_CRYPTO_HASH_HMAC,                            /* HMAC algorithm                        */
+    0,                                              /* Key size in bits, not used            */
+    0,                                              /* IV size in bits, not used             */
+    0,                                              /* Transmitted ICV size in bits, not used*/
+    0,                                              /* Block size in bytes, not used         */
+    sizeof(NX_CRYPTO_HMAC),                         /* Metadata size in bytes                */
+    _nx_crypto_method_hmac_init,                    /* HKDF initialization routine           */
+    _nx_crypto_method_hmac_cleanup,                 /* HKDF cleanup routine                  */
+    _nx_crypto_method_hmac_operation                /* HKDF operation                        */
+};
 
 
 /* Define generic HMAC-based Key Derivation Function method. */
-//NX_CRYPTO_METHOD crypto_method_hkdf =
-//{
-//    NX_CRYPTO_HKDF_METHOD,                          /* HKDF algorithm                        */
-//    0,                                              /* Key size in bits, not used            */
-//    0,                                              /* IV size in bits, not used             */
-//    0,                                              /* Transmitted ICV size in bits, not used*/
-//    0,                                              /* Block size in bytes, not used         */
-//    sizeof(NX_CRYPTO_HKDF) + sizeof(NX_CRYPTO_HMAC),/* Metadata size in bytes                */
-//    _nx_crypto_method_hkdf_init,                    /* HKDF initialization routine           */
-//    _nx_crypto_method_hkdf_cleanup,                 /* HKDF cleanup routine                  */
-//    _nx_crypto_method_hkdf_operation                /* HKDF operation                        */
-//};
+NX_CRYPTO_METHOD crypto_method_hkdf =
+{
+    NX_CRYPTO_HKDF_METHOD,                          /* HKDF algorithm                        */
+    0,                                              /* Key size in bits, not used            */
+    0,                                              /* IV size in bits, not used             */
+    0,                                              /* Transmitted ICV size in bits, not used*/
+    0,                                              /* Block size in bytes, not used         */
+    sizeof(NX_CRYPTO_HKDF) + sizeof(NX_CRYPTO_HMAC),/* Metadata size in bytes                */
+    _nx_crypto_method_hkdf_init,                    /* HKDF initialization routine           */
+    _nx_crypto_method_hkdf_cleanup,                 /* HKDF cleanup routine                  */
+    _nx_crypto_method_hkdf_operation                /* HKDF operation                        */
+};
 
 /* Declare the 3DES-CBC 128 encrytion method. */
 NX_CRYPTO_METHOD crypto_method_des =
 {
-    NX_CRYPTO_ENCRYPTION_DES_CBC,                /* DES crypto algorithm                   */
-    NX_CRYPTO_DES_KEY_LEN_IN_BITS,               /* Key size in bits                       */
-    NX_CRYPTO_DES_IV_LEN_IN_BITS,                /* IV size in bits                        */
+    NX_CRYPTO_ENCRYPTION_DES_CBC,                /* DES crypto algorithm                   */ /* lgtm[cpp/weak-cryptographic-algorithm] */
+    NX_CRYPTO_DES_KEY_LEN_IN_BITS,               /* Key size in bits                       */ /* lgtm[cpp/weak-cryptographic-algorithm] */
+    NX_CRYPTO_DES_IV_LEN_IN_BITS,                /* IV size in bits                        */ /* lgtm[cpp/weak-cryptographic-algorithm] */
     0,                                           /* ICV size in bits, not used             */
-    (NX_CRYPTO_DES_BLOCK_SIZE_IN_BITS >> 3),     /* Block size in bytes                    */
+    (NX_CRYPTO_DES_BLOCK_SIZE_IN_BITS >> 3),     /* Block size in bytes                    */ /* lgtm[cpp/weak-cryptographic-algorithm] */
     sizeof(NX_CRYPTO_DES),                       /* Metadata size in bytes                 */
     _nx_crypto_method_des_init,                  /* 3DES initialization routine            */
     _nx_crypto_method_des_cleanup,               /* 3DES cleanup routine                   */
@@ -751,11 +772,11 @@ NX_CRYPTO_METHOD crypto_method_des =
 /* Declare the 3DES-CBC 128 encrytion method. */
 NX_CRYPTO_METHOD crypto_method_3des =
 {
-    NX_CRYPTO_ENCRYPTION_3DES_CBC,               /* 3DES crypto algorithm                  */
-    NX_CRYPTO_3DES_KEY_LEN_IN_BITS,              /* Key size in bits                       */
-    NX_CRYPTO_3DES_IV_LEN_IN_BITS,               /* IV size in bits                        */
-    0,                                           /* ICV size in bits, not used             */
-    (NX_CRYPTO_3DES_BLOCK_SIZE_IN_BITS >> 3),    /* Block size in bytes                    */
+    NX_CRYPTO_ENCRYPTION_3DES_CBC,               /* 3DES crypto algorithm                  */ /* lgtm[cpp/weak-cryptographic-algorithm] */
+    NX_CRYPTO_3DES_KEY_LEN_IN_BITS,              /* Key size in bits                       */ /* lgtm[cpp/weak-cryptographic-algorithm] */
+    NX_CRYPTO_3DES_IV_LEN_IN_BITS,               /* IV size in bits                        */ /* lgtm[cpp/weak-cryptographic-algorithm] */
+    0,                                           /* ICV size in bits, not used             */ 
+    (NX_CRYPTO_3DES_BLOCK_SIZE_IN_BITS >> 3),    /* Block size in bytes                    */ /* lgtm[cpp/weak-cryptographic-algorithm] */
     sizeof(NX_CRYPTO_3DES),                      /* Metadata size in bytes                 */
     _nx_crypto_method_3des_init,                 /* 3DES initialization routine            */
     _nx_crypto_method_3des_cleanup,              /* 3DES cleanup routine                   */

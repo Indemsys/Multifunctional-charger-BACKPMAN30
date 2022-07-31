@@ -452,7 +452,7 @@ UINT  i, j;
 /*                                                                        */
 /*  DESCRIPTION                                                           */ 
 /*                                                                        */ 
-/*    This function watches the session timeout on each ready_to_send client     */
+/*    This function watches the session timeout on each active client     */
 /*    session. WHen it does it clears session data from the client record */ 
 /*    and resets the client state to INIT. If a iP address had been       */
 /*    assigned, it is returned back to the server pool.                   */
@@ -1593,7 +1593,7 @@ NX_PACKET                       *packet_ptr;
         if (dhcp_events & NX_DHCP_SERVER_FAST_PERIODIC_EVENT)
         {
 
-            /* Check the clients in ready_to_send session with the server. */
+            /* Check the clients in active session with the server. */
             for (i = 0; i < NX_DHCP_CLIENT_RECORD_TABLE_SIZE; i++)
             {
 
@@ -1604,7 +1604,7 @@ NX_PACKET                       *packet_ptr;
                 if ((dhcp_client_ptr -> nx_dhcp_client_mac_lsw == 0) && (dhcp_client_ptr -> nx_dhcp_client_mac_msw == 0))
                     continue;
 
-                /* Skip clients not in ready_to_send session with the Server, static members,
+                /* Skip clients not in active session with the Server, static members, 
                 or client in the bound state. */
                 if (dhcp_client_ptr -> nx_dhcp_session_timeout == TX_WAIT_FOREVER)
                     continue;

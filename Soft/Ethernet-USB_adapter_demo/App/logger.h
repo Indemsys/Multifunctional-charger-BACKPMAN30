@@ -2,7 +2,7 @@
   #define __App_LOGGER
 
 
-  #define     EVENT_LOG_SIZE         256 // Должно быть степенью 2
+  #define     EVENT_LOG_SIZE         64  // Должно быть степенью 2
   #define     EVENT_LOG_DISPLAY_ROW  32  // Количество строк лога выводимых на экран при автообновлении
 
 

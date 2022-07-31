@@ -29,7 +29,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_tls_session_renegotiate                  PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -42,7 +42,7 @@
 /*    need, usually due to a connection being open for a long time or in  */
 /*    response to a potential security issue.                             */
 /*                                                                        */
-/*    If the session is still ready_to_send (no CloseNotify messages have been   */
+/*    If the session is still active (no CloseNotify messages have been   */
 /*    sent) then a re-negotiation is done using the Secure Renegotiation  */
 /*    Indication Extension (RFC 5746), if enabled. If the session has     */
 /*    been closed, a new session is established using the existing TCP    */
@@ -87,13 +87,23 @@
 /*                                            supported chained packet,   */
 /*                                            fixed renegotiation bug,    */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            fixed packet leak bug,      */
+/*                                            resulting in version 6.1.8  */
+/*  10-15-2021     Timothy Stapko           Modified comment(s), added    */
+/*                                            option to disable client    */
+/*                                            initiated renegotiation,    */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), changed  */
+/*                                            an error to assert,         */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 #ifndef NX_SECURE_TLS_DISABLE_SECURE_RENEGOTIATION
 UINT _nx_secure_tls_session_renegotiate(NX_SECURE_TLS_SESSION *tls_session, UINT wait_option)
 {
 UINT       status = NX_NOT_SUCCESSFUL;
-NX_PACKET *incoming_packet;
+NX_PACKET *incoming_packet = NX_NULL;
 NX_PACKET *send_packet;
 
     /* Get the protection. */
@@ -103,7 +113,7 @@ NX_PACKET *send_packet;
     tls_session -> nx_secure_record_queue_header = NX_NULL;
     tls_session -> nx_secure_record_decrypted_packet = NX_NULL;
 
-    /* If the session isn't ready_to_send, trying to renegotiate is an error! */
+    /* If the session isn't active, trying to renegotiate is an error! */
     if (tls_session -> nx_secure_tls_remote_session_active != NX_TRUE || tls_session -> nx_secure_tls_local_session_active != NX_TRUE)
     {
         /* Release the protection. */
@@ -196,6 +206,11 @@ NX_PACKET *send_packet;
                 break;
             }
         }
+
+        if (incoming_packet != NX_NULL)
+        {
+            nx_secure_tls_packet_release(incoming_packet);
+        }
     }
 #endif
 
@@ -204,7 +219,7 @@ NX_PACKET *send_packet;
     {
         /* Session is a TLS Server type. */
 
-        /* The session is ready_to_send, so send a HelloRequest to re-establish the connection. */
+        /* The session is active, so send a HelloRequest to re-establish the connection. */
         /* Allocate a handshake packet so we can send the HelloRequest message. */
         status = _nx_secure_tls_allocate_handshake_packet(tls_session, tls_session -> nx_secure_tls_packet_pool, &send_packet, wait_option);
 
@@ -216,15 +231,17 @@ NX_PACKET *send_packet;
             return(status);
         }
 
+        /* We are requesting a renegotiation from the server side - we need to know if we requested
+           the renegotiation when the ClientHello comes in so we can reject client-initiated renegotiation
+           if the user so chooses. */
+        tls_session -> nx_secure_tls_server_renegotiation_requested = NX_TRUE;
+
         /* Populate our packet with HelloRequest data. */
         status = _nx_secure_tls_send_hellorequest(tls_session, send_packet);
+        NX_ASSERT(status == NX_SUCCESS);
 
-        if (status == NX_SUCCESS)
-        {
-
-            /* Send the HelloRequest to kick things off. */
-            status = _nx_secure_tls_send_handshake_record(tls_session, send_packet, NX_SECURE_TLS_HELLO_REQUEST, wait_option);
-        }
+        /* Send the HelloRequest to kick things off. */
+        status = _nx_secure_tls_send_handshake_record(tls_session, send_packet, NX_SECURE_TLS_HELLO_REQUEST, wait_option);
 
         /* If anything after the allocate fails, we need to release our packet. */
         if (status != NX_SUCCESS)
@@ -256,6 +273,11 @@ NX_PACKET *send_packet;
             {
                 break;
             }
+        }
+
+        if (incoming_packet != NX_NULL)
+        {
+            nx_secure_tls_packet_release(incoming_packet);
         }
     }
 #endif

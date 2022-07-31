@@ -1,20 +1,4 @@
-﻿/*******************************************************************************
-*
-* Copyright 2004-2014 Freescale Semiconductor, Inc.
-*
-* This software is owned or controlled by Freescale Semiconductor.
-* Use of this software is governed by the Freescale FreeMASTER License
-* distributed with this Material.
-* See the LICENSE file distributed for more details.
-*
-****************************************************************************/
-/*!
-*
-* @brief  FreeMASTER serial communication routines
-*
-*******************************************************************************/
-
-#include "App.h"
+﻿#include "App.h"
 #include "freemaster.h"
 #include "freemaster_private.h"
 #include "freemaster_protocol.h"
@@ -26,7 +10,6 @@ extern T_serial_io_driver *frm_drv;
 static uint8_t fmstr_pCommBuffer[FMSTR_COMM_BUFFER_SIZE + 1 + 4 + 2];
 
 /* FreeMASTER runtime flags */
-/*lint -e{960} using union */
 typedef volatile union
 {
   uint8_t all;
@@ -61,7 +44,7 @@ static int32_t FMSTR_Rx(uint8_t rx_char);
 
 static FMSTR_BOOL _FMSTR_SerialInit(void);
 static void       _FMSTR_SerialPoll(void);
-static void       _FMSTR_SerialSendResponse(FMSTR_BPTR pResponse, FMSTR_SIZE nLength, FMSTR_U8 statusCode);
+static void       _FMSTR_SerialSendResponse(FMSTR_BPTR pResponse, FMSTR_SIZE nLength, FMSTR_U8 statusCode, void *identification);
 
 /* Interface of this serial driver */
 const FMSTR_TRANSPORT_INTF FMSTR_SERIAL =
@@ -167,7 +150,7 @@ static void FMSTR_Listen(void)
 static void _FMSTR_SendError(uint8_t nErrCode)
 {
   /* fill & send single-byte response */
-  FMSTR_SendResponse(&fmstr_pCommBuffer[2], 0U, nErrCode);
+  FMSTR_SendResponse(&fmstr_pCommBuffer[2], 0U, nErrCode, NULL);
 }
 
 /**************************************************************************/ /*!
@@ -182,7 +165,7 @@ static void _FMSTR_SendError(uint8_t nErrCode)
 *
 ******************************************************************************/
 
-static void  _FMSTR_SerialSendResponse(FMSTR_BPTR pResponse, FMSTR_SIZE nLength, FMSTR_U8 statusCode)
+static void  _FMSTR_SerialSendResponse(FMSTR_BPTR pResponse, FMSTR_SIZE nLength, FMSTR_U8 statusCode, void *identification)
 {
   uint8_t i;
   uint8_t c;
@@ -376,7 +359,7 @@ static int32_t FMSTR_Rx(uint8_t rxChar)
         pMessageIO = FMSTR_ValueFromBuffer8(&nSize, pMessageIO);
 
         /* do decode now! */
-        FMSTR_ProtocolDecoder(pMessageIO, nSize, nCmd);
+        FMSTR_ProtocolDecoder(pMessageIO, nSize, nCmd, (void *)"serial");
       }
 
       return FMSTR_TRUE;

@@ -38,7 +38,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_tcp_server_socket_relisten                      PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.8        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -59,7 +59,7 @@
 /*    NX_SUCCESS                            Successful completion status  */
 /*    NX_CONNECTION_PENDING                 Connection already underway   */
 /*                                           (this is a successful status)*/
-/*    NX_INVALID_RELISTEN                   No ready_to_send listen requests     */
+/*    NX_INVALID_RELISTEN                   No active listen requests     */
 /*    NX_NOT_CLOSED                         Socket state not closed       */
 /*    NX_ALREADY_BOUND                      Socket already bound to port  */
 /*                                                                        */
@@ -80,6 +80,9 @@
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Yuxin Zhou               Modified comment(s), and      */
+/*                                            supported TCP/IP offload,   */
+/*                                            resulting in version 6.1.8  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_tcp_server_socket_relisten(NX_IP *ip_ptr, UINT port, NX_TCP_SOCKET *socket_ptr)
@@ -132,13 +135,13 @@ VOID                         (*listen_callback)(NX_TCP_SOCKET *socket_ptr, UINT 
         return(NX_ALREADY_BOUND);
     }
 
-    /* Search through the ready_to_send listen requests to see if there is already
-       one ready_to_send.  */
+    /* Search through the active listen requests to see if there is already
+       one active.  */
     listen_ptr =  ip_ptr -> nx_ip_tcp_active_listen_requests;
     if (listen_ptr)
     {
 
-        /* Search the ready_to_send listen requests for this port.  */
+        /* Search the active listen requests for this port.  */
         do
         {
 
@@ -149,6 +152,19 @@ VOID                         (*listen_callback)(NX_TCP_SOCKET *socket_ptr, UINT 
 
                 /* Yes, a listen request was found for this port, with an empty
                    socket designation.  */
+
+#ifdef NX_ENABLE_TCPIP_OFFLOAD
+                /* Listen to TCP/IP offload interfaces.  */
+                if (_nx_tcp_server_socket_driver_listen(ip_ptr, port, socket_ptr))
+                {
+
+                    /* Listen request failure, release the protection.  */
+                    tx_mutex_put(&(ip_ptr -> nx_ip_protection));
+
+                    /* Return an already bound error code.  */
+                    return(NX_TCPIP_OFFLOAD_ERROR);
+                }
+#endif /* NX_ENABLE_TCPIP_OFFLOAD */
 
                 /* Determine if there are any connection requests queued up.  */
                 if (!listen_ptr -> nx_tcp_listen_queue_current)

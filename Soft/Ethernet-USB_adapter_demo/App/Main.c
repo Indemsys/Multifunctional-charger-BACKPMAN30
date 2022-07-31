@@ -3,7 +3,7 @@
 WVAR_TYPE    wvar;
 
 #pragma data_alignment=8
-uint8_t                 thread_main_stack[THREAD_MAIN_STACK_SIZE];
+uint8_t                 thread_main_stack[THREAD_MAIN_STACK_SIZE] @ "DTCM";
 TX_THREAD               main_thread;
 
 
@@ -13,7 +13,7 @@ TX_THREAD               main_thread;
 int main(void)
 {
   SCB_EnableICache();
-  SCB_EnableDCache(); 
+  SCB_EnableDCache();
   BACKPMAN3_Memory_init(); // Объявляем область используемую DMA ADC как некэшируемую
 
   HAL_Init();
@@ -39,7 +39,7 @@ int main(void)
 -----------------------------------------------------------------------------------------------------*/
 VOID tx_application_define(VOID *first_unused_memory)
 {
-  App_create_pool_memry(first_unused_memory);
+  App_create_mem_pools(first_unused_memory);
 
   json_set_alloc_funcs(App_malloc, App_free); // Назначаем парсеру JSON функции работы с динамической памятью
 

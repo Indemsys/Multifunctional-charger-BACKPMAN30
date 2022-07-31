@@ -16,7 +16,7 @@ void MX_USB_OTG_FS_PCD_Init(void)
   hpcd_USB_OTG_FS.Init.speed                   = PCD_SPEED_FULL;
   hpcd_USB_OTG_FS.Init.dma_enable              = DISABLE;
   hpcd_USB_OTG_FS.Init.phy_itface              = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable              = DISABLE;
+  hpcd_USB_OTG_FS.Init.Sof_enable              = ENABLE;
   hpcd_USB_OTG_FS.Init.low_power_enable        = DISABLE;
   hpcd_USB_OTG_FS.Init.lpm_enable              = DISABLE;
   hpcd_USB_OTG_FS.Init.battery_charging_enable = ENABLE;
@@ -108,7 +108,7 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef *pcdHandle)
 void MX_USB_OTG_FS_HCD_Init(void)
 {
   hhcd_USB_OTG_FS.Instance               = USB_OTG_FS;
-  hhcd_USB_OTG_FS.Init.Host_channels     = 16;
+  hhcd_USB_OTG_FS.Init.Host_channels     = 4;  // При таком минимальном количестве каналов может работать класс CDC-ECM. Чем больше каналов, тем дольше длиться процедура прерывания USB
   hhcd_USB_OTG_FS.Init.speed             = HCD_SPEED_FULL;
   hhcd_USB_OTG_FS.Init.dma_enable        = DISABLE;
   hhcd_USB_OTG_FS.Init.phy_itface        = USB_OTG_EMBEDDED_PHY;
@@ -129,7 +129,7 @@ void MX_USB_OTG_FS_HCD_Init(void)
 void HAL_HCD_MspInit(HCD_HandleTypeDef *hcdHandle)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-    
+
   HAL_PWREx_EnableUSBVoltageDetector();
 
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -152,7 +152,7 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef *hcdHandle)
 
   __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
 
-  HAL_NVIC_SetPriority(OTG_FS_IRQn, 6, 0);
+  HAL_NVIC_SetPriority(OTG_FS_IRQn, USB_HOST_PRIO, 0);
   HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
 }
 

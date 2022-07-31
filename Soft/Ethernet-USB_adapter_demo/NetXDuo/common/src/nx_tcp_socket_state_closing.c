@@ -42,7 +42,7 @@
 /*  DESCRIPTION                                                           */
 /*                                                                        */
 /*    This function processes packets during the CLOSING state,           */
-/*    which is the state at the end of an ready_to_send, simultaneous            */
+/*    which is the state at the end of an active, simultaneous            */
 /*    disconnect.  If a valid ACK is present, set the socket state        */
 /*    to TIMED WAIT.                                                      */
 /*                                                                        */

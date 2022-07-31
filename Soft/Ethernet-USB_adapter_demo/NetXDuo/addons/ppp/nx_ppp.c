@@ -407,7 +407,7 @@ ULONG       count;
         if (ppp_events & NX_PPP_EVENT_TIMEOUT)
         {
 
-            /* Timeout occurred. Is there are PPP timeout ready_to_send?   */
+            /* Timeout occurred. Is there are PPP timeout active?   */
             if (ppp_ptr -> nx_ppp_timeout)
             {
                 
@@ -2210,7 +2210,7 @@ NX_PACKET       *packet_ptr;
 /*  FUNCTION                                               RELEASE        */ 
 /*                                                                        */ 
 /*    _nx_ppp_lcp_state_machine_update                    PORTABLE C      */ 
-/*                                                           6.1.2        */
+/*                                                           6.1.8        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -2257,6 +2257,9 @@ NX_PACKET       *packet_ptr;
 /*                                            improved packet length      */
 /*                                            verification,               */
 /*                                            resulting in version 6.1.2  */
+/*  08-02-2021     Yuxin Zhou               Modified comment(s), fixed    */
+/*                                            the logic of retransmission,*/
+/*                                            resulting in version 6.1.8  */
 /*                                                                        */
 /**************************************************************************/
 void  _nx_ppp_lcp_state_machine_update(NX_PPP *ppp_ptr, NX_PACKET *packet_ptr)
@@ -2801,9 +2804,6 @@ UINT    status;
                         /* Yes, the peer can accept larger messages than the default.  */
                         (ppp_ptr -> nx_ppp_interface_ptr) -> nx_interface_ip_mtu_size =  ppp_ptr -> nx_ppp_mru;
                     }
-                    
-                    /* Disable the LCP timeout.  */
-                    ppp_ptr -> nx_ppp_timeout =  0;
                 }
 
                 /* Send configuration reply.  */
@@ -8740,11 +8740,11 @@ TX_INTERRUPT_SAVE_AREA
     /* Disable interrupts.  */
     TX_DISABLE
 
-    /* Check for no longer ready_to_send PPP instance.  */
+    /* Check for no longer active PPP instance.  */
     if (ppp_ptr -> nx_ppp_id != NX_PPP_ID)
     {
 
-        /* PPP is no longer ready_to_send.  */
+        /* PPP is no longer active.  */
 
         /* Restore interrupts.  */
         TX_RESTORE
@@ -8782,7 +8782,7 @@ TX_INTERRUPT_SAVE_AREA
         return(NX_PPP_BUFFER_FULL);
     }
 
-    /* Otherwise, PPP is ready_to_send and there is room in the buffer!  */
+    /* Otherwise, PPP is active and there is room in the buffer!  */
 
     /* Place the byte in the buffer.  */
     ppp_ptr -> nx_ppp_serial_buffer[ppp_ptr -> nx_ppp_serial_buffer_write_index++] =  byte;
@@ -12101,11 +12101,11 @@ TX_INTERRUPT_SAVE_AREA
     /* Disable interrupts.  */
     TX_DISABLE
 
-    /* Check for no longer ready_to_send PPP instance.  */
+    /* Check for no longer active PPP instance.  */
     if (ppp_ptr -> nx_ppp_id != NX_PPP_ID)
     {
 
-        /* PPP is no longer ready_to_send.  */
+        /* PPP is no longer active.  */
 
         /* Restore interrupts.  */
         TX_RESTORE

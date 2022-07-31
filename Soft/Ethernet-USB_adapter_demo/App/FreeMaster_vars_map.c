@@ -70,3 +70,11 @@ FMSTR_TSA_RW_VAR(curr_enc_b_smpl                        ,FMSTR_TSA_UINT8)
 
 FMSTR_TSA_TABLE_END();
 
+
+
+FMSTR_TSA_TABLE_LIST_BEGIN()
+
+FMSTR_TSA_TABLE(wvar_vars)
+FMSTR_TSA_TABLE(app_vars)
+
+FMSTR_TSA_TABLE_LIST_END()

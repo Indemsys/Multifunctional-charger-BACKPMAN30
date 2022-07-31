@@ -4,9 +4,9 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include   "App.h"
 
-uint8_t     spi_b      @ ".sram1";
+uint8_t     spi_b      @ "SRAM1";
 #pragma data_alignment=8
-uint8_t    spi_buf[4]  @ ".sram1";
+uint8_t    spi_buf[4]  @ "SRAM1";
 
 
 //static void TFT_clear_screen(void);

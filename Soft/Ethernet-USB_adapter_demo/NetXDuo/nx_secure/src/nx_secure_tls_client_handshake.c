@@ -265,7 +265,7 @@ const NX_CRYPTO_METHOD
             break;
         case NX_SECURE_TLS_HELLO_REQUEST:
             /* Server has requested we restart the session. If we are in the middle of a handshake already
-             * (session is not ready_to_send) then ignore. If we are in an ready_to_send session, we can choose to
+             * (session is not active) then ignore. If we are in an active session, we can choose to
              * send a ClientHello (start the handshake again) or send a no_renegotiation alert. */
             if (tls_session -> nx_secure_tls_local_session_active)
             {
@@ -395,7 +395,7 @@ const NX_CRYPTO_METHOD
                     status = NX_SECURE_TLS_NO_RENEGOTIATION_ERROR;
                 }
             }
-            /* If we are still in a handshake (session is not ready_to_send) then ignore the message. */
+            /* If we are still in a handshake (session is not active) then ignore the message. */
             break;
 #endif /* NX_SECURE_TLS_DISABLE_SECURE_RENEGOTIATION */
         case NX_SECURE_TLS_CLIENT_STATE_SERVERHELLO:
@@ -561,7 +561,7 @@ const NX_CRYPTO_METHOD
             /* Reset the sequence number now that we are starting a new session. */
             NX_SECURE_MEMSET(tls_session -> nx_secure_tls_local_sequence_number, 0, sizeof(tls_session -> nx_secure_tls_local_sequence_number));
 
-            /* The local session is now ready_to_send since we sent the changecipherspec message.
+            /* The local session is now active since we sent the changecipherspec message.
                NOTE: Do not set the keys until after the changecipherspec message has been passed to the send record
                routine - this call causes encryption and hashing to happen on records. ChangeCipherSpec should be the last
                un-encrypted/un-hashed record sent. For a renegotiation handshake, CCS is the last message encrypted using

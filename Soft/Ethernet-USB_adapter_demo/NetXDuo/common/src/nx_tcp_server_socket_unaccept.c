@@ -174,13 +174,13 @@ UINT                         port;
     else
     {
 
-        /* Not bound, so search through the ready_to_send listen requests to see if this
-           socket is an ready_to_send listen socket.  */
+        /* Not bound, so search through the active listen requests to see if this
+           socket is an active listen socket.  */
         listen_ptr =  ip_ptr -> nx_ip_tcp_active_listen_requests;
         if (listen_ptr)
         {
 
-            /* Search the ready_to_send listen requests for this port.  */
+            /* Search the active listen requests for this port.  */
             do
             {
 
@@ -207,7 +207,7 @@ UINT                         port;
     socket_ptr -> nx_tcp_socket_state =        NX_TCP_CLOSED;
     socket_ptr -> nx_tcp_socket_client_type =  NX_TRUE;
 
-    /* Socket is no longer ready_to_send. Clear the timeout. */
+    /* Socket is no longer active. Clear the timeout. */
     socket_ptr -> nx_tcp_socket_timeout =  0;
 
     /* The socket is off the bound list...  we need to check for queued receive packets and

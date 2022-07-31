@@ -51,7 +51,6 @@
 
 #define NX_PTP_SOURCE_CODE
 
-#include <tx_user.h>
 #include "nxd_ptp_client.h"
 #include "nx_udp.h"
 #include "nx_ipv4.h"

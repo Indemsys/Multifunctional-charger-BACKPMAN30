@@ -8,7 +8,7 @@ extern FDCAN_HandleTypeDef    hfdcan;
 
 TX_THREAD                     can_thread;
 #pragma data_alignment=8
-uint8_t                       thread_CAN_stack[THREAD_CAN_STACK_SIZE];
+uint8_t                       thread_CAN_stack[THREAD_CAN_STACK_SIZE] @ "DTCM";
 
 
 static void Thread_CAN(ULONG initial_input);

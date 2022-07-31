@@ -38,7 +38,7 @@
 /*  DESCRIPTION                                                           */
 /*                                                                        */
 /*    This function returns the size in bytes needed by the current       */
-/*    TLS session cipher (e.g. AES) if the encrypted session is ready_to_send.   */
+/*    TLS session cipher (e.g. AES) if the encrypted session is active.   */
 /*    If the session is not encrypted (e.g. during initial handshake) or  */
 /*    the cipher does not have an inlined IV, 0 is returned.              */
 /*                                                                        */
@@ -77,7 +77,7 @@ const NX_CRYPTO_METHOD               *session_cipher_method;
 UINT                                  algorithm;
 
 
-    /* If TLS session is ready_to_send, allocate space for the IV that precedes the data in
+    /* If TLS session is active, allocate space for the IV that precedes the data in
        certain ciphersuites. */
     if (tls_session -> nx_secure_tls_local_session_active)
     {
@@ -145,7 +145,7 @@ UINT                                  algorithm;
     }
     else
     {
-        /* Session is not ready_to_send so we don't need to allocate space for an IV. */
+        /* Session is not active so we don't need to allocate space for an IV. */
         *iv_size = 0;
     }
 

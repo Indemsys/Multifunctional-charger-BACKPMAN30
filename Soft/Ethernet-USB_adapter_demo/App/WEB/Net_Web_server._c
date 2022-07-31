@@ -27,9 +27,9 @@ NX_WEB_HTTP_SERVER         web_server;
 static   uint8_t   server_stack[WEB_SERVER_STACK_SIZE];
 
 
-static NX_SECURE_X509_CERT  certificate @ ".sram1";
-static CHAR                 crypto_metadata_server[20000 * NX_WEB_HTTP_SERVER_SESSION_MAX] @ ".sram1";
-static UCHAR                tls_packet_buffer[40000] @ ".sram1";
+static NX_SECURE_X509_CERT  certificate @ "SRAM1";
+static CHAR                 crypto_metadata_server[20000 * NX_WEB_HTTP_SERVER_SESSION_MAX] @ "SRAM1";
+static UCHAR                tls_packet_buffer[40000] @ "SRAM1";
 
 
 #define               RESPONSE_MAX_SIZE 512
@@ -711,11 +711,11 @@ void HTTP_server_controller(void)
 
   if (Is_RNDIS_network_active())
   {
-    Net_HTTP_server_create(&rndis_ip);
+    Net_HTTP_server_create(rndis_ip_ptr);
   }
   else
   {
-    if (http_ip_ptr == &rndis_ip)
+    if (http_ip_ptr == rndis_ip_ptr)
     {
       status = Net_HTTP_server_delete();
       APPLOG("RNDIS. HTTP server delete result: %04X", status);

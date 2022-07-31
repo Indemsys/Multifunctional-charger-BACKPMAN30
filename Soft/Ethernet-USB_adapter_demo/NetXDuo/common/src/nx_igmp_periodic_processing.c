@@ -83,7 +83,7 @@ UINT          interface_index;
     for (i = 0; i < NX_MAX_MULTICAST_GROUPS; i++)
     {
 
-        /* Determine if the specified entry is ready_to_send.  */
+        /* Determine if the specified entry is active.  */
         if (ip_ptr -> nx_ipv4_multicast_entry[i].nx_ipv4_multicast_join_list)
         {
 
@@ -92,7 +92,7 @@ UINT          interface_index;
                 (ip_ptr -> nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time != NX_WAIT_FOREVER))
             {
 
-                /* Yes, it is ready_to_send.  Decrement and check for expiration.  */
+                /* Yes, it is active.  Decrement and check for expiration.  */
                 ip_ptr -> nx_ipv4_multicast_entry[i].nx_ipv4_multicast_update_time--;
 
                 /* We don't want to decrement a join group if we cannot send it. Check

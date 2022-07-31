@@ -63,11 +63,8 @@ static NX_WEB_HTTP_SERVER_MIME_MAP _nx_web_http_server_mime_maps[] =
     {"html",     "text/html"},
     {"htm",      "text/html"},
     {"txt",      "text/plain"},
-    {"css",      "text/css"},
-    {"js",       "application/javascript"},
     {"gif",      "image/gif"},
     {"jpg",      "image/jpeg"},
-    {"png",      "image/png"},
     {"ico",      "image/x-icon"},
 };
 
@@ -274,7 +271,7 @@ UINT  _nxe_web_http_server_packet_content_find(NX_WEB_HTTP_SERVER *server_ptr, N
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_web_http_server_packet_content_find             PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -321,6 +318,9 @@ UINT  _nxe_web_http_server_packet_content_find(NX_WEB_HTTP_SERVER *server_ptr, N
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  06-02-2021     Yuxin Zhou               Modified comment(s),          */
+/*                                            fixed compiler warnings,    */
+/*                                            resulting in version 6.1.7  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_web_http_server_packet_content_find(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET **packet_ptr, ULONG *content_length)
@@ -393,6 +393,12 @@ ULONG       temp_offset;
         {
             temp_offset -= (ULONG)((*packet_ptr) -> nx_packet_append_ptr - (*packet_ptr) -> nx_packet_prepend_ptr);
             (*packet_ptr) = (*packet_ptr) -> nx_packet_next;
+        }
+
+        /* Chack if packet is valid.  */
+        if ((*packet_ptr) == NX_NULL)
+        {
+            return(NX_WEB_HTTP_BAD_PACKET_LENGTH);
         }
 
         /* If this packet contain no content, set next packet as the first packet of the content.  */
@@ -2186,8 +2192,8 @@ UINT    status;
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _nxe_web_http_server_secure_configure               PORTABLE C      */
-/*                                                           6.1          */
+/*    _nx_web_http_server_secure_configure                PORTABLE C      */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -2255,6 +2261,8 @@ UINT    status;
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s),          */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_web_http_server_secure_configure(NX_WEB_HTTP_SERVER *http_server_ptr, const NX_SECURE_TLS_CRYPTO *crypto_table,
@@ -2285,6 +2293,120 @@ UINT    status;
     /* Return result of TLS setup. */
     return(status);
 }
+
+#ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _nxe_web_http_server_secure_ecc_configure           PORTABLE C      */
+/*                                                           6.1.11       */
+/*  AUTHOR                                                                */
+/*                                                                        */
+/*    Yuxin Zhou, Microsoft Corporation                                   */
+/*                                                                        */
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks for errors in the HTTPS ECC configuration call.*/
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    http_server_ptr                       Pointer to HTTP server        */
+/*    supported_groups                      List of supported groups      */
+/*    supported_group_count                 Number of supported groups    */
+/*    curves                                List of curve methods         */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    status                                Completion status             */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    _nx_web_http_server_secure_ecc_configure                            */
+/*                                          Actual ECC configuration call */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
+/*  04-25-2022     Yuxin Zhou               Initial Version 6.1.11        */
+/*                                                                        */
+/**************************************************************************/
+UINT _nxe_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_ptr,
+                                               const USHORT *supported_groups, USHORT supported_group_count,
+                                               const NX_CRYPTO_METHOD **curves)
+{
+UINT status;
+
+    /* Check for invalid input pointers. */
+    if ((http_server_ptr == NX_NULL) || (http_server_ptr -> nx_web_http_server_id != NX_WEB_HTTP_SERVER_ID) ||
+        (supported_groups == NX_NULL) || (supported_group_count == 0) || (curves == NX_NULL))
+    {
+        return(NX_PTR_ERROR);
+    }
+
+    /* Call actual ECC configuration function.  */
+    status = _nx_web_http_server_secure_ecc_configure(http_server_ptr, supported_groups, supported_group_count, curves);
+    return(status);
+}
+
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _nx_web_http_server_secure_ecc_configure            PORTABLE C      */
+/*                                                           6.1.11       */
+/*  AUTHOR                                                                */
+/*                                                                        */
+/*    Yuxin Zhou, Microsoft Corporation                                   */
+/*                                                                        */
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function configures supported curve lists for NetX Web HTTP    */
+/*    server instance using TLS.                                          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    http_server_ptr                       Pointer to HTTP server        */
+/*    supported_groups                      List of supported groups      */
+/*    supported_group_count                 Number of supported groups    */
+/*    curves                                List of curve methods         */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    status                                Completion status             */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*    nx_tcpserver_tls_ecc_setup            Socket server ECC configure   */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
+/*    Application Code                                                    */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
+/*  04-25-2022     Yuxin Zhou               Initial Version 6.1.11        */
+/*                                                                        */
+/**************************************************************************/
+UINT _nx_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_ptr,
+                                              const USHORT *supported_groups, USHORT supported_group_count,
+                                              const NX_CRYPTO_METHOD **curves)
+{
+UINT status;
+
+    /* Configure TLS ECC for the socket server. */
+    status = nx_tcpserver_tls_ecc_setup(&http_server_ptr -> nx_web_http_server_tcpserver, 
+                                        supported_groups, supported_group_count, curves);
+    return(status);
+}
+#endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */
 
 #endif /* NX_WEB_HTTPS_ENABLE */
 
@@ -3689,11 +3811,6 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
-        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
-        {
-          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
-          return;
-        }
 
         /* Determine if the authentication failed.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
@@ -4227,11 +4344,6 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
-        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
-        {
-          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
-          return;
-        }
 
         /* Determine if the authentication is currently in progress.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
@@ -4691,11 +4803,6 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
-        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
-        {
-          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
-          return;
-        }
 
         /* Determine if the authentication is currently in progress.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
@@ -5277,7 +5384,7 @@ UINT        authorization_decoded_size;
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_web_http_server_retrieve_basic_authorization    PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -5314,6 +5421,10 @@ UINT        authorization_decoded_size;
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  01-31-2022     Yuxin Zhou               Modified comment(s),  fixed   */
+/*                                            the HTTP Server state issue */
+/*                                            with basic authorization,   */
+/*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_web_http_server_retrieve_basic_authorization(NX_PACKET *packet_ptr, CHAR *authorization_request_ptr)
@@ -5378,6 +5489,9 @@ CHAR    *buffer_ptr;
         /* No, authorization is not present.  Return a zero length.  */
         return(length);
     }
+
+    /* Set the found flag back to false.  */
+    found =  NX_FALSE;
 
     /* Now remove any extra blanks.  */
     while ((buffer_ptr < (CHAR *) packet_ptr -> nx_packet_append_ptr) && (*buffer_ptr == ' '))
@@ -5771,105 +5885,6 @@ UINT       crlf_found = 0;
 
     /* Not found the "cr,lf,cr,lf".  */
     return(0);
-}
-
-
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_web_http_server_number_convert                  PORTABLE C      */
-/*                                                           6.1          */
-/*  AUTHOR                                                                */
-/*                                                                        */
-/*    Yuxin Zhou, Microsoft Corporation                                   */
-/*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function converts a number into an ASCII string.               */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    number                                Unsigned integer number       */
-/*    string                                Destination string            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    Size                                  Number of bytes in string     */
-/*                                           (0 implies an error)         */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_web_http_server_get_process       Process GET request           */
-/*    _nx_web_http_server_response_send     Send response to client       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
-/*    DATE              NAME                      DESCRIPTION             */
-/*                                                                        */
-/*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
-/*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
-/*                                            resulting in version 6.1    */
-/*                                                                        */
-/**************************************************************************/
-UINT  _nx_web_http_server_number_convert(UINT number, CHAR *string)
-{
-
-UINT    j;
-UINT    digit;
-UINT    size;
-
-
-    /* Initialize counters.  */
-    size =  0;
-
-    /* Loop to convert the number to ASCII.  */
-    while (size < 10)
-    {
-
-        /* Shift the current digits over one.  */
-        for (j = size; j != 0; j--)
-        {
-
-            /* Move each digit over one place.  */
-            string[j] =  string[j-1];
-        }
-
-        /* Compute the next decimal digit.  */
-        digit =  number % 10;
-
-        /* Update the input number.  */
-        number =  number / 10;
-
-        /* Store the new digit in ASCII form.  */
-        string[0] =  (CHAR) (digit + 0x30);
-
-        /* Increment the size.  */
-        size++;
-
-        /* Determine if the number is now zero.  */
-        if (number == 0)
-            break;
-    }
-
-    /* Make the string NULL terminated.  */
-    string[size] =  (CHAR) NX_NULL;
-
-    /* Determine if there is an overflow error.  */
-    if (number)
-    {
-
-        /* Error, return bad values to user.  */
-        size =  0;
-        string[0] = '0';
-    }
-
-    /* Return size to caller.  */
-    return(size);
 }
 
 
@@ -7184,7 +7199,7 @@ UINT  _nxe_web_http_server_get_entity_header(NX_WEB_HTTP_SERVER *server_ptr, NX_
 /*  FUNCTION                                               RELEASE        */ 
 /*                                                                        */ 
 /*    _nx_web_http_server_get_entity_header               PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -7226,6 +7241,9 @@ UINT  _nxe_web_http_server_get_entity_header(NX_WEB_HTTP_SERVER *server_ptr, NX_
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), and      */
 /*                                            fixed write underflow,      */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            verified memmove use cases, */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_web_http_server_get_entity_header(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET **packet_pptr, UCHAR *entity_header_buffer, ULONG buffer_size)
@@ -7329,7 +7347,7 @@ UINT                        index;
             /* Leave boundary string only. */
             memmove(&multipart_ptr -> nx_web_http_server_multipart_boundary[4],
                     &multipart_ptr -> nx_web_http_server_multipart_boundary[index],
-                    quotation_index - index + 1);
+                    quotation_index - index + 1); /* Use case of memmove is verified.  */
         }
         else
         {
@@ -8277,7 +8295,7 @@ UCHAR   ch;
 /*  FUNCTION                                               RELEASE        */ 
 /*                                                                        */ 
 /*    _nx_web_http_server_generate_response_header        PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.8        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -8308,7 +8326,7 @@ UCHAR   ch;
 /*                                          Allocate response packet      */
 /*    nx_packet_data_append                 Append packet data            */
 /*    memcmp                                Compare string                */
-/*    _nx_web_http_server_number_convert    Convert number to ASCII       */
+/*    _nx_utility_uint_to_string            Convert number to ASCII       */
 /*    _nx_web_http_server_date_to_string    Convert data to string        */
 /*    nx_packet_release                     Release packet                */
 /*                                                                        */ 
@@ -8327,6 +8345,10 @@ UCHAR   ch;
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Yuxin Zhou               Modified comment(s),          */
+/*                                            improved the logic of       */
+/*                                            converting number to string,*/
+/*                                            resulting in version 6.1.8  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_web_http_server_generate_response_header(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET **packet_pptr,
@@ -8426,7 +8448,7 @@ CHAR        status_code_not_modified;
         {
 
             /* Convert the content_length to ASCII representation.  */
-            temp = _nx_web_http_server_number_convert(content_length, temp_string);
+            temp = _nx_utility_uint_to_string(content_length, 10, temp_string, sizeof(temp_string));
 
             /* Place the "Content-Length" field in the header.  */
             status += nx_packet_data_append(packet_ptr, "Content-Length: ", 16,
@@ -8494,7 +8516,7 @@ CHAR        status_code_not_modified;
                                                 server_ptr -> nx_web_http_server_packet_pool_ptr, NX_WAIT_FOREVER);
 
                 /* Convert the max-age to ASCII representation.  */
-                temp = _nx_web_http_server_number_convert(max_age, temp_string);
+                temp = _nx_utility_uint_to_string(max_age, 10, temp_string, sizeof(temp_string));
                 status += nx_packet_data_append(packet_ptr, temp_string, temp,
                                                 server_ptr -> nx_web_http_server_packet_pool_ptr, NX_WAIT_FOREVER);
 

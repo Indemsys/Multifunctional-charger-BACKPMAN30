@@ -267,7 +267,7 @@ VOID  _nx_tcp_socket_state_syn_sent(NX_TCP_SOCKET *socket_ptr, NX_TCP_HEADER *tc
     {
 
         /* Invalid response was received, it is likely that the other side still
-           thinks a previous connection is ready_to_send.  Send a reset (RST) message to
+           thinks a previous connection is active.  Send a reset (RST) message to
            the other side to clear any previous connection.  */
 
         /* Send the RST packet.  */

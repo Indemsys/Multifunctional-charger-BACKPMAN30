@@ -27,7 +27,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
 /*    nx_web_http_server.h                                PORTABLE C      */
-/*                                                           6.1.6        */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -50,6 +50,16 @@
 /*                                            improved the logic of       */
 /*                                            parsing base64,             */
 /*                                            resulting in version 6.1.6  */
+/*  08-02-2021     Yuxin Zhou               Modified comment(s), and      */
+/*                                            improved the logic of       */
+/*                                            converting number to string,*/
+/*                                            resulting in version 6.1.8  */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s), and      */
+/*                                            deprecated unused macros,   */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            supported ECC configuration,*/
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -65,10 +75,6 @@
 extern   "C" {
 
 #endif
-
-/* Include common HTTP definitions. */
-#include "nx_web_http_common.h"
-
 
 /* If HTTPS is enabled, make sure TLS is enabled in the TCP server. */
 #ifdef NX_WEB_HTTPS_ENABLE
@@ -88,6 +94,8 @@ extern   "C" {
 #include    "filex_stub.h"
 #endif
 
+/* Include common HTTP definitions. */
+#include "nx_web_http_common.h"
 
 /* Include multiple-socket TCP/TLS support. */
 #include "nx_tcpserver.h"
@@ -140,10 +148,10 @@ extern   "C" {
 #define NX_WEB_HTTP_SERVER_MAX_PENDING          (NX_WEB_HTTP_SERVER_SESSION_MAX << 1)
 #endif
 
+/* Deprecated. This symbol is defined for compatibility. */
 #ifndef NX_WEB_HTTP_SERVER_THREAD_TIME_SLICE
 #define NX_WEB_HTTP_SERVER_THREAD_TIME_SLICE    2
 #endif
-
 
 #ifndef NX_WEB_HTTP_SERVER_MIN_PACKET_SIZE
 #define NX_WEB_HTTP_SERVER_MIN_PACKET_SIZE      600
@@ -354,6 +362,7 @@ typedef struct NX_WEB_HTTP_SERVER_STRUCT
 #define nx_web_http_server_query_get                         _nx_web_http_server_query_get
 #define nx_web_http_server_start                             _nx_web_http_server_start
 #define nx_web_http_server_secure_configure                  _nx_web_http_server_secure_configure
+#define nx_web_http_server_secure_ecc_configure              _nx_web_http_server_secure_ecc_configure
 #define nx_web_http_server_stop                              _nx_web_http_server_stop
 #define nx_web_http_server_content_get_extended              _nx_web_http_server_content_get_extended
 #define nx_web_http_server_content_length_get                _nx_web_http_server_content_length_get
@@ -390,6 +399,7 @@ typedef struct NX_WEB_HTTP_SERVER_STRUCT
 #define nx_web_http_server_query_get                         _nxe_web_http_server_query_get
 #define nx_web_http_server_start                             _nxe_web_http_server_start
 #define nx_web_http_server_secure_configure                  _nxe_web_http_server_secure_configure
+#define nx_web_http_server_secure_ecc_configure              _nxe_web_http_server_secure_ecc_configure
 #define nx_web_http_server_stop                              _nxe_web_http_server_stop
 #define nx_web_http_server_content_get_extended              _nxe_web_http_server_content_get_extended
 #define nx_web_http_server_get_entity_header                 _nxe_web_http_server_get_entity_header
@@ -450,6 +460,11 @@ UINT        nx_web_http_server_secure_configure(NX_WEB_HTTP_SERVER *http_server_
                                             UINT remote_certs_num,
                                             UCHAR *remote_certificate_buffer,
                                             UINT remote_cert_buffer_size);
+#ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
+UINT        nx_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_ptr,
+                                                    const USHORT *supported_groups, USHORT supported_group_count,
+                                                    const NX_CRYPTO_METHOD **curves);
+#endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */
 #endif /* NX_WEB_HTTPS_ENABLE */
 UINT        nx_web_http_server_stop(NX_WEB_HTTP_SERVER *http_server_ptr);
 UINT        nx_web_http_server_content_get_extended(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET *packet_ptr, ULONG byte_offset, CHAR *destination_ptr, UINT destination_size, UINT *actual_size);
@@ -514,6 +529,11 @@ UINT        _nx_web_http_server_secure_configure(NX_WEB_HTTP_SERVER *http_server
                                             UINT remote_certs_num,
                                             UCHAR *remote_certificate_buffer,
                                             UINT remote_cert_buffer_size);
+#ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
+UINT        _nx_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_ptr,
+                                                     const USHORT *supported_groups, USHORT supported_group_count,
+                                                     const NX_CRYPTO_METHOD **curves);
+#endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */
 #endif /* NX_WEB_HTTPS_ENABLE */
 UINT        _nx_web_http_server_stop(NX_WEB_HTTP_SERVER *http_server_ptr);
 UINT        _nx_web_http_server_content_get_extended(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET *packet_ptr, ULONG byte_offset, CHAR *destination_ptr, UINT destination_size, UINT *actual_size);
@@ -559,7 +579,6 @@ UINT        _nx_web_http_server_basic_authenticate(NX_WEB_HTTP_SERVER *server_pt
 UINT        _nx_web_http_server_retrieve_basic_authorization(NX_PACKET *packet_ptr, CHAR *authorization_request_ptr);
 UINT        _nx_web_http_server_retrieve_resource(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET *packet_ptr, CHAR *destination, UINT max_size);
 UINT        _nx_web_http_server_calculate_content_offset(NX_PACKET *packet_ptr);
-UINT        _nx_web_http_server_number_convert(UINT number, CHAR *string);
 UINT        _nx_web_http_server_type_get(NX_WEB_HTTP_SERVER *server_ptr, CHAR *name, CHAR *http_type_string, UINT *string_size);
 UINT        _nx_web_http_server_type_get_extended(NX_WEB_HTTP_SERVER *server_ptr, CHAR *name, UINT name_length,
                                                   CHAR *http_type_string, UINT http_type_string_max_size, UINT *string_size);
@@ -640,6 +659,11 @@ UINT        _nxe_web_http_server_secure_configure(NX_WEB_HTTP_SERVER *http_serve
                                             UINT remote_certs_num,
                                             UCHAR *remote_certificate_buffer,
                                             UINT remote_cert_buffer_size);
+#ifdef NX_SECURE_ENABLE_ECC_CIPHERSUITE
+UINT        _nxe_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_ptr,
+                                                      const USHORT *supported_groups, USHORT supported_group_count,
+                                                      const NX_CRYPTO_METHOD **curves);
+#endif /* NX_SECURE_ENABLE_ECC_CIPHERSUITE */
 #endif /* NX_WEB_HTTPS_ENABLE */
 UINT        _nxe_web_http_server_stop(NX_WEB_HTTP_SERVER *http_server_ptr);
 UINT        _nxe_web_http_server_invalid_userpassword_notify_set(NX_WEB_HTTP_SERVER *http_server_ptr,

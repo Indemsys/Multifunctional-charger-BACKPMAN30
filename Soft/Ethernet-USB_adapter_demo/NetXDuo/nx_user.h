@@ -632,9 +632,9 @@
    to NetX Duo API for notifying the application of socket events, such as TCP connection and disconnect
    completion.  These extended notify functions are mainly used by the BSD wrapper. The default is this
    feature is disabled.  */
-/*
+
 #define NX_ENABLE_EXTENDED_NOTIFY_SUPPORT
-*/
+
 
 /* Defined, ASSERT is disabled. The default is enabled. */
 /*
@@ -662,6 +662,8 @@
 /*
 #define NX_MAX_STRING_LENGTH                                1024
 */
+
+#define NX_TELNET_SERVER_USER_CREATE_PACKET_POOL
 
 #endif
 

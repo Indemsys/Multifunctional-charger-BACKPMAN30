@@ -40,7 +40,7 @@
 /*    This function generates a HelloRequest message, which is used by a  */
 /*    TLS server to indicate to the remote TLS client host that it wishes */
 /*    to perform a re-negotiation handshake. The client should respond    */
-/*    with a ClientHello as long as the ready_to_send TLS session is valid.      */
+/*    with a ClientHello as long as the active TLS session is valid.      */
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */

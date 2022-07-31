@@ -194,7 +194,7 @@ UINT    status;
                 ip_ptr -> nx_ip_arp_dynamic_list =  arp_entry;
             }
 
-            /* Increment the number of ready_to_send dynamic entries.  */
+            /* Increment the number of active dynamic entries.  */
             ip_ptr -> nx_ip_arp_dynamic_active_count++;
         }
 

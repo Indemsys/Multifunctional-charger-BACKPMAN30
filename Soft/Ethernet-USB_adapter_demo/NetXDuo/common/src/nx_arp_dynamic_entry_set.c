@@ -142,7 +142,7 @@ ULONG         next_hop_address;
             break;
         }
 
-        /* Move to the next entry in the ready_to_send list.  */
+        /* Move to the next entry in the active list.  */
         search_ptr =  search_ptr -> nx_arp_active_next;
 
         /* Determine if the search pointer is back at the head of

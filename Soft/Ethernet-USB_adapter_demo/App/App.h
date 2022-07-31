@@ -33,6 +33,7 @@
 
   #include   "../app/CAN_bus_defs.h"
 
+  #include   "freemaster.h"
   #include   "Serial_driver.h"
 
 //#include   "stm32h735g_discovery_sd.h"
@@ -44,7 +45,7 @@
   #include   "ux_host_class_cdc_ecm.h"
   #include   "USB_descriptors_builder.h"
   #include   "USB_periph_init.h"
-  #include   "USB_device_init.h"
+  #include   "USB_init.h"
   #include   "USB_msc_driver.h"
   #include   "USB_CDC_driver.h"
   #include   "USB_host_cdc_ecm.h"
@@ -71,6 +72,7 @@
   #include   "logger.h"
   #include   "Net_common.h"
   #include   "Net_utils.h"
+  #include   "Net_TCP_server.h"
   #include   "NV_store.h"
   #include   "App_JSON_serializer.h"
   #include   "App_JSON_deserializer.h"
@@ -95,6 +97,7 @@
   #define        HARDWARE_VERSION                  "BACKPMAN3 Rev1.0"
 
   #define        AXI_SRAM_END                      0x2407FFFF
+  #define        DTCM_SRAM_END                     0x2001FFFF
 
   #define        STFS_PARAMS_FILE_NAME             "PARAMS.JSON"
   #define        STFS_COMPRESSED_PARAMS_FILE_NAME  "PARAMS.BIN"
@@ -150,27 +153,27 @@ extern void    Delay_m7(int cnt); // Задержка на (cnt+1)*7 такто�
   #define        THREAD_NET_STACK_SIZE              4096
   #define        THREAD_CAN_STACK_SIZE              2048
   #define        THREAD_IO_STACK_SIZE               2048
-  #define        THREAD_LOCK_STACK_SIZE             2048
   #define        THREAD_HMI_STACK_SIZE              2048
-
+  #define        THREAD_BSD_STACK_SIZE              2048
 
   #define        THREAD_MAIN_PRIORITY               3
   #define        THREAD_IO_PRIORITY                 4
   #define        THREAD_CAN_PRIORITY                5
   #define        THREAD_LOCK_PRIORITY               6
   #define        THREAD_FREEMASTER_PRIORITY         7
+  #define        THREAD_BSD_PRIORITY                8
   #define        THREAD_NET_PRIORITY                9
   #define        VT100_TASK_PRIO                    10
   #define        THREAD_HMI_PRIORITY                11
   #define        THREAD_STFS_TEST_PRIORITY          21
   #define        THREAD_IDLE_PRIORITY               30
 
-//#define        ADC12_ISR_PRIO                     7
-//#define        ADC3_ISR_PRIO                      7
-  #define        DMA_ADC_ISR_PRIO                   6  // Приоритет прерывания каналов DMA при приеме данных от ADC
-  #define        SPI4_ISR_PRIO                      7  // Приоритет канала обмена с дисплеем
-  #define        SPI1_ISR_PRIO                      5  // Приоритет канала обмена с DAC80501
 
+// A lower priority value indicates a higher priority
+  #define        DMA_ADC_ISR_PRIO                   4  // Приоритет прерывания каналов DMA при приеме данных от ADC
+  #define        SPI1_ISR_PRIO                      5  // Приоритет канала обмена с DAC80501
+  #define        USB_HOST_PRIO                      6  // Приоритет USB в режиме хоста
+  #define        SPI4_ISR_PRIO                      7  // Приоритет канала обмена с дисплеем
 
 typedef struct
 {
@@ -184,9 +187,8 @@ typedef struct
 
 } T_usb_app_info;
 
-
 extern T_app_state                app_state;
-extern         WVAR_TYPE          wvar;
+extern WVAR_TYPE                  wvar;
 extern const   T_work_params      dwvar[];
 extern uint64_t                   ref_time;             // Калибровочная константа предназначенная для измерения нагрузки микропроцессора
 extern volatile uint32_t          g_cpu_usage;
@@ -198,6 +200,9 @@ extern uint32_t                   dcdc_duty_cycle;
 extern uint32_t                   dcdc_duty_cycle_last;
 extern uint32_t                   dcdc_compare_val;
 extern uint32_t                   adc_trig_compare_val;
+
+extern uint8_t                    g_start_freemaster;
+extern uint8_t                    g_usb_mode;
 
 extern float                      TS_CAL2;
 extern float                      TS_CAL1;
@@ -220,7 +225,7 @@ extern T_run_average_uint32_20    flt_VREF;
 
 extern T_can_land_cmd             g_can_cmd;
 
-extern T_usb_app_info            uinf;
+extern T_usb_app_info            g_uinf;
 
 void   Thread_HMI_create(void);
 

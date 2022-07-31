@@ -6,7 +6,7 @@
 /*  GUIX Studio User Guide, or visit our web site at azure.com/rtos            */
 /*                                                                             */
 /*  GUIX Studio Revision 6.1.11.0                                              */
-/*  Date (dd.mm.yyyy): 11. 7.2022   Time (hh:mm): 13:02                        */
+/*  Date (dd.mm.yyyy): 24. 7.2022   Time (hh:mm): 15:35                        */
 /*******************************************************************************/
 
 
@@ -381,7 +381,7 @@ GX_CONST GX_STUDIO_WIDGET window_LAN_info_Val_DHCP_define =
     gx_studio_prompt_create,                 /* create function                */
     GX_NULL,                                 /* drawing function override      */
     GX_NULL,                                 /* event function override        */
-    {10, 79, 130, 102},                      /* widget size                    */
+    {10, 79, 220, 102},                      /* widget size                    */
     &window_LAN_info_Val_IP_define,          /* next widget definition         */
     GX_NULL,                                 /* no child widgets               */ 
     offsetof(WINDOW_LAN_INFO_CONTROL_BLOCK, window_LAN_info_Val_DHCP), /* control block */

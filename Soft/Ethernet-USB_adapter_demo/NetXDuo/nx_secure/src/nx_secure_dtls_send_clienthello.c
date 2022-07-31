@@ -39,7 +39,7 @@ static UINT _nx_secure_dtls_send_clienthello_sec_spf_extensions(NX_SECURE_TLS_SE
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_dtls_send_clienthello                    PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.10       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -81,6 +81,9 @@ static UINT _nx_secure_dtls_send_clienthello_sec_spf_extensions(NX_SECURE_TLS_SE
 /*  09-30-2020     Timothy Stapko           Modified comment(s),          */
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
+/*  01-31-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            updated cookie handling,    */
+/*                                            resulting in version 6.1.10 */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_dtls_send_clienthello(NX_SECURE_DTLS_SESSION *dtls_session, NX_PACKET *send_packet)
@@ -121,7 +124,7 @@ USHORT                      protocol_version;
     /* Initialize the handshake hashes used for the Finished message. */
     _nx_secure_tls_handshake_hash_init(tls_session);
 
-    /* At this point, the remote session is not ready_to_send - that is, incoming records are not encrypted. */
+    /* At this point, the remote session is not active - that is, incoming records are not encrypted. */
     tls_session -> nx_secure_tls_remote_session_active = 0;
 
     /* Since we are establishing a new session, we start in non-encrypted mode. */
@@ -171,10 +174,10 @@ USHORT                      protocol_version;
 
         /* Move the data to insert cookie. */
         NX_SECURE_MEMMOVE(packet_buffer + dtls_session -> nx_secure_dtls_cookie_length,
-                packet_buffer, (UINT)(send_packet -> nx_packet_append_ptr - packet_buffer));
+                packet_buffer, (UINT)(send_packet -> nx_packet_append_ptr - packet_buffer)); /* Use case of memmove is verified.  */
 
         /* Set cookie. */
-        NX_SECURE_MEMCPY(packet_buffer, dtls_session -> nx_secure_dtls_cookie,
+        NX_SECURE_MEMCPY(packet_buffer, dtls_session -> nx_secure_dtls_client_cookie_ptr,
                dtls_session -> nx_secure_dtls_cookie_length); /* Use case of memcpy is verified. */
         length += dtls_session -> nx_secure_dtls_cookie_length;
 
@@ -461,7 +464,7 @@ USHORT                      protocol_version;
     send_packet -> nx_packet_length = send_packet -> nx_packet_length + length;
 
     /* We are starting a new handshake, so both local and remote sessions are not
-     * ready_to_send. */
+     * active. */
     dtls_session -> nx_secure_dtls_tls_session.nx_secure_tls_remote_session_active = 0;
     dtls_session -> nx_secure_dtls_tls_session.nx_secure_tls_local_session_active = 0;
 

@@ -88,7 +88,7 @@ NX_ARP *arp_entry;
     /* Setup pointers to the starting and ending ARP entries in the dynamic list.  */
     arp_entry = ip_ptr -> nx_ip_arp_dynamic_list;
 
-    /* Walk through the dynamic ARP list until there are no more ready_to_send entries.  */
+    /* Walk through the dynamic ARP list until there are no more active entries.  */
     while ((arp_entry) && (ip_ptr -> nx_ip_arp_dynamic_active_count))
     {
 

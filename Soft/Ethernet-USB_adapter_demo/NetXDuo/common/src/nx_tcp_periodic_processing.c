@@ -106,7 +106,7 @@ UINT           keepalive_enabled = NX_FALSE;
         if (keepalive_enabled)
         {
 
-            /* Yes; Check for the socket having a TCP Keepalive timer ready_to_send.  */
+            /* Yes; Check for the socket having a TCP Keepalive timer active.  */
             if ((socket_ptr -> nx_tcp_socket_state == NX_TCP_ESTABLISHED) && (socket_ptr -> nx_tcp_socket_keepalive_timeout))
             {
 

@@ -13,7 +13,7 @@ const T_parmenu parmenu[5]=
 };
 
 
-const T_work_params dwvar[15]=
+const T_work_params dwvar[14]=
 {
   {
     "default_ip_addr",
@@ -106,24 +106,6 @@ const T_work_params dwvar[15]=
     0,
   },
   {
-    "en_freemaster_on_telnet",
-    "Enable FreeMaster on Telnet (0-No, 1-Yes)",
-    "ENFRONT",
-    (void*)&wvar.en_freemaster_on_telnet,
-    tint8u,
-    1,
-    0,
-    1,
-    0,
-    BKMAN3R1_CDC_ECM,
-    "",
-    "%d",
-    0,
-    sizeof(wvar.en_freemaster_on_telnet),
-    6,
-    1,
-  },
-  {
     "name",
     "Product  name",
     "-",
@@ -196,10 +178,10 @@ const T_work_params dwvar[15]=
     3,
   },
   {
-    "vcom_mode",
-    "Select VCOM mode (0 - VT100 terminal, 1 - FreeMaster) ",
+    "en_freemaster",
+    "Enable FreeMaster protocol",
     "-",
-    (void*)&wvar.vcom_mode,
+    (void*)&wvar.en_freemaster,
     tint8u,
     1,
     0,
@@ -209,7 +191,7 @@ const T_work_params dwvar[15]=
     "",
     "%d",
     0,
-    sizeof(wvar.vcom_mode),
+    sizeof(wvar.en_freemaster),
     5,
     1,
   },

@@ -217,10 +217,10 @@ typedef struct NX_NAT_DEVICE_STRUCT
     ULONG                                  forwarded_packets_sent;              /* Total number of packets sent by NAT. */        
 #endif                                                                                                                                           
     NX_NAT_TRANSLATION_ENTRY               *nx_nat_dynamic_available_entry_head;/* Define the head pointer of available dynamic entries list.   */
-    NX_NAT_TRANSLATION_ENTRY               *nx_nat_dynamic_active_entry_head;   /* Define the head pointer of ready_to_send dynamic entries list.      */
+    NX_NAT_TRANSLATION_ENTRY               *nx_nat_dynamic_active_entry_head;   /* Define the head pointer of active dynamic entries list.      */ 
     UINT                                   nx_nat_dynamic_available_entries;    /* Define the number of available dynamic entries.              */  
-    UINT                                   nx_nat_dynamic_active_entries;       /* Define the number of ready_to_send dynamic entries.                 */
-    UINT                                   nx_nat_static_active_entries;        /* Define the number of ready_to_send static entries.                  */
+    UINT                                   nx_nat_dynamic_active_entries;       /* Define the number of active dynamic entries.                 */        
+    UINT                                   nx_nat_static_active_entries;        /* Define the number of active static entries.                  */                        
     VOID                                   (*nx_nat_cache_full_notify)(struct NX_NAT_DEVICE_STRUCT *);                   
 } NX_NAT_DEVICE;        
 

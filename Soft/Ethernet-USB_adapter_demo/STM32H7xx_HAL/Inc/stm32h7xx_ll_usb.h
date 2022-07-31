@@ -419,9 +419,7 @@ typedef struct
 #define USBx_DFIFO(i)   *(__IO uint32_t *)(USBx_BASE + USB_OTG_FIFO_BASE + ((i) * USB_OTG_FIFO_SIZE))
 
 #define USBx_HOST       ((USB_OTG_HostTypeDef *)(USBx_BASE + USB_OTG_HOST_BASE))
-#define USBx_HC(i)      ((USB_OTG_HostChannelTypeDef *)(USBx_BASE\
-                                                        + USB_OTG_HOST_CHANNEL_BASE\
-                                                        + ((i) * USB_OTG_HOST_CHANNEL_SIZE)))
+#define USBx_HC(i)      ((USB_OTG_HostChannelTypeDef *)(USBx_BASE + USB_OTG_HOST_CHANNEL_BASE + ((i) * USB_OTG_HOST_CHANNEL_SIZE)))
 
 #endif /* defined (USB_OTG_FS) || defined (USB_OTG_HS) */
 
@@ -504,7 +502,7 @@ HAL_StatusTypeDef USB_HC_StartXfer(USB_OTG_GlobalTypeDef *USBx,
                                    USB_OTG_HCTypeDef *hc, uint8_t dma);
 
 uint32_t          USB_HC_ReadInterrupt(USB_OTG_GlobalTypeDef *USBx);
-HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint8_t hc_num);
+HAL_StatusTypeDef USB_HC_Halt(USB_OTG_GlobalTypeDef *USBx, uint32_t hc_num);
 HAL_StatusTypeDef USB_DoPing(USB_OTG_GlobalTypeDef *USBx, uint8_t ch_num);
 HAL_StatusTypeDef USB_StopHost(USB_OTG_GlobalTypeDef *USBx);
 HAL_StatusTypeDef USB_ActivateRemoteWakeup(USB_OTG_GlobalTypeDef *USBx);

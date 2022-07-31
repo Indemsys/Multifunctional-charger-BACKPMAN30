@@ -4,17 +4,6 @@
 #include "freemaster_tsa.h"
 
 
-
-FMSTR_TSA_TABLE_LIST_BEGIN()
-
-FMSTR_TSA_TABLE(wvar_vars)
-FMSTR_TSA_TABLE(app_vars)
-
-FMSTR_TSA_TABLE_LIST_END()
-
-T_serial_io_driver           *frm_drv;
-
-
 #define FM_PIPE_RX_BUF_SIZE 64
 #define FM_PIPE_TX_BUF_SIZE 1024
 #define FM_PIPE_MAX_STR_LEN 512
@@ -43,6 +32,24 @@ T_fm_pins_state             pst_prev;
 static void Thread_freemaster(ULONG initial_data);
 
 /*-----------------------------------------------------------------------------------------------------
+  Вызывается из контекста удаляемой задачи после того как она выключена
+
+  \param thread_ptr
+  \param condition
+-----------------------------------------------------------------------------------------------------*/
+static void FreeMaster_entry_exit_notify(TX_THREAD *thread_ptr, UINT condition)
+{
+  if (condition == TX_THREAD_ENTRY)
+  {
+
+  }
+  else if (condition == TX_THREAD_EXIT)
+  {
+    FreeMaster_task_delete();
+  }
+}
+
+/*-----------------------------------------------------------------------------------------------------
 
 
   \param void
@@ -52,14 +59,8 @@ static void Thread_freemaster(ULONG initial_data);
 uint32_t FreeMaster_task_create(ULONG initial_data)
 {
   UINT                err;
-  T_serial_io_driver *p_drv;
 
   if (task_freemaster_created != 0) return RES_ERROR;
-
-  // Инициализируем драйвер
-  // Выделяется память драйвера, создается задача приема драйвера
-  p_drv = (T_serial_io_driver *)initial_data;
-  if (p_drv->_init(&p_drv->pdrvcbl, p_drv) != RES_OK) return RES_ERROR;
 
   p_freemaster_stack = App_malloc(THREAD_FREEMASTER_STACK_SIZE);
   if (p_freemaster_stack == NULL) goto err_exit_;
@@ -68,19 +69,22 @@ uint32_t FreeMaster_task_create(ULONG initial_data)
   if (p_freemaster_thread == NULL) goto err_exit_;
 
   err = tx_thread_create(
-       p_freemaster_thread,
-       (CHAR *)"FreeMaster",
-       Thread_freemaster,
-       (ULONG)p_drv,
-       p_freemaster_stack,
-       THREAD_FREEMASTER_STACK_SIZE,
-       THREAD_FREEMASTER_PRIORITY,
-       THREAD_FREEMASTER_PRIORITY,
-       1,
-       TX_AUTO_START
-       );
+                         p_freemaster_thread,
+                         (CHAR *)"FreeMaster",
+                         Thread_freemaster,
+                         initial_data,
+                         p_freemaster_stack,
+                         THREAD_FREEMASTER_STACK_SIZE,
+                         THREAD_FREEMASTER_PRIORITY,
+                         THREAD_FREEMASTER_PRIORITY,
+                         1,
+                         TX_AUTO_START
+                        );
 
   if (err != TX_SUCCESS) return RES_ERROR;
+
+  tx_thread_entry_exit_notify(p_freemaster_thread, FreeMaster_entry_exit_notify);
+
   task_freemaster_created = 1;
   return RES_OK;
 
@@ -99,9 +103,7 @@ err_exit_:
 -----------------------------------------------------------------------------------------------------*/
 void FreeMaster_task_delete(void)
 {
-  T_serial_io_driver *p_drv =(T_serial_io_driver *)(p_freemaster_thread->driver);
   tx_thread_terminate(p_freemaster_thread);
-  p_drv->_deinit(&p_drv->pdrvcbl);
   tx_thread_delete(p_freemaster_thread);
   App_free(p_freemaster_stack);
   App_free(p_freemaster_thread);
@@ -110,7 +112,6 @@ void FreeMaster_task_delete(void)
   App_free(p_log_rec);
   App_free(log_str);
   task_freemaster_created = 0;
-
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -120,25 +121,25 @@ void FreeMaster_task_delete(void)
 -----------------------------------------------------------------------------------------------------*/
 static void Pins_control(void)
 {
-  if (memcmp(&pst,&pst_prev, sizeof(T_fm_pins_state))!= 0)
+  if (memcmp(&pst,&pst_prev, sizeof(T_fm_pins_state)) != 0)
   {
-    Set_OUT1_level ( pst.OUT1      );
-    Set_OUT2_level ( pst.OUT2      );
-    Set_OUT3_level ( pst.OUT3      );
-    Set_OUT4_level ( pst.OUT4      );
-    Set_LED_green  ( pst.LED_green );
-    Set_LED_red    ( pst.LED_red   );
-    Set_ASW_R      ( pst.ASW_R     );
-    Set_ASW_F      ( pst.ASW_F     );
-    Set_PSW_R      ( pst.PSW_R     );
-    Set_PSW_F      ( pst.PSW_F     );
-    Set_LSW_F      ( pst.LSW_F     );
-    Set_OLED_RES   ( pst.OLED_RES  );
-    Set_OLEDV      ( pst.OLEDV     );
-    Set_OLED_DC    ( pst.OLED_DC   );
-    Set_OLED_CS    ( pst.OLED_CS   );
-    Set_EN_CHARGER ( pst.EN_CHARGER);
-    Set_DCDC_MODE  ( pst.DCDC_MODE );
+    Set_OUT1_level(pst.OUT1);
+    Set_OUT2_level(pst.OUT2);
+    Set_OUT3_level(pst.OUT3);
+    Set_OUT4_level(pst.OUT4);
+    Set_LED_green(pst.LED_green);
+    Set_LED_red(pst.LED_red);
+    Set_ASW_R(pst.ASW_R);
+    Set_ASW_F(pst.ASW_F);
+    Set_PSW_R(pst.PSW_R);
+    Set_PSW_F(pst.PSW_F);
+    Set_LSW_F(pst.LSW_F);
+    Set_OLED_RES(pst.OLED_RES);
+    Set_OLEDV(pst.OLEDV);
+    Set_OLED_DC(pst.OLED_DC);
+    Set_OLED_CS(pst.OLED_CS);
+    Set_EN_CHARGER(pst.EN_CHARGER);
+    Set_DCDC_MODE(pst.DCDC_MODE);
 
     pst_prev = pst;
   }
@@ -214,16 +215,16 @@ void Format_log_string(char *str, uint32_t max_str_len, T_app_log_record  *p_log
   if (p_log_rec->line_num != 0)
   {
     snprintf(str, max_str_len, "%06d.%06d %s (%s %d)\n\r",
-      sec, usec,
-      p_log_rec->msg,
-      p_log_rec->func_name,
-      p_log_rec->line_num);
+             sec, usec,
+             p_log_rec->msg,
+             p_log_rec->func_name,
+             p_log_rec->line_num);
   }
   else
   {
     snprintf(str, max_str_len, "%06d.%06d %s\n\r",
-      sec, usec,
-      p_log_rec->msg);
+             sec, usec,
+             p_log_rec->msg);
   }
 }
 
@@ -260,12 +261,7 @@ static void Thread_freemaster(ULONG initial_data)
   uint16_t app_command;
   uint8_t  res;
 
-  tx_thread_identify()->driver =  initial_data;
-
-  // Получаем указатель на драйвер последовательного интерфейса
-  frm_drv = (T_serial_io_driver *)(tx_thread_identify()->driver);
-
-  if (!FMSTR_Init())
+  if (!FMSTR_Init((void *)initial_data))
   {
     return;
   }

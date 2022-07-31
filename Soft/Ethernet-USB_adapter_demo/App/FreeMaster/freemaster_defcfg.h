@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2007-2015 Freescale Semiconductor, Inc.
- * Copyright 2018-2019 NXP
+ * Copyright 2018-2021 NXP
  *
  * License: NXP LA_OPT_NXP_Software_License
  *
@@ -32,18 +32,18 @@
 #include "freemaster_cfg.h"
 
 /* Define global version macro */
-#define FMSTR_VERSION 0x00030000 /* 3.0.0 */
-#define FMSTR_VERSION_STR "3.0.0"
+#define FMSTR_VERSION     0x00030004
+#define FMSTR_VERSION_STR "3.0.4"
 
 /******************************************************************************
-* Configuration check
-******************************************************************************/
+ * Configuration check
+ ******************************************************************************/
 
 /* polling mode as default when nothing selected */
 #if !defined(FMSTR_POLL_DRIVEN) && !defined(FMSTR_LONG_INTR) && !defined(FMSTR_SHORT_INTR)
-    #define FMSTR_LONG_INTR   0
-    #define FMSTR_SHORT_INTR  0
-    #define FMSTR_POLL_DRIVEN 1
+#define FMSTR_LONG_INTR   0
+#define FMSTR_SHORT_INTR  0
+#define FMSTR_POLL_DRIVEN 1
 #endif
 
 /* otherwise, "undefined" means false for all three options */
@@ -57,25 +57,27 @@
 #define FMSTR_SHORT_INTR 0
 #endif
 
-/* transport MUST be defined in configuration */
-#if (!(FMSTR_DISABLE)) && !defined(FMSTR_TRANSPORT)
-    #error No FreeMASTER communication transport interface is enabled. Please choose the interface (FMSTR_TRANSPORT) or set FMSTR_DISABLE option to 1.
+
+/* Protocol session */
+#ifndef FMSTR_SESSION_COUNT
+#define FMSTR_SESSION_COUNT 1
 #endif
 
-#ifndef FMSTR_DISABLE
-#define FMSTR_DISABLE 0   /* FreeMASTER driver de-activated */
+#if FMSTR_SESSION_COUNT == 0
+#error Count of sessions (FMSTR_SESSION_COUNT) cannot be zero!
 #endif
+
 
 #ifndef FMSTR_APPLICATION_STR
-#define FMSTR_APPLICATION_STR "Unknown Application"
+#define FMSTR_APPLICATION_STR "Not defined"
 #endif
 
 #ifndef FMSTR_DESCRIPTION_STR
-#define FMSTR_DESCRIPTION_STR "Unknown Description"
+#define FMSTR_DESCRIPTION_STR "Not defined"
 #endif
 
 #ifndef FMSTR_BUILDTIME_STR
-#define FMSTR_BUILDTIME_STR __DATE__" " __TIME__
+#define FMSTR_BUILDTIME_STR "Build date not specified" /* e.g: __DATE__ " " __TIME__ */
 #endif
 
 /* Remote access to device enabled by default */
@@ -91,20 +93,20 @@
 /* Build CFG_F1 configuration flags: */
 
 /* CFG_F1 0x01: Big endian */
-#define FMSTR_CFG_F1_BIG_ENDIAN ((FMSTR_PLATFORM_BIG_ENDIAN ? 1 : 0) << 0)
+#define FMSTR_CFG_F1_BIG_ENDIAN ((FMSTR_PLATFORM_BIG_ENDIAN != 0U ? 1U : 0U) << 0)
 
 /* CFG_F1 0x02: Remote access enabled */
-#define FMSTR_CFG_F1_ENABLE_REMOTE_ACCESS ((FMSTR_ENABLE_REMOTE_ACCESS ? 1 : 0) << 1)
+#define FMSTR_CFG_F1_ENABLE_REMOTE_ACCESS ((FMSTR_ENABLE_REMOTE_ACCESS != 0U ? 1U : 0U) << 1)
 
 /* CFG_F1 0x30: access level which needs passwords */
-#if (defined (FMSTR_RESTRICTED_ACCESS_R_PASSWORD))
-    #define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_R) << 4)
+#if (defined(FMSTR_RESTRICTED_ACCESS_R_PASSWORD))
+#define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_R) << 4)
 #elif defined(FMSTR_RESTRICTED_ACCESS_RW_PASSWORD)
-    #define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_RW) << 4)
+#define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_RW) << 4)
 #elif defined(FMSTR_RESTRICTED_ACCESS_RWF_PASSWORD)
-    #define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_RWF) << 4)
+#define FMSTR_CFG_F1_RESTRICTED_ACCESS ((FMSTR_RESTRICTED_ACCESS_RWF) << 4)
 #else
-    #define FMSTR_CFG_F1_RESTRICTED_ACCESS 0
+#define FMSTR_CFG_F1_RESTRICTED_ACCESS 0U
 #endif
 
 /* CFG_F1 value */
@@ -153,25 +155,25 @@
 #endif
 
 #if FMSTR_USE_RECORDER > 255
-#error The count of enabled recorders MUST be smaller than 255.
+#error Number of enabled recorders MUST be smaller than 255.
 #endif
 
 #if FMSTR_USE_SCOPE > 255
-#error The count of enabled scopes MUST be smaller than 255.
+#error Number of enabled oscilloscopes MUST be smaller than 255.
 #endif
 
 /* check recorder settings */
-#if FMSTR_USE_RECORDER
+#if FMSTR_USE_RECORDER > 0
 
-    /* 0 means recorder time base is "unknown" */
-    #ifndef FMSTR_REC_TIMEBASE
-    #define FMSTR_REC_TIMEBASE 0
-    #endif
+/* 0 means recorder time base is "unknown" */
+#ifndef FMSTR_REC_TIMEBASE
+#define FMSTR_REC_TIMEBASE 0
+#endif
 
-    /* default recorder buffer size is 256 */
-    #ifndef FMSTR_REC_BUFF_SIZE
-    #define FMSTR_REC_BUFF_SIZE 256
-    #endif
+/* 0 means that default recorder will not be created, user needs to call RecoderCreate */
+#ifndef FMSTR_REC_BUFF_SIZE
+#define FMSTR_REC_BUFF_SIZE 0
+#endif
 
 #endif
 /* default app.cmds settings */
@@ -192,10 +194,6 @@
 #define FMSTR_USE_TSA 0
 #endif
 
-#if (FMSTR_USE_TSA) && (FMSTR_DISABLE)
-#undef FMSTR_USE_TSA
-#define FMSTR_USE_TSA 0
-#endif
 
 #ifndef FMSTR_USE_TSA_SAFETY
 #define FMSTR_USE_TSA_SAFETY 0
@@ -206,7 +204,7 @@
 #define FMSTR_USE_TSA_INROM 0
 #endif
 
-#if FMSTR_USE_TSA_INROM
+#if FMSTR_USE_TSA_INROM > 0
 #define FMSTR_TSA_CDECL const
 #else
 #define FMSTR_TSA_CDECL
@@ -232,33 +230,50 @@
 #endif
 
 #if FMSTR_USE_PIPES > 127
-#error The count of enabled pipes MUST be smaller than 127.
+#error Number of enabled pipes MUST be smaller than 127.
 #endif
 
-#if FMSTR_USE_PIPES
-    /* pipe printf buffer */
-    #ifndef FMSTR_PIPES_PRINTF_BUFF_SIZE
-    #define FMSTR_PIPES_PRINTF_BUFF_SIZE 48
-    #endif
+#if FMSTR_USE_PIPES > 0
+/* pipe printf buffer */
+#ifndef FMSTR_PIPES_PRINTF_BUFF_SIZE
+#define FMSTR_PIPES_PRINTF_BUFF_SIZE 48U
+#endif
 #endif
 
 /* use default buffer size */
 #if !defined(FMSTR_COMM_BUFFER_SIZE) || (FMSTR_COMM_BUFFER_SIZE < 32)
-    #if defined(FMSTR_COMM_BUFFER_SIZE)
-        #if FMSTR_COMM_BUFFER_SIZE > 0
-            #warning FMSTR_COMM_BUFFER_SIZE set too small
-        #endif
+#if defined(FMSTR_COMM_BUFFER_SIZE)
+#if FMSTR_COMM_BUFFER_SIZE > 0
+#warning FMSTR_COMM_BUFFER_SIZE set too small
+#endif
 
-        #undef  FMSTR_COMM_BUFFER_SIZE
-    #elif !(FMSTR_DISABLE)
-        #warning FMSTR_COMM_BUFFER_SIZE is not set in configuration, the default value is used.
-    #endif
+#undef FMSTR_COMM_BUFFER_SIZE
+#endif
 
-    #define FMSTR_COMM_BUFFER_SIZE 240
+#define FMSTR_COMM_BUFFER_SIZE 240U
+#endif
+
+/* PDBDM buffer is defined in the driver by default */
+#ifndef FMSTR_PDBDM_USER_BUFFER
+#define FMSTR_PDBDM_USER_BUFFER 0
 #endif
 
 /* Help macro to create ID string for preprocessor to recognize the drivers to enable or not */
 #define FMSTR_MK_IDSTR1(x) x##_ID
-#define FMSTR_MK_IDSTR(x) FMSTR_MK_IDSTR1(x)
+#define FMSTR_MK_IDSTR(x)  FMSTR_MK_IDSTR1(x)
+
+/* Default driver debugging print level (0=none, 1=errors, 2=normal, 3=verbose) */
+#ifndef FMSTR_DEBUG_LEVEL
+#ifdef FMSTR_DEBUG_PRINTF
+#define FMSTR_DEBUG_LEVEL 3
+#else
+#define FMSTR_DEBUG_LEVEL 0
+#endif
+#endif
+
+#if FMSTR_DEBUG_LEVEL > 0 && !defined(FMSTR_DEBUG_PRINTF)
+#undef FMSTR_DEBUG_LEVEL
+#define FMSTR_DEBUG_LEVEL 0
+#endif
 
 #endif /* __FREEMASTER_DEF_CFG_H */

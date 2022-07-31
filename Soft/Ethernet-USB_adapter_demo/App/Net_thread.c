@@ -3,12 +3,15 @@
 // 15:40:27
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include   "App.h"
-
+#include   "nxd_bsd.h"
 
 
 TX_THREAD                     net_thread;
 #pragma data_alignment=8
-uint8_t                       thread_net_stack[THREAD_NET_STACK_SIZE];
+uint8_t                       thread_net_stack[THREAD_NET_STACK_SIZE] @ "DTCM";
+#pragma data_alignment=8
+uint8_t                       thread_bsd_stack[THREAD_BSD_STACK_SIZE] @ "DTCM";
+
 
 static TX_EVENT_FLAGS_GROUP   net_flag;
 
@@ -21,6 +24,8 @@ static void Thread_net(ULONG initial_input);
 -----------------------------------------------------------------------------------------------------*/
 void Thread_net_create(void)
 {
+  Init_Net();
+
   tx_thread_create(&net_thread, "Net", Thread_net,
     0,
     (void *)thread_net_stack, // stack_start
@@ -73,14 +78,16 @@ static void Thread_net(ULONG initial_input)
     Net_task_abnormal_stop();
   }
 
-  Init_Net();
-  if (wvar.usb_mode == USB_MODE_DEVICE)
+  if (g_usb_mode == USB_MODE_DEVICE)
   {
     RNDIS_init_network_stack();
+    if (bsd_initialize(rndis_ip_ptr, &net_packet_pool, (CHAR*)thread_bsd_stack, THREAD_BSD_STACK_SIZE, THREAD_BSD_PRIORITY)==TX_SUCCESS) g_start_freemaster = 1;
+
   }
   else
   {
     ECM_Host_init_network_stack();
+    if (bsd_initialize(ecm_host_ip_ptr, &net_packet_pool, (CHAR*)thread_bsd_stack, THREAD_BSD_STACK_SIZE, THREAD_BSD_PRIORITY)==TX_SUCCESS) g_start_freemaster = 1;
   }
 
   do
@@ -97,7 +104,7 @@ static void Thread_net(ULONG initial_input)
     }
     else
     {
-      if (wvar.usb_mode == USB_MODE_DEVICE)
+      if (g_usb_mode == USB_MODE_DEVICE)
       {
         RNDIS_network_controller();
       }

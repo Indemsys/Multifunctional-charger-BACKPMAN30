@@ -86,7 +86,7 @@ NX_PACKET *next_packet_ptr;
     /* Pickup pointer to ARP dynamic list.  */
     arp_entry =  ip_ptr -> nx_ip_arp_dynamic_list;
 
-    /* Loop through the ready_to_send ARP entries to see if they need updating.  */
+    /* Loop through the active ARP entries to see if they need updating.  */
     for (i = 0; i < ip_ptr -> nx_ip_arp_dynamic_active_count; i++)
     {
 
@@ -108,13 +108,13 @@ NX_PACKET *next_packet_ptr;
                 {
 
                     /* The number of retries has been exceeded. The entry is removed
-                       from the ready_to_send list and any queued packet is released.  */
+                       from the active list and any queued packet is released.  */
 
                     /* Disable interrupts.  */
                     TX_DISABLE
 
-                    /* This ARP entry has expired, remove it from the ready_to_send ARP list.  Check to make
-                       sure it is still ready_to_send.  */
+                    /* This ARP entry has expired, remove it from the active ARP list.  Check to make
+                       sure it is still active.  */
                     if (arp_entry -> nx_arp_active_list_head)
                     {
 
@@ -143,10 +143,10 @@ NX_PACKET *next_packet_ptr;
                                 arp_entry -> nx_arp_active_next;
                         }
 
-                        /* Decrease the number of ready_to_send ARP entries.  */
+                        /* Decrease the number of active ARP entries.  */
                         ip_ptr -> nx_ip_arp_dynamic_active_count--;
 
-                        /* Clear the ready_to_send head pointer.  */
+                        /* Clear the active head pointer.  */
                         arp_entry -> nx_arp_active_list_head =  NX_NULL;
                     }
 

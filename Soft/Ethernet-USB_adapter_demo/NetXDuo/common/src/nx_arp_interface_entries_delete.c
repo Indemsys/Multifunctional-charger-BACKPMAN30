@@ -91,7 +91,7 @@ NX_INTERFACE *interface_ptr;
     /* Setup pointers to the starting and ending ARP entries in the dynamic list. */
     arp_entry = ip_ptr -> nx_ip_arp_dynamic_list;
 
-    /* Walk through the dynamic ARP list until there are no more ready_to_send entries. */
+    /* Walk through the dynamic ARP list until there are no more active entries. */
     while ((arp_entry) && (ip_ptr -> nx_ip_arp_dynamic_active_count))
     {
 
@@ -131,7 +131,7 @@ NX_INTERFACE *interface_ptr;
         /* Pick up the last ARP entry. */
         last_arp_entry = next_arp_entry -> nx_arp_pool_previous;
 
-        /* Walk through the static ARP list until there are no more ready_to_send entries. */
+        /* Walk through the static ARP list until there are no more active entries. */
         while (next_arp_entry)
         {
 
@@ -144,7 +144,7 @@ NX_INTERFACE *interface_ptr;
             if (arp_entry -> nx_arp_ip_interface == interface_ptr)
             {
 
-                /* The static entry was found.  It needs to be unlinked from the ready_to_send
+                /* The static entry was found.  It needs to be unlinked from the active
                    list and the static list and re-linked to the end of the dynamic list.  */
                 _nx_arp_static_entry_delete_internal(ip_ptr, arp_entry);
             }

@@ -132,7 +132,7 @@ UINT    status;
     if (arp_entry)
     {
 
-        /* The static entry was found.  It needs to be unlinked from the ready_to_send
+        /* The static entry was found.  It needs to be unlinked from the active
            list and the static list and re-linked to the end of the dynamic list.  */
         _nx_arp_static_entry_delete_internal(ip_ptr, arp_entry);
 

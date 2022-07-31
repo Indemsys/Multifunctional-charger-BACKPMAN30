@@ -147,7 +147,7 @@ static int Mn_telnet_drv_send_buf(const void *buf, unsigned int len)
 {
   UINT                     res;
   NX_PACKET                *packet;
-  T_serial_io_driver *mdrv = (T_serial_io_driver *)(tx_thread_identify()->driver);
+  //T_serial_io_driver *mdrv = (T_serial_io_driver *)(tx_thread_identify()->driver);
 
   res = nx_packet_allocate(&net_packet_pool,&packet, NX_TCP_PACKET, MS_TO_TICKS(10));
   if (res != NX_SUCCESS) return RES_ERROR;
@@ -223,7 +223,7 @@ static int Mn_telnet_drv_printf(const char  *fmt_ptr, ...)
 
   \param void
 -----------------------------------------------------------------------------------------------------*/
-static void _Read_usb_telnet_data(NX_PACKET *packet_ptr)
+static void _Read_data_from_net(NX_PACKET *packet_ptr)
 {
   UINT              res;
   ULONG             actual_length;
@@ -322,7 +322,7 @@ static int Mn_telnet_drv_wait_ch(unsigned char *b, int timeout)
 }
 
 /*-----------------------------------------------------------------------------------------------------
-
+  Функция вызывается в контексте потока сервера Telnet
 
   \param telnet_server_ptr
   \param logical_connection
@@ -334,28 +334,18 @@ void Telnet_client_connect(NX_TELNET_SERVER *telnet_server_ptr, UINT logical_con
   // Создать задачу VT100 для данного соединения и передать ей драйвер
   if ((logical_connection == TELNET_LOGICAL_CONNECTION) && (telnet_server_ptr == &telnet_server))
   {
-    if ((wvar.en_freemaster_on_telnet != 0) && (wvar.usb_mode == USB_MODE_HOST))
+    if (telnet_vt100_drv_handle < 0)
     {
-      FreeMaster_task_create((ULONG)Mnsdrv_get_telnet_driver());
-      APPLOG("FreeMaster on Telnet port connected");
-      telnet_connected = 1;
-      status = RES_OK;
+      status = Task_VT100_create(&mon_telnet_drv_driver,&telnet_vt100_drv_handle); // В контексте этого вызова будут выполнены функции драйвера init и deinit
+      if (status == RES_OK)
+      {
+        APPLOG("Telnet port connected");
+        telnet_connected = 1;
+      }
     }
     else
     {
-      if (telnet_vt100_drv_handle < 0)
-      {
-        status = Task_VT100_create(&mon_telnet_drv_driver,&telnet_vt100_drv_handle); // В контексте этого вызова будут выполнены функции драйвера init и deinit
-        if (status == RES_OK)
-        {
-          APPLOG("Telnet port connected");
-          telnet_connected = 1;
-        }
-      }
-      else
-      {
-        APPLOG("Logical connection %d to Telnet rejected", logical_connection);
-      }
+      APPLOG("Logical connection %d to Telnet rejected", logical_connection);
     }
   }
   else
@@ -372,7 +362,7 @@ void Telnet_client_connect(NX_TELNET_SERVER *telnet_server_ptr, UINT logical_con
 }
 
 /*-----------------------------------------------------------------------------------------------------
-
+  Функция вызывается в контексте потока сервера Telnet
 
   \param telnet_server_ptr
   \param logical_connection
@@ -382,7 +372,7 @@ void Telnet_receive_data(NX_TELNET_SERVER *telnet_server_ptr, UINT logical_conne
 {
   if ((telnet_server_ptr == &telnet_server) && (logical_connection == TELNET_LOGICAL_CONNECTION))
   {
-    _Read_usb_telnet_data(packet);
+    _Read_data_from_net(packet);
   }
   // В конце всегда нужно пакет освободить или переиспользовать
   nx_packet_release(packet);
@@ -391,7 +381,7 @@ void Telnet_receive_data(NX_TELNET_SERVER *telnet_server_ptr, UINT logical_conne
 
 
 /*-----------------------------------------------------------------------------------------------------
-
+  Функция вызывается в контексте потока сервера Telnet
 
   \param telnet_server_ptr
   \param logical_connection
@@ -401,17 +391,7 @@ void Telnet_client_disconnect(NX_TELNET_SERVER *telnet_server_ptr, UINT logical_
   if ((telnet_server_ptr == &telnet_server) && (logical_connection == TELNET_LOGICAL_CONNECTION))
   {
     telnet_connected = 0;
-    if (wvar.en_freemaster_on_telnet==0)
-    {
-      Task_VT100_delete(&telnet_vt100_drv_handle);
-    }
-    else
-    {
-      if (wvar.usb_mode == USB_MODE_HOST)
-      {
-        FreeMaster_task_delete();
-      }
-    }
+    Task_VT100_delete(&telnet_vt100_drv_handle);
     APPLOG("Telnet port disconnected");
   }
 }
@@ -432,15 +412,15 @@ uint32_t TELNET_server_create(NX_IP *ip, NX_TELNET_SERVER  *telnet_server_ptr)
   //if (wvar.en_telnet == 0) return RES_ERROR;
   if (telnet_server_ptr->nx_telnet_server_id !=  0)  return RES_OK;
 
-  strcpy(intf_name,"USB telnet");
+  strcpy(intf_name,"Telnet");
   err = nx_telnet_server_create(telnet_server_ptr,
-       intf_name,
-       ip,
-       &telnet_server_stack_memory[0],
-       TELNET_SERVER_STACK_SIZE,
-       Telnet_client_connect,
-       Telnet_receive_data,
-       Telnet_client_disconnect);
+                                intf_name,
+                                ip,
+                                &telnet_server_stack_memory[0],
+                                TELNET_SERVER_STACK_SIZE,
+                                Telnet_client_connect,
+                                Telnet_receive_data,
+                                Telnet_client_disconnect);
 
 
   if (NX_SUCCESS != err)
@@ -504,7 +484,7 @@ uint32_t TELNET_server_delete(NX_TELNET_SERVER  *telnet_server_ptr)
 /*-------------------------------------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------------------------------------*/
-T_serial_io_driver *Mnsdrv_get_telnet_driver(void)
+T_serial_io_driver* Mnsdrv_get_telnet_driver(void)
 {
   return &mon_telnet_drv_driver;
 }

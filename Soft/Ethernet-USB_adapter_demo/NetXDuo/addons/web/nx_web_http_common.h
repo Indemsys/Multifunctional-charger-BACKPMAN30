@@ -84,7 +84,7 @@ extern   "C" {
 #endif
 
 #ifndef NX_WEB_HTTP_MAX_RESOURCE
-#define NX_WEB_HTTP_MAX_RESOURCE                128 // ћаксимальна длина строки в запрсе GET например
+#define NX_WEB_HTTP_MAX_RESOURCE                40
 #endif
 
 #ifndef NX_WEB_HTTP_MAX_NAME
@@ -95,9 +95,9 @@ extern   "C" {
 #define NX_WEB_HTTP_MAX_PASSWORD                20
 #endif
   
-// To enabled HTTPS, define this symbol 
+/* To enabled HTTPS, define this symbol 
 #define NX_WEB_HTTPS_ENABLE
-
+*/
 
 /* To enable MD5 digest authentication, define this symbol 
 #define NX_WEB_HTTP_DIGEST_ENABLE

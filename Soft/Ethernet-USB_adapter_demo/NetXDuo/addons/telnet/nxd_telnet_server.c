@@ -2086,7 +2086,7 @@ NX_TELNET_SERVER   *server_ptr;
 /*                                                                        */
 /*  DESCRIPTION                                                           */ 
 /*                                                                        */ 
-/*    This function reviews all the ready_to_send TELNET client connections and  */
+/*    This function reviews all the active TELNET client connections and  */ 
 /*    looks for an activity timeout. If a connection has not had any      */ 
 /*    activity within NX_TELNET_ACTIVITY_TIMEOUT seconds, the connection  */ 
 /*    is deleted and its resources are made available to a new connection.*/ 
@@ -2133,7 +2133,7 @@ NX_TELNET_CLIENT_REQUEST   *client_req_ptr;
         /* Set a pointer to client request structure.  */
         client_req_ptr =  &(server_ptr -> nx_telnet_server_client_list[i]);
 
-        /* Now see if this socket has an activity timeout ready_to_send.  */
+        /* Now see if this socket has an activity timeout active.  */
         if (client_req_ptr -> nx_telnet_client_request_activity_timeout)
         {
 

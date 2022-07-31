@@ -43,7 +43,7 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function sets up the server socket after an ready_to_send connection  */
+/*    This function sets up the server socket after an active connection  */
 /*    request was received.                                               */
 /*                                                                        */
 /*  INPUT                                                                 */
@@ -198,7 +198,7 @@ NX_IP *ip_ptr;
                listen state so it can be tried again.  */
             socket_ptr -> nx_tcp_socket_state =  NX_TCP_LISTEN_STATE;
 
-            /* Socket is not ready_to_send. Clear the timeout. */
+            /* Socket is not active. Clear the timeout. */
             socket_ptr -> nx_tcp_socket_timeout =  0;
         }
 

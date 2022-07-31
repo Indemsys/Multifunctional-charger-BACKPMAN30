@@ -196,7 +196,7 @@ UINT         queued_count;
                     break;
                 }
 
-                /* Move to the next ready_to_send ARP entry.  */
+                /* Move to the next active ARP entry.  */
                 arp_ptr =  arp_ptr -> nx_arp_active_next;
 
                 /* Determine if we are at the end of the ARP list.  */

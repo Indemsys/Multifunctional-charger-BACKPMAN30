@@ -26,7 +26,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */ 
 /*                                                                        */
 /*    nxd_ftp_client.h                                    PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -45,6 +45,9 @@
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s), included */
+/*                                            necessary header file,      */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -60,6 +63,8 @@
 extern   "C" {
 
 #endif
+
+#include "nx_api.h"
 
 
 /* Define the FTP Client ID.  */
@@ -171,7 +176,7 @@ extern   "C" {
 /* Define the FTP Server TCP port numbers.  */
 
 #define NX_FTP_SERVER_CONTROL_PORT          21          /* Control Port for FTP server                         */
-#define NX_FTP_SERVER_DATA_PORT             20          /* Data Port for FTP server in ready_to_send transfer mode    */
+#define NX_FTP_SERVER_DATA_PORT             20          /* Data Port for FTP server in active transfer mode    */ 
 
 /* Define the size for buffer to store an IPv6 address represented in ASCII. */
 #define NX_FTP_IPV6_ADDRESS_BUFSIZE         60

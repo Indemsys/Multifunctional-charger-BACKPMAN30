@@ -43,7 +43,7 @@
 /*  DESCRIPTION                                                           */
 /*                                                                        */
 /*    This function processes packets during the FIN WAIT 1 state,        */
-/*    which is the state after the initial FIN was issued in an ready_to_send    */
+/*    which is the state after the initial FIN was issued in an active    */
 /*    disconnect issued by the application.                               */
 /*                                                                        */
 /*  INPUT                                                                 */

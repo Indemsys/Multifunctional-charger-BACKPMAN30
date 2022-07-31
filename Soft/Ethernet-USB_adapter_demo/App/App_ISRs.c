@@ -120,7 +120,7 @@ void OTG_FS_EP1_IN_IRQHandler(void)
 -----------------------------------------------------------------------------------------------------*/
 void OTG_FS_IRQHandler(void)
 {
-  if (wvar.usb_mode ==USB_MODE_DEVICE)
+  if (g_usb_mode ==USB_MODE_DEVICE)
   {
     HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
   }

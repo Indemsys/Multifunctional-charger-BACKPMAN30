@@ -980,7 +980,7 @@ UINT    status;
     /* Set the FTP client id.  */
     ftp_client_ptr -> nx_ftp_client_id =  NXD_FTP_CLIENT_ID;
 
-    /* Default to ready_to_send transfer mode. */
+    /* Default to active transfer mode. */
     ftp_client_ptr -> nx_ftp_client_passive_transfer_enabled = NX_FALSE;
 
     /* Default to stream mode. */
@@ -1975,7 +1975,7 @@ UINT    status;
 /*  CALLS                                                                 */ 
 /*                                                                        */  
 /*    _nx_ftp_client_packet_allocate        Allocate packet               */ 
-/*    _nx_ftp_client_active_transfer_setup  Setup ready_to_send transfer         */
+/*    _nx_ftp_client_active_transfer_setup  Setup active transfer         */ 
 /*    _nx_ftp_client_passive_transfer_setup Setup passive transfer        */ 
 /*    _nx_ftp_client_block_mode_send        Send block mode command       */ 
 /*    _nx_ftp_client_data_socket_cleanup    Cleanup data socket           */ 
@@ -2024,7 +2024,7 @@ UINT        status;
     else
     {
 
-        /* Transfer the data in ready_to_send transfer mode. */
+        /* Transfer the data in active transfer mode. */
         status = _nx_ftp_client_active_transfer_setup(ftp_client_ptr, wait_option);
     }
 
@@ -3133,7 +3133,7 @@ UINT status;
 /*    This function sets the request to passive mode. Once this is set    */
 /*    the Client will send a PASV command preceding any FTP Client command*/
 /*    for accessing a server data port.  If passive mode is not set,      */
-/*    the FTP Client will send and receive data via ready_to_send transfer mode. */
+/*    the FTP Client will send and receive data via active transfer mode. */
 /*                                                                        */ 
 /*  INPUT                                                                 */ 
 /*                                                                        */ 
@@ -3395,7 +3395,7 @@ UINT    status;
 /*  CALLS                                                                 */ 
 /*                                                                        */ 
 /*    _nx_ftp_client_packet_allocate        Allocate packet               */ 
-/*    _nx_ftp_client_active_transfer_setup  Setup ready_to_send transfer         */
+/*    _nx_ftp_client_active_transfer_setup  Setup active transfer         */ 
 /*    _nx_ftp_client_passive_transfer_setup Setup passive transfer        */ 
 /*    _nx_ftp_client_block_mode_send        Send block mode command       */ 
 /*    _nx_ftp_client_data_socket_cleanup    Cleanup data socket           */ 
@@ -3555,7 +3555,7 @@ UINT        status;
     else
     {
 
-        /* Open in ready_to_send transfer mode.  */
+        /* Open in active transfer mode.  */
         status = _nx_ftp_client_active_transfer_setup(ftp_client_ptr, wait_option);
     }
 
@@ -4928,7 +4928,7 @@ UINT status;
 /*                                                                        */
 /*  DESCRIPTION                                                           */ 
 /*                                                                        */ 
-/*    This function sets up the Client data socket for ready_to_send transfer    */
+/*    This function sets up the Client data socket for active transfer    */
 /*    where the Client data socket is the TCP client.                     */
 /*                                                                        */ 
 /*    Find free port and listen on it, sends the PORT/EPRT command to     */ 

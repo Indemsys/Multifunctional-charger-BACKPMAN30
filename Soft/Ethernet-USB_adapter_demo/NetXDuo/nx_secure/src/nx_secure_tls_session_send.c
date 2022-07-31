@@ -36,7 +36,7 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function sends data using an ready_to_send TLS session, handling      */
+/*    This function sends data using an active TLS session, handling      */
 /*    all encryption and hashing before sending data over the established */
 /*    TCP socket connection.                    .                         */
 /*                                                                        */

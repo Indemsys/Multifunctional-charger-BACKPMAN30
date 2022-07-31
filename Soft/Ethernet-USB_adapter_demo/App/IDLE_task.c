@@ -46,13 +46,6 @@ static void Thread_idle(ULONG initial_input)
       Thread_STfs_test_delete();
       sffs_test_delete = 0;
     }
-    //    if (request_save_to_NV_mem)
-    //    {
-    //      request_save_to_NV_mem =0;
-    //      Save_Params_to_NV_store();
-    //    }
-    //    Wdog_refresh();
-
   }
 }
 

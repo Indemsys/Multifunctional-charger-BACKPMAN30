@@ -121,7 +121,7 @@ UINT              is_server;
         }
 
         
-        /* If we received a Finished message but the session is not ready_to_send, error! */
+        /* If we received a Finished message but the session is not active, error! */
         if (!tls_session -> nx_secure_tls_remote_session_active)
         {
             return(NX_SECURE_TLS_UNEXPECTED_MESSAGE);

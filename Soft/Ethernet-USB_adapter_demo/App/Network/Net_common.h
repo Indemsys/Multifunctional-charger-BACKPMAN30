@@ -1,7 +1,7 @@
 ﻿#ifndef NET_COMMON_H
   #define NET_COMMON_H
 
-#define                 PACKETS_IN_POOL     (60+19) // Добавлено простанство сэкономленное на буферах WICED
+#define                 PACKETS_IN_POOL     (30) // Добавлено простанство сэкономленное на буферах WICED
 #define                 PACKET_MAX_SZ       1568
 
 #define                 NX_ARP_CACHE_SIZE   (520)
@@ -10,8 +10,8 @@
 
 #define                 MAX_TLS_CERTIFICATE_SIZE    2000
 
-extern NX_IP            rndis_ip;
-extern NX_IP            ecm_host_ip;
+extern NX_IP            *rndis_ip_ptr;
+extern NX_IP            *ecm_host_ip_ptr;
 
 typedef struct
 {

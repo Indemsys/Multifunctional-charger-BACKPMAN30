@@ -5,7 +5,7 @@
 #define  MAIN_PARAMS_ROOT   BKMAN3R1_main
 #define  PARAMS_ROOT        BKMAN3R1_0
 
-#define  DWVAR_SIZE        15
+#define  DWVAR_SIZE        14
 #define  PARMNU_ITEM_NUM   5
 
 #define  SELECTORS_NUM     5
@@ -99,7 +99,7 @@ typedef struct
   uint8_t        default_ip_addr[16];           // Default IP address | def.val.= 192.168.1.1
   uint8_t        default_net_mask[16];          // Default network mask  | def.val.= 255.255.255.0
   uint8_t        en_dhcp_client;                // Enable DHCP client (0-No, 1-Yes) | def.val.= 1
-  uint8_t        en_freemaster_on_telnet;       // Enable FreeMaster on Telnet (0-No, 1-Yes) | def.val.= 1
+  uint8_t        en_freemaster;                 // Enable FreeMaster protocol | def.val.= 1
   uint8_t        enable_HTTP_server;            // Enable WEB server | def.val.= 1
   uint8_t        enable_HTTPS;                  // Enable_HTTPS | def.val.= 0
   uint8_t        HTTP_server_password[32];      // HTTP server pasword | def.val.= 123456789
@@ -107,7 +107,6 @@ typedef struct
   uint8_t        rndis_config;                  // RNDIS interface configuration (0-Win home net, 1 - DHCP server) | def.val.= 1
   uint8_t        this_host_name[16];            // This device host name | def.val.= host1
   uint8_t        usb_mode;                      // USB mode (0- RNDIS & VCOM device, 1- CDC ECM host) | def.val.= 1
-  uint8_t        vcom_mode;                     // Select VCOM mode (0 - VT100 terminal, 1 - FreeMaster)  | def.val.= 1
   uint8_t        ver[64];                       // Firmware version | def.val.= 1.0
 } WVAR_TYPE;
 

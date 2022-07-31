@@ -80,7 +80,7 @@ TX_INTERRUPT_SAVE_AREA
 NX_PACKET *packet_ptr, *next_packet_ptr;
 
 
-    /* Determine if this ARP entry is already ready_to_send.  */
+    /* Determine if this ARP entry is already active.  */
     if (arp_ptr -> nx_arp_active_list_head)
     {
 
@@ -112,10 +112,10 @@ NX_PACKET *packet_ptr, *next_packet_ptr;
             (arp_ptr -> nx_arp_active_previous) -> nx_arp_active_next =  arp_ptr -> nx_arp_active_next;
         }
 
-        /* No longer ready_to_send, clear the ready_to_send list head.  */
+        /* No longer active, clear the active list head.  */
         arp_ptr -> nx_arp_active_list_head =  NX_NULL;
 
-        /* Decrease the number of ready_to_send ARP entries.  */
+        /* Decrease the number of active ARP entries.  */
         ip_ptr -> nx_ip_arp_dynamic_active_count--;
 
         /* Pickup the queued packets head pointer.  */

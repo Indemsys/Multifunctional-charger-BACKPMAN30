@@ -8,8 +8,6 @@
 
 T_app_net_props         app_net_props;
 
-
-
 NX_PACKET_POOL          net_packet_pool;
 uint8_t                 net_packet_pool_buffer[(PACKETS_IN_POOL *(PACKET_MAX_SZ + sizeof(NX_PACKET)))]; // NX_PACKET - имеет размер 60 байт. Целиком пакет имеет размер 1628 байта
 

@@ -3987,7 +3987,7 @@ UINT        i;
 
         /* At least one DNS server is required - return an error.  */
         return(NX_DNS_NO_SERVER);
-    }        
+    }
 
     /* Bind the UDP socket to random port for each query.  */
     status =  nx_udp_socket_bind(&(dns_ptr -> nx_dns_socket), NX_ANY_PORT, TX_WAIT_FOREVER);
@@ -4033,7 +4033,7 @@ UINT        i;
 
                 /* Yes, have done, just return success.  */
                 return NX_SUCCESS;
-            }  
+            }
             else
             {
 
@@ -4848,7 +4848,6 @@ ULONG               time_remaining;
     /* Return completion status. */
     return(status);
 }
-
 
 /**************************************************************************/ 
 /*                                                                        */ 
@@ -10381,7 +10380,7 @@ ALIGN_TYPE  *head;
 /*  FUNCTION                                               RELEASE        */ 
 /*                                                                        */ 
 /*    _nx_dns_cache_delete_rr_string                      PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -10410,14 +10409,19 @@ ALIGN_TYPE  *head;
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s),          */
+/*                                            fixed compiler warnings,    */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_dns_cache_delete_rr_string(NX_DNS *dns_ptr, VOID *cache_ptr, UINT cache_size, NX_DNS_RR *record_ptr)
 {
+
 #ifdef NX_DNS_ENABLE_EXTENDED_RR_TYPES
 UINT    string_len;
 UINT    size;
-#endif
+#endif /* NX_DNS_ENABLE_EXTENDED_RR_TYPES */
+
 
     /* Check the cache.  */
     if (cache_ptr == NX_NULL)

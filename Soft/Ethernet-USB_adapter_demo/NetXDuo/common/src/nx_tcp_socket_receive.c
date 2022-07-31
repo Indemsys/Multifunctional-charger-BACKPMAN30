@@ -120,7 +120,7 @@ ULONG                  trace_timestamp;
     {
         /* There is no data on the queue. */
 
-        /* Determine if the socket is still in an ready_to_send state, but also allow
+        /* Determine if the socket is still in an active state, but also allow
            a receive socket operation if there are still more queued receive
            packets for this socket.  */
         if ((socket_ptr -> nx_tcp_socket_state < NX_TCP_SYN_SENT)   ||

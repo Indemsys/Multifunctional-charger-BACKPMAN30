@@ -39,12 +39,12 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function sets the ready_to_send local certificate, overriding any     */
+/*    This function sets the active local certificate, overriding any     */
 /*    previously added local certificates. Normally, a single certificate */
 /*    is used for a TLS instance, but in some cases the server or client  */
 /*    may need to choose a specific certificate during the handshake. By  */
 /*    calling this function in the TLS server or client callback, an      */
-/*    application can choose the ready_to_send local certificate at runtime      */
+/*    application can choose the active local certificate at runtime      */
 /*    after a ClientHello or ServerHello is received.                     */
 /*                                                                        */
 /*    NOTE: The certificate MUST be in the local store before calling     */
@@ -81,7 +81,7 @@ UINT _nx_secure_tls_active_certificate_set(NX_SECURE_TLS_SESSION *tls_session,
                                            NX_SECURE_X509_CERT *certificate)
 {
 
-    /* Set the ready_to_send certificate (should be in the store). */
+    /* Set the active certificate (should be in the store). */
     tls_session -> nx_secure_tls_credentials.nx_secure_tls_active_certificate = certificate;
 
     /* Return completion status.  */

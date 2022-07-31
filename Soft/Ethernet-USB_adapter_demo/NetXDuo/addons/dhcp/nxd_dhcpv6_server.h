@@ -26,7 +26,7 @@
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */ 
 /*                                                                        */ 
 /*    nxd_dhcpv6_server.h                                 PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
@@ -46,6 +46,9 @@
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), improved */
 /*                                            packet length verification, */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Yuxin Zhou               Modified comment(s), included */
+/*                                            necessary header file,      */
+/*                                            resulting in version 6.1.9  */
 /*                                                                        */
 /**************************************************************************/
 
@@ -61,6 +64,8 @@
 extern   "C" {
 
 #endif
+
+#include "nx_api.h"
 
 /* Define the DHCPv6 ID to mark the DHCPV6_CLIENT and DHCPV6_SERVER structures as created.  */
 
@@ -177,7 +182,7 @@ NX_DHCPV6_SERVER_DUID_TYPE_LINK_ONLY
 #define NX_DHCPV6_ALL_EVENTS                            0xFFFFFFFFUL    /* All Server DHCPv6 event flags */
 #define NX_DHCPV6_SERVER_RECEIVE_EVENT                  0x00000001UL    /* Packet received on the DHCPv6 server queue. */
 #define NX_DHCPV6_IP_LEASE_CHECK_PERIODIC_EVENT         0x00000008UL    /* Time keeper to check for expiration on leased IP addresses. */
-#define NX_DHCPV6_CHECK_SESSION_PERIODIC_EVENT          0x00000004UL    /* Time keeper to check if each session with ready_to_send client has timed out. */
+#define NX_DHCPV6_CHECK_SESSION_PERIODIC_EVENT          0x00000004UL    /* Time keeper to check if each session with active client has timed out. */
 
 
 /* Define DHCPv6 client and server ports.  */

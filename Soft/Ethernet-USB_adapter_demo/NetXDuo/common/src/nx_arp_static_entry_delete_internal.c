@@ -87,7 +87,7 @@ TX_INTERRUPT_SAVE_AREA
     /* Disable interrupts temporarily.  */
     TX_DISABLE
 
-    /* Determine if this ARP entry is already ready_to_send.  */
+    /* Determine if this ARP entry is already active.  */
     if (arp_entry -> nx_arp_active_list_head)
     {
 

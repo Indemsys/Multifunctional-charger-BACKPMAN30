@@ -43,7 +43,7 @@ NX_SECURE_CALLER_CHECKING_EXTERNS
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function checks for errors in the TLS ready_to_send certificate set   */
+/*    This function checks for errors in the TLS active certificate set   */
 /*    call.                                                               */
 /*                                                                        */
 /*  INPUT                                                                 */
@@ -92,7 +92,7 @@ UINT status;
     /* Check for appropriate caller.  */
     NX_THREADS_ONLY_CALLER_CHECKING
 
-    /* Set the ready_to_send certificate. */
+    /* Set the active certificate. */
     status =  _nx_secure_tls_active_certificate_set(tls_session, certificate);
 
     /* Return completion status.  */

@@ -29,7 +29,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_tls_send_record                          PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -84,6 +84,15 @@
 /*                                            fixed race condition for    */
 /*                                            multithread transmission,   */
 /*                                            resulting in version 6.1    */
+/*  06-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            resulting in version 6.1.7  */
+/*  08-02-2021     Timothy Stapko           Modified comment(s),          */
+/*                                            used wait forever on        */
+/*                                            transmission mutex,         */
+/*                                            resulting in version 6.1.8  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s),          */
+/*                                            improved internal logic,    */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_tls_send_record(NX_SECURE_TLS_SESSION *tls_session, NX_PACKET *send_packet,
@@ -116,7 +125,7 @@ NX_PACKET *current_packet;
     tx_mutex_put(&_nx_secure_tls_protection);
 
     /* Get transmit mutex first. */
-    status = tx_mutex_get(&(tls_session -> nx_secure_tls_session_transmit_mutex), wait_option);
+    status = tx_mutex_get(&(tls_session -> nx_secure_tls_session_transmit_mutex), TX_WAIT_FOREVER);
 
     tx_mutex_get(&_nx_secure_tls_protection, TX_WAIT_FOREVER);
 
@@ -127,7 +136,7 @@ NX_PACKET *current_packet;
         return(NX_SECURE_TLS_TRANSMIT_LOCKED);
     }
 
-    /* See if this is an ready_to_send session, we need to account for the IV if the session cipher
+    /* See if this is an active session, we need to account for the IV if the session cipher
        uses one. TLS 1.3 does not use an explicit IV so don't add it.*/
     if (tls_session -> nx_secure_tls_local_session_active
 #if (NX_SECURE_TLS_TLS_1_3_ENABLED)
@@ -160,10 +169,6 @@ NX_PACKET *current_packet;
         send_packet -> nx_packet_length += iv_size;
     }
 
-    /* Back off the prepend_ptr for TLS Record header. Note the packet_length field is adjusted
-       prior to nx_tcp_socket_send() below. */
-    //send_packet -> nx_packet_prepend_ptr -= NX_SECURE_TLS_RECORD_HEADER_SIZE;
-
     /* Ensure there is enough room for the record header.  */
     if ((ULONG)(send_packet -> nx_packet_prepend_ptr - send_packet -> nx_packet_data_start) < NX_SECURE_TLS_RECORD_HEADER_SIZE)
     {
@@ -191,19 +196,12 @@ NX_PACKET *current_packet;
     record_header[3] = (UCHAR)((length & 0xFF00) >> 8);
     record_header[4] = (UCHAR)(length & 0x00FF);
 
-    /* If the session is ready_to_send, hash and encrypt the record payload using
+    /* If the session is active, hash and encrypt the record payload using
        the session keys and chosen ciphersuite. */
     if (tls_session -> nx_secure_tls_local_session_active)
     {
         /*************************************************************************************************************/
-
-        if (tls_session -> nx_secure_tls_session_ciphersuite == NX_NULL)
-        {
-
-            /* Likely internal error since at this point ciphersuite negotiation was theoretically completed. */
-            tx_mutex_put(&(tls_session -> nx_secure_tls_session_transmit_mutex));
-            return(NX_SECURE_TLS_UNKNOWN_CIPHERSUITE);
-        }
+        NX_ASSERT(tls_session -> nx_secure_tls_session_ciphersuite != NX_NULL)
 
 #if (NX_SECURE_TLS_TLS_1_3_ENABLED)
         /* TLS 1.3 records have the record type appended in a single byte. */

@@ -9,7 +9,7 @@ static TX_MUTEX              io_mutex;
 
 TX_THREAD                    io_thread;
 #pragma data_alignment=8
-uint8_t                      thread_io_stack[THREAD_IO_STACK_SIZE];
+uint8_t                      thread_io_stack[THREAD_IO_STACK_SIZE] @ "DTCM";
 
 
 volatile int32_t             g_encoder_counter;

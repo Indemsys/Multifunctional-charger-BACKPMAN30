@@ -13,24 +13,23 @@ static uint8_t             rndis_interface_active;
 static uint8_t             rndis_network_active;
 static uint8_t             rndis_dhcp_server_active;
 
-NX_IP                      rndis_ip;
+NX_IP                      *rndis_ip_ptr;
 static T_app_net_props     rndis_net_props;
 
 #define                    RNDIS_IP_STACK_SIZE             1024
 #define                    RNDIS_DHCP_SERVER_STACK_SIZE    1024
 
 
-#pragma data_alignment=8
-uint8_t                    rndis_ip_stack_memory[RNDIS_IP_STACK_SIZE];
-#pragma data_alignment=8
-uint8_t                    rndis_ip_arp_cache_memory[NX_ARP_CACHE_SIZE];
-#pragma data_alignment=8
-uint8_t                    rndis_dhcp_server_stack_memory[RNDIS_DHCP_SERVER_STACK_SIZE];
 
+uint8_t                    *rndis_ip_stack_memory;
+uint8_t                    *rndis_ip_arp_cache_memory;
+uint8_t                    *rndis_dhcp_server_stack_memory;
 
 static NX_DHCP_SERVER      rndis_dhcp_server;
 
 extern NX_TELNET_SERVER    telnet_server;
+
+volatile uint32_t          g_sof_cnt;
 
 /*-----------------------------------------------------------------------------------------------------
   Функция вызывается в контексте прерывания usbfs_int_isr в момент активизации класса RNDIS (подключения разъема или после подачи питания с уже подключенным разъемом)
@@ -40,6 +39,7 @@ extern NX_TELNET_SERVER    telnet_server;
 static void RNDIS_instance_activate_callback(void *arg)
 {
   rndis_interface_active = 1;
+  g_uinf.inserted        = 1;
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -50,7 +50,21 @@ static void RNDIS_instance_activate_callback(void *arg)
 static void RNDIS_instance_deactivate_callback(void *arg)
 {
   rndis_interface_active = 0;
+  g_uinf.inserted        = 0;
 }
+
+
+/*-----------------------------------------------------------------------------------------------------
+  Функция вызываемая после каждого приема пакета SOF на шине USB
+
+  \param hpcd
+-----------------------------------------------------------------------------------------------------*/
+void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
+{
+  g_sof_cnt++;
+}
+
+
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -104,6 +118,10 @@ UINT Register_rndis_class(void)
 
   rndis_parameter.ux_slave_class_rndis_parameter_vendor_id      = 0x045B;
   rndis_parameter.ux_slave_class_rndis_parameter_driver_version = 0x0003;
+
+  g_uinf.idVendor  = USBD_VID;
+  g_uinf.idProduct = USBD_PID;
+
 
   ux_utility_memory_copy(rndis_parameter.ux_slave_class_rndis_parameter_vendor_description,"RNDIS", 5);
 
@@ -171,6 +189,68 @@ static void _RNDIS_get_IP_proprties(void)
 
 /*-----------------------------------------------------------------------------------------------------
 
+
+  \param mac_str
+  \param max_str_len
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t RNDIS_Get_MAC(char* mac_str, uint32_t max_str_len)
+{
+  mac_str[0] = 0;
+
+  uint8_t *m = (uint8_t*)rndis_parameter.ux_slave_class_rndis_parameter_local_node_id;
+  // К этому моменту уже была выполнена функция _ux_network_driver_activate
+  snprintf(mac_str, max_str_len, "%02X:%02X:%02X:%02X:%02X:%02X", m[0],m[1],m[2],m[3],m[4],m[5]);
+  return RES_OK;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param ip_str
+  \param max_str_len
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t RNDIS_Get_MASK_IP(char* ip_str, char* mask_str,uint32_t max_str_len)
+{
+  ULONG                    ip_address;
+  ULONG                    network_mask;
+
+  ip_str[0] = 0;
+  mask_str[0] = 0;
+
+  if (Is_RNDIS_network_active() == 0) return RES_ERROR;
+  nx_ip_address_get(rndis_ip_ptr,&ip_address,&network_mask);
+  snprintf(ip_str, max_str_len, "%03d.%03d.%03d.%03d", IPADDR(ip_address));
+  snprintf(mask_str, max_str_len, "%03d.%03d.%03d.%03d", IPADDR(network_mask));
+  return RES_OK;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param gate_str
+  \param max_str_len
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t RNDIS_Get_Gateway_IP(char* gate_str,uint32_t max_str_len)
+{
+  ULONG                    ip_address;
+
+  gate_str[0] = 0;
+  if (Is_RNDIS_network_active() == 0) return RES_ERROR;
+
+  nx_ip_gateway_address_get(rndis_ip_ptr,&ip_address);
+  snprintf(gate_str, max_str_len, "%03d.%03d.%03d.%03d", IPADDR(ip_address));
+  return RES_OK;
+}
+
+
+/*-----------------------------------------------------------------------------------------------------
+
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
 static uint32_t _RNDIS_create_DHCP_server(void)
@@ -178,10 +258,10 @@ static uint32_t _RNDIS_create_DHCP_server(void)
   UINT status;
   UINT addresses_added;
 
-  nx_ip_address_set(&rndis_ip, rndis_net_props.ip_address, rndis_net_props.dhcp_subnet_mask);
+  nx_ip_address_set(rndis_ip_ptr, rndis_net_props.ip_address, rndis_net_props.dhcp_subnet_mask);
 
   status = nx_dhcp_server_create(&rndis_dhcp_server,
-       &rndis_ip,
+       rndis_ip_ptr,
        &rndis_dhcp_server_stack_memory[0],
        RNDIS_DHCP_SERVER_STACK_SIZE,
        "RNDIS DHCP Server",
@@ -248,6 +328,20 @@ void RNDIS_init_network_stack(void)
 {
   UINT status;
 
+  rndis_ip_ptr                   = App_dtcm_malloc(sizeof(NX_IP));
+  rndis_ip_stack_memory          = App_dtcm_malloc(RNDIS_IP_STACK_SIZE);
+  rndis_ip_arp_cache_memory      = App_dtcm_malloc(NX_ARP_CACHE_SIZE);
+  rndis_dhcp_server_stack_memory = App_dtcm_malloc(RNDIS_DHCP_SERVER_STACK_SIZE);
+
+  if ((rndis_ip_ptr == TX_NULL) ||(rndis_ip_stack_memory == TX_NULL) || (rndis_ip_arp_cache_memory==TX_NULL) || (rndis_dhcp_server_stack_memory== TX_NULL))
+  {
+    App_free(rndis_ip_ptr);
+    App_free(rndis_ip_stack_memory);
+    App_free(rndis_ip_arp_cache_memory);
+    App_free(rndis_dhcp_server_stack_memory);
+    return;
+  }
+
   ux_network_driver_init();  // Запускаем сетевой драйвер чере USB
 
 
@@ -255,7 +349,7 @@ void RNDIS_init_network_stack(void)
 
   /* Create an IP instance. */
 
-  status = nx_ip_create(&rndis_ip,
+  status = nx_ip_create(rndis_ip_ptr,
        "RNDIS IP Instance",
        rndis_net_props.ip_address,
        rndis_net_props.network_mask,
@@ -269,7 +363,7 @@ void RNDIS_init_network_stack(void)
     APPLOG("RNDIS. IP error %04X", status);
   }
 
-  status = nx_arp_enable(&rndis_ip,&rndis_ip_arp_cache_memory[0], NX_ARP_CACHE_SIZE);
+  status = nx_arp_enable(rndis_ip_ptr,&rndis_ip_arp_cache_memory[0], NX_ARP_CACHE_SIZE);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. ARP error %04X", status);
@@ -282,19 +376,19 @@ void RNDIS_init_network_stack(void)
   //  APPLOG("RNDIS. RARP error %04X", err);
   //}
 
-  status = nx_tcp_enable(&rndis_ip);
+  status = nx_tcp_enable(rndis_ip_ptr);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. TCP error %04X", status);
   }
 
-  status = nx_udp_enable(&rndis_ip);
+  status = nx_udp_enable(rndis_ip_ptr);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. UDP error %04X", status);
   }
 
-  status = nx_icmp_enable(&rndis_ip);
+  status = nx_icmp_enable(rndis_ip_ptr);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. ICMP error %04X", status);
@@ -307,14 +401,14 @@ void RNDIS_init_network_stack(void)
   //  APPLOG("Error %04X", err);
   //}
 
-  status = nx_ip_fragment_enable(&rndis_ip);
+  status = nx_ip_fragment_enable(rndis_ip_ptr);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. IP fragment. error %04X", status);  // NX_NOT_ENABLED
   }
 
   /* Gateway IP Address */
-  status = nx_ip_gateway_address_set(&rndis_ip, rndis_net_props.gateway_address);
+  status = nx_ip_gateway_address_set(rndis_ip_ptr, rndis_net_props.gateway_address);
 
   if (NX_SUCCESS != status)
   {
@@ -324,11 +418,12 @@ void RNDIS_init_network_stack(void)
   // Установка callback, который вызывается в цепочке _nx_ip_thread_entry -> _nx_ip_deferred_link_status_process после события NX_IP_LINK_STATUS_EVENT
   // Данное событие отправляет функция _nx_ip_driver_link_status_event
   // Переменная linkup передаваемая в callback функция получает свое значение во время выполнения _nx_ip_deferred_link_status_process из функции драйвера
-  status = nx_ip_link_status_change_notify_set(&rndis_ip,_RNDIS_link_status_change_callback);
+  status = nx_ip_link_status_change_notify_set(rndis_ip_ptr,_RNDIS_link_status_change_callback);
   if (NX_SUCCESS != status)
   {
     APPLOG("RNDIS. notify set error %04X", status);
   }
+
 }
 
 
@@ -350,12 +445,12 @@ uint32_t RNDIS_start_network(void)
   {
     _RNDIS_create_DHCP_server();
   }
-  TELNET_server_create(&rndis_ip,&telnet_server);
+  TELNET_server_create(rndis_ip_ptr,&telnet_server);
 
   {
     ULONG ip_address;
     ULONG network_mask;
-    nx_ip_address_get(&rndis_ip,&ip_address,&network_mask);
+    nx_ip_address_get(rndis_ip_ptr,&ip_address,&network_mask);
     APPLOG("RNDIS interface IP: %03d.%03d.%03d.%03d Mask: %03d.%03d.%03d.%03d", IPADDR(ip_address), IPADDR(network_mask));
   }
 
@@ -408,6 +503,17 @@ uint32_t RNDIS_stop_network(void)
 -----------------------------------------------------------------------------------------------------*/
 void RNDIS_network_controller(void)
 {
+  static uint32_t sof_cnt_prev = 0;
+  uint32_t  sof_cnt_curr = g_sof_cnt;
+  if (sof_cnt_curr == sof_cnt_prev)
+  {
+    if (Is_RNDIS_interface_active())
+    {
+      RNDIS_instance_deactivate_callback(0);
+    }
+  }
+  sof_cnt_prev = sof_cnt_curr;
+
   if ((Is_RNDIS_interface_active() == 1) && (Is_RNDIS_network_active() == 0))
   {
     RNDIS_start_network();

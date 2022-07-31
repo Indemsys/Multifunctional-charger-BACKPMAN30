@@ -40,7 +40,7 @@
 /*    This function sets up a function pointer that TLS will invoke when  */
 /*    a re-negotiation request is received from a remote host. This       */
 /*    happens when the remote host sends a ClientHello or HelloRequest    */
-/*    (client and server hosts, respectively) during an ready_to_send session.   */
+/*    (client and server hosts, respectively) during an active session.   */
 /*    The callback is used to notify the application when a               */
 /*    re-negotiation has been requested. The callback should return       */
 /*    NX_SUCCESS to continue the re-negotiation handshake or a non-zero   */

@@ -36,7 +36,7 @@
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function sends data using an ready_to_send DTLS session, handling     */
+/*    This function sends data using an active DTLS session, handling     */
 /*    all encryption and hashing before sending data over the UDP socket. */
 /*                                                                        */
 /*  INPUT                                                                 */

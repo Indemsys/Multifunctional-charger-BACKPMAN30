@@ -418,7 +418,7 @@ const NX_CRYPTO_METHOD               *method_ptr = NX_NULL;
         /* Reset the sequence number now that we are starting a new session. */
         NX_SECURE_MEMSET(tls_session -> nx_secure_tls_local_sequence_number, 0, sizeof(tls_session -> nx_secure_tls_local_sequence_number));
 
-        /* The local session is now ready_to_send since we sent the changecipherspec message.
+        /* The local session is now active since we sent the changecipherspec message.
            NOTE: Do not set the keys until after the changecipherspec message has been passed to the send record
            routine - this call causes encryption and hashing to happen on records. ChangeCipherSpec should be the last
            un-encrypted/un-hashed record sent. For a renegotiation handshake, CCS is the last message encrypted using
