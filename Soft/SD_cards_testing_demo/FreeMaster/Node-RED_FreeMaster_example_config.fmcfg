@@ -1,0 +1,12 @@
+{
+  "port": 8090,
+  "node_red": true,
+  "open_path": "/red/",
+  "connections": [
+    {
+      "connection_string": "NET;192.168.3.1;type=TCP;port=3344;timeout=500",
+      "name": "TCP Connection",
+      "description": "TCP connection"
+    }
+  ]
+}
