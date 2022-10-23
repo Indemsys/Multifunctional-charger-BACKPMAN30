@@ -1,0 +1,301 @@
+[
+    {
+        "id": "1f0e3304.7a54ed",
+        "type": "tab",
+        "label": "FreeMASTER Lite example",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "86fa9316.950b1",
+        "type": "comment",
+        "z": "1f0e3304.7a54ed",
+        "name": "Shows the usage of the oscilloscope and read variable functionality",
+        "info": "",
+        "x": 240,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "8b1a0153.80e0b",
+        "type": "comment",
+        "z": "1f0e3304.7a54ed",
+        "name": "FreeMASTER Lite",
+        "info": "",
+        "x": 150,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "3d7cea24.c98836",
+        "type": "pcm",
+        "z": "1f0e3304.7a54ed",
+        "name": "PCM",
+        "url": "127.0.0.1:8090",
+        "urlType": "str",
+        "internal": true,
+        "x": 270,
+        "y": 240,
+        "wires": [
+            [
+                "d11c985b.c41ea8"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "48ce3b84.0cdc34",
+        "type": "inject",
+        "z": "1f0e3304.7a54ed",
+        "name": "Trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "3d7cea24.c98836"
+            ]
+        ]
+    },
+    {
+        "id": "d11c985b.c41ea8",
+        "type": "comm-start",
+        "z": "1f0e3304.7a54ed",
+        "name": "Start Comm",
+        "conn": "NET;192.168.3.1;type=TCP;port=3344;timeout=1000",
+        "connType": "str",
+        "x": 450,
+        "y": 240,
+        "wires": [
+            [
+                "be133407.297af8"
+            ]
+        ]
+    },
+    {
+        "id": "6c7c35eb.f1399c",
+        "type": "comm-stop",
+        "z": "1f0e3304.7a54ed",
+        "name": "Stop Comm",
+        "x": 1350,
+        "y": 240,
+        "wires": [
+            [
+                "5ec9d443.93377c"
+            ]
+        ]
+    },
+    {
+        "id": "be133407.297af8",
+        "type": "tsa-read",
+        "z": "1f0e3304.7a54ed",
+        "name": "Read TSA",
+        "x": 630,
+        "y": 240,
+        "wires": [
+            [
+                "a067eee4.70a43",
+                "fc2b72c9f34d521d"
+            ]
+        ]
+    },
+    {
+        "id": "a067eee4.70a43",
+        "type": "osc-setup",
+        "z": "1f0e3304.7a54ed",
+        "name": "Setup Oscilloscope",
+        "osc": "1",
+        "oscType": "num",
+        "vars": [
+            {
+                "var": "g_cpu_usage",
+                "varType": "str"
+            }
+        ],
+        "x": 830,
+        "y": 240,
+        "wires": [
+            [
+                "9eae1502.16d3c8"
+            ]
+        ]
+    },
+    {
+        "id": "9eae1502.16d3c8",
+        "type": "osc-get-data",
+        "z": "1f0e3304.7a54ed",
+        "name": "Get Oscilloscope Data",
+        "osc": "1",
+        "oscType": "num",
+        "x": 1060,
+        "y": 240,
+        "wires": [
+            [
+                "6c7c35eb.f1399c",
+                "abfde556.d7df58",
+                "3af2f1ad.524a8e"
+            ]
+        ]
+    },
+    {
+        "id": "92528959.a48968",
+        "type": "comment",
+        "z": "1f0e3304.7a54ed",
+        "name": "Requires scope instance to be enabled in the embedded application",
+        "info": "",
+        "x": 340,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "546066b1.e598f8",
+        "type": "comment",
+        "z": "1f0e3304.7a54ed",
+        "name": "Once a scope instance is setup it can be continuously polled for data",
+        "info": "",
+        "x": 1060,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "abfde556.d7df58",
+        "type": "debug",
+        "z": "1f0e3304.7a54ed",
+        "name": "Topic (oscilloscope variables)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5ec9d443.93377c",
+        "type": "debug",
+        "z": "1f0e3304.7a54ed",
+        "name": "Communication stopped",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "\"Communication stopped\"",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1550,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "3af2f1ad.524a8e",
+        "type": "debug",
+        "z": "1f0e3304.7a54ed",
+        "name": "Payload (oscilloscope data)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "2b90867a.e067fa",
+        "type": "catch",
+        "z": "1f0e3304.7a54ed",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 880,
+        "y": 100,
+        "wires": [
+            [
+                "23e4f775.a77958"
+            ]
+        ]
+    },
+    {
+        "id": "b21192c8.90dbc",
+        "type": "comment",
+        "z": "1f0e3304.7a54ed",
+        "name": "Catch errors on any node",
+        "info": "",
+        "x": 890,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "23e4f775.a77958",
+        "type": "debug",
+        "z": "1f0e3304.7a54ed",
+        "name": "Error occurred",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "fc2b72c9f34d521d",
+        "type": "read-flt-var",
+        "z": "1f0e3304.7a54ed",
+        "name": "Read Float Variable",
+        "addr": "g_cpu_usage_fp",
+        "addrType": "str",
+        "x": 830,
+        "y": 320,
+        "wires": [
+            [
+                "b7808e489edfd817"
+            ]
+        ]
+    },
+    {
+        "id": "b7808e489edfd817",
+        "type": "debug",
+        "z": "1f0e3304.7a54ed",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 320,
+        "wires": []
+    }
+]

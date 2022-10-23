@@ -1,0 +1,933 @@
+﻿                                                                                                   
+####################################################################################################################################################################                                                                       
+          
+  Samsung S8 RNDIS descriptor in USB tethering mode
+
+####################################################################################################################################################################                                                                       
+
+    ---------------------- Device Descriptor ----------------------
+bLength                  : 0x12 (18 bytes)
+bDescriptorType          : 0x01 (Device Descriptor)
+bcdUSB                   : 0x310 (USB Version 3.10)
+bDeviceClass             : 0x00 (defined by the interface descriptors)
+bDeviceSubClass          : 0x00
+bDeviceProtocol          : 0x00
+bMaxPacketSize0          : 0x09 (9 bytes)
+idVendor                 : 0x04E8 (Samsung Electronics Co., Ltd.)
+idProduct                : 0x6863
+bcdDevice                : 0x0400
+iManufacturer            : 0x01 (String Descriptor 1)
+ Language 0x0409         : "SAMSUNG"
+iProduct                 : 0x02 (String Descriptor 2)
+ Language 0x0409         : "SAMSUNG_Android"
+iSerialNumber            : 0x03 (String Descriptor 3)
+ Language 0x0409         : "ce12171ca073b10a04"
+bNumConfigurations       : 0x01 (1 Configuration)
+Data (HexDump)           : 12 01 10 03 00 00 00 09 E8 04 63 68 00 04 01 02   ..........ch....
+                           03 01                                             ..
+
+    ------------------ Configuration Descriptor -------------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x02 (Configuration Descriptor)
+wTotalLength             : 0x005D (93 bytes)
+bNumInterfaces           : 0x02 (2 Interfaces)
+bConfigurationValue      : 0x01 (Configuration 1)
+iConfiguration           : 0x04 (String Descriptor 4)
+ Language 0x0409         : "Conf 1"
+bmAttributes             : 0xC0
+ D7: Reserved, set 1     : 0x01
+ D6: Self Powered        : 0x01 (yes)
+ D5: Remote Wakeup       : 0x00 (no)
+ D4..0: Reserved, set 0  : 0x00
+MaxPower                 : 0x08 (16 mA)
+Data (HexDump)           : 09 02 5D 00 02 01 04 C0 08 08 0B 00 02 E0 01 03   ..].............
+                           07 09 04 00 00 01 E0 01 03 05 05 24 00 10 01 05   ...........$....
+                           24 01 00 01 04 24 02 00 05 24 06 00 01 07 05 82   $....$...$......
+                           03 08 00 09 06 30 00 00 08 00 09 04 01 00 02 0A   .....0..........
+                           00 00 06 07 05 81 02 00 04 00 06 30 00 00 00 00   ...........0....
+                           07 05 01 02 00 04 00 06 30 00 00 00 00            ........0....
+
+        ------------------- IAD Descriptor --------------------
+bLength                  : 0x08 (8 bytes)
+bDescriptorType          : 0x0B
+bFirstInterface          : 0x00
+bInterfaceCount          : 0x02
+bFunctionClass           : 0xE0 (Wireless Controller)
+bFunctionSubClass        : 0x01
+bFunctionProtocol        : 0x03
+iFunction                : 0x07 (String Descriptor 7)
+ Language 0x0409         : "RNDIS"
+Data (HexDump)           : 08 0B 00 02 E0 01 03 07                           ........
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x00
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x01 (1 Endpoint)
+bInterfaceClass          : 0xE0 (Wireless Controller)
+bInterfaceSubClass       : 0x01
+bInterfaceProtocol       : 0x03 (Remote NDIS)
+iInterface               : 0x05 (String Descriptor 5)
+ Language 0x0409         : "RNDIS Communications Control"
+Data (HexDump)           : 09 04 00 00 01 E0 01 03 05                        .........
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x00 (Header Functional Descriptor)
+bcdCDC                   : 0x110 (CDC Version 1.10)
+Data (HexDump)           : 05 24 00 10 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x01 (Call Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..2                   : 0x00 (Reserved)
+ D1                      : 0x00 (sends/receives call management information only over the Communication Class interface)
+ D0                      : 0x00 (does not handle call management itself)
+bDataInterface           : 0x01
+Data (HexDump)           : 05 24 01 00 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x04 (4 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x02 (Abstract Control Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..4                   : 0x00 (Reserved)
+ D3                      : 0x00 (not supports the notification Network_Connection)
+ D2                      : 0x00 (not supports the request Send_Break)
+ D1                      : 0x00 (not supports the request combination of Set_Line_Coding, Set_Control_Line_State, Get_Line_Coding, and the notification Serial_State)
+ D0                      : 0x00 (not supports the request combination of Set_Comm_Feature, Clear_Comm_Feature, and Get_Comm_Feature)
+Data (HexDump)           : 04 24 02 00                                       .$..
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x06 (Union Functional Descriptor)
+bControlInterface        : 0x00
+bSubordinateInterface[0] : 0x01
+Data (HexDump)           : 05 24 06 00 01                                    .$...
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x82 (Direction=IN EndpointID=2)
+bmAttributes             : 0x03 (TransferType=InterruptPeriodic)
+wMaxPacketSize           : 0x0008
+bInterval                : 0x09 (9 ms)
+Data (HexDump)           : 07 05 82 03 08 00 09                              .......
+
+        ------ SuperSpeed Endpoint Companion Descriptor -------
+bLength                  : 0x06 (6 bytes)
+bDescriptorType          : 0x30 (SuperSpeed Endpoint Companion Descriptor)
+bMaxBurst                : 0x00 (up to 1 packets per burst)
+bmAttributes             : 0x00
+wBytesPerInterval        : 0x0008 (8 bytes)
+Data (HexDump)           : 06 30 00 00 08 00                                 .0....
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x01
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x0A (CDC-Data)
+bInterfaceSubClass       : 0x00
+bInterfaceProtocol       : 0x00
+iInterface               : 0x06 (String Descriptor 6)
+ Language 0x0409         : "RNDIS Ethernet Data"
+Data (HexDump)           : 09 04 01 00 02 0A 00 00 06                        .........
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x81 (Direction=IN EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0400 (max 1024 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 81 02 00 04 00                              .......
+
+        ------ SuperSpeed Endpoint Companion Descriptor -------
+bLength                  : 0x06 (6 bytes)
+bDescriptorType          : 0x30 (SuperSpeed Endpoint Companion Descriptor)
+bMaxBurst                : 0x00 (up to 1 packets per burst)
+bmAttributes             : 0x00 (The bulk endpoint does not define streams)
+wBytesPerInterval        : 0x0000
+Data (HexDump)           : 06 30 00 00 00 00                                 .0....
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x01 (Direction=OUT EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0400 (max 1024 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 01 02 00 04 00                              .......
+
+        ------ SuperSpeed Endpoint Companion Descriptor -------
+bLength                  : 0x06 (6 bytes)
+bDescriptorType          : 0x30 (SuperSpeed Endpoint Companion Descriptor)
+bMaxBurst                : 0x00 (up to 1 packets per burst)
+bmAttributes             : 0x00 (The bulk endpoint does not define streams)
+wBytesPerInterval        : 0x0000
+Data (HexDump)           : 06 30 00 00 00 00                                 .0....
+
+      ---------- Binary Object Store (BOS) Descriptor -----------
+bLength                  : 0x05 (5 bytes)
+bDescriptorType          : 0x0F (Binary Object Store)
+wTotalLength             : 0x0016 (22 bytes)
+bNumDeviceCaps           : 0x02
+Data (HexDump)           : 05 0F 16 00 02                                    .....
+
+        ------------- USB 2.0 Extension Descriptor ------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x10 (Device Capability Descriptor)
+bDevCapabilityType       : 0x02 (USB 2.0 Extension)
+bmAttributes             : 0x00
+ LPMCapable              : 0 (Link Power Management protocol is not supported)
+ BESLAndAlternateHIRD    : 0 (BESL & Alternate HIRD definitions are not supported)
+ BaselineBESLValid       : 0 (not valid)
+ DeepBESLValid           : 0 (not valid)
+ BaselineBESL            : 0
+ DeepBESL                : 0
+Data (HexDump)           : 07 10 02 00 00 00 00                              .......
+
+        ----- SuperSpeed USB Device Capability Descriptor -----
+bLength                  : 0x0A (10 bytes)
+bDescriptorType          : 0x10 (Device Capability Descriptor)
+bDevCapabilityType       : 0x03 (SuperSpeed USB Device Capability)
+bmAttributes             : 0x00
+ Bit 0 Reserved          : 0x00
+ Bit 1 LTM Capable       : 0x00 (no)
+ Bit 7:2 Reserved        : 0x00
+wSpeedsSupported         : 0x0F (Low-Speed, Full-Speed, High-Speed, SuperSpeed)
+bFunctionalitySupport    : 0x01 (lowest speed with all the functionality is 'Full-Speed')
+bU1DevExitLat            : 0x01   (less than 1 µs)
+wU2DevExitLat            : 0x01F4 (less than 500 µs)
+Data (HexDump)           : 0A 10 03 00 0F 00 01 01 F4 01                     ..........
+
+      -------------------- String Descriptors -------------------
+             ------ String Descriptor 0 ------
+bLength                  : 0x04 (4 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language ID[0]           : 0x0409 (English - United States)
+Data (HexDump)           : 04 03 09 04                                       ....
+             ------ String Descriptor 1 ------
+bLength                  : 0x10 (16 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "SAMSUNG"
+Data (HexDump)           : 10 03 53 00 41 00 4D 00 53 00 55 00 4E 00 47 00   ..S.A.M.S.U.N.G.
+             ------ String Descriptor 2 ------
+bLength                  : 0x20 (32 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "SAMSUNG_Android"
+Data (HexDump)           : 20 03 53 00 41 00 4D 00 53 00 55 00 4E 00 47 00    .S.A.M.S.U.N.G.
+                           5F 00 41 00 6E 00 64 00 72 00 6F 00 69 00 64 00   _.A.n.d.r.o.i.d.
+             ------ String Descriptor 3 ------
+bLength                  : 0x26 (38 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "ce12171ca073b10a04"
+Data (HexDump)           : 26 03 63 00 65 00 31 00 32 00 31 00 37 00 31 00   &.c.e.1.2.1.7.1.
+                           63 00 61 00 30 00 37 00 33 00 62 00 31 00 30 00   c.a.0.7.3.b.1.0.
+                           61 00 30 00 34 00                                 a.0.4.
+             ------ String Descriptor 4 ------
+bLength                  : 0x0E (14 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "Conf 1"
+Data (HexDump)           : 0E 03 43 00 6F 00 6E 00 66 00 20 00 31 00         ..C.o.n.f. .1.
+             ------ String Descriptor 5 ------
+bLength                  : 0x3A (58 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS Communications Control"
+Data (HexDump)           : 3A 03 52 00 4E 00 44 00 49 00 53 00 20 00 43 00   :.R.N.D.I.S. .C.
+                           6F 00 6D 00 6D 00 75 00 6E 00 69 00 63 00 61 00   o.m.m.u.n.i.c.a.
+                           74 00 69 00 6F 00 6E 00 73 00 20 00 43 00 6F 00   t.i.o.n.s. .C.o.
+                           6E 00 74 00 72 00 6F 00 6C 00                     n.t.r.o.l.
+             ------ String Descriptor 6 ------
+bLength                  : 0x28 (40 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS Ethernet Data"
+Data (HexDump)           : 28 03 52 00 4E 00 44 00 49 00 53 00 20 00 45 00   (.R.N.D.I.S. .E.
+                           74 00 68 00 65 00 72 00 6E 00 65 00 74 00 20 00   t.h.e.r.n.e.t. .
+                           44 00 61 00 74 00 61 00                           D.a.t.a.
+             ------ String Descriptor 7 ------
+bLength                  : 0x0C (12 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS"
+Data (HexDump)           : 0C 03 52 00 4E 00 44 00 49 00 53 00               ..R.N.D.I.S.
+             ------ String Descriptor 8 ------
+bLength                  : 0x02 (2 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : ""  *!*CAUTION  zero length
+Data (HexDump)           : 02 03                                             ..
+
+####################################################################################################################################################################                                                                                                    
+                                                                                                              
+  Beaglebone Board descriptor
+
+####################################################################################################################################################################                                                                       
+
+
+    ---------------------- Device Descriptor ----------------------
+bLength                  : 0x12 (18 bytes)
+bDescriptorType          : 0x01 (Device Descriptor)
+bcdUSB                   : 0x200 (USB Version 2.00)
+bDeviceClass             : 0xEF (Miscellaneous)
+bDeviceSubClass          : 0x02
+bDeviceProtocol          : 0x01 (IAD - Interface Association Descriptor)
+bMaxPacketSize0          : 0x40 (64 bytes)
+idVendor                 : 0x1D6B (The Linux Foundation)
+idProduct                : 0x0104
+bcdDevice                : 0x0308
+iManufacturer            : 0x02 (String Descriptor 2)
+ Language 0x0409         : "Circuitco"
+iProduct                 : 0x03 (String Descriptor 3)
+ Language 0x0409         : "BeagleBoneBlack"
+iSerialNumber            : 0x04 (String Descriptor 4)
+ Language 0x0409         : "5A-1813BBBK4305"
+bNumConfigurations       : 0x01 (1 Configuration)
+Data (HexDump)           : 12 01 00 02 EF 02 01 40 6B 1D 04 01 08 03 02 03   .......@k.......
+                           04 01                                             ..
+
+    ------------------ Configuration Descriptor -------------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x02 (Configuration Descriptor)
+wTotalLength             : 0x00A4 (164 bytes)
+bNumInterfaces           : 0x05 (5 Interfaces)
+bConfigurationValue      : 0x01 (Configuration 1)
+iConfiguration           : 0x05 (String Descriptor 5)
+ Language 0x0409         : "Multifunction with RNDIS"
+bmAttributes             : 0xC0
+ D7: Reserved, set 1     : 0x01
+ D6: Self Powered        : 0x01 (yes)
+ D5: Remote Wakeup       : 0x00 (no)
+ D4..0: Reserved, set 0  : 0x00
+MaxPower                 : 0x01 (2 mA)
+Data (HexDump)           : 09 02 A4 00 05 01 05 C0 01 08 0B 00 02 02 06 00   ................
+                           09 09 04 00 00 01 02 02 FF 07 05 24 00 10 01 05   ...........$....
+                           24 01 00 01 04 24 02 00 05 24 06 00 01 07 05 82   $....$...$......
+                           03 08 00 09 09 04 01 00 02 0A 00 00 08 07 05 81   ................
+                           02 00 02 00 07 05 01 02 00 02 00 08 0B 02 02 02   ................
+                           02 01 0C 09 04 02 00 01 02 02 01 0A 05 24 00 10   .............$..
+                           01 05 24 01 00 03 04 24 02 02 05 24 06 02 03 07   ..$....$...$....
+                           05 84 03 0A 00 09 09 04 03 00 02 0A 00 00 0B 07   ................
+                           05 83 02 00 02 00 07 05 02 02 00 02 00 09 04 04   ................
+                           00 02 08 06 50 01 07 05 85 02 00 02 00 07 05 03   ....P...........
+                           02 00 02 01                                       ....
+
+        ------------------- IAD Descriptor --------------------
+bLength                  : 0x08 (8 bytes)
+bDescriptorType          : 0x0B
+bFirstInterface          : 0x00
+bInterfaceCount          : 0x02
+bFunctionClass           : 0x02 (Communications and CDC Control)
+bFunctionSubClass        : 0x06
+bFunctionProtocol        : 0x00
+iFunction                : 0x09 (String Descriptor 9)
+ Language 0x0409         : "RNDIS"
+Data (HexDump)           : 08 0B 00 02 02 06 00 09                           ........
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x00
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x01 (1 Endpoint)
+bInterfaceClass          : 0x02 (Communications and CDC Control)
+bInterfaceSubClass       : 0x02 (Abstract Control Model)
+bInterfaceProtocol       : 0xFF (Vendor-specific)
+iInterface               : 0x07 (String Descriptor 7)
+ Language 0x0409         : "RNDIS Communications Control"
+Data (HexDump)           : 09 04 00 00 01 02 02 FF 07                        .........
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x00 (Header Functional Descriptor)
+bcdCDC                   : 0x110 (CDC Version 1.10)
+Data (HexDump)           : 05 24 00 10 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x01 (Call Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..2                   : 0x00 (Reserved)
+ D1                      : 0x00 (sends/receives call management information only over the Communication Class interface)
+ D0                      : 0x00 (does not handle call management itself)
+bDataInterface           : 0x01
+Data (HexDump)           : 05 24 01 00 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x04 (4 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x02 (Abstract Control Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..4                   : 0x00 (Reserved)
+ D3                      : 0x00 (not supports the notification Network_Connection)
+ D2                      : 0x00 (not supports the request Send_Break)
+ D1                      : 0x00 (not supports the request combination of Set_Line_Coding, Set_Control_Line_State, Get_Line_Coding, and the notification Serial_State)
+ D0                      : 0x00 (not supports the request combination of Set_Comm_Feature, Clear_Comm_Feature, and Get_Comm_Feature)
+Data (HexDump)           : 04 24 02 00                                       .$..
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x06 (Union Functional Descriptor)
+bControlInterface        : 0x00
+bSubordinateInterface[0] : 0x01
+Data (HexDump)           : 05 24 06 00 01                                    .$...
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x82 (Direction=IN EndpointID=2)
+bmAttributes             : 0x03 (TransferType=Interrupt)
+wMaxPacketSize           : 0x0008
+ Bits 15..13             : 0x00 (reserved, must be zero)
+ Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+ Bits 10..0              : 0x08 (8 bytes per packet)
+bInterval                : 0x09 (9 ms)
+Data (HexDump)           : 07 05 82 03 08 00 09                              .......
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x01
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x0A (CDC-Data)
+bInterfaceSubClass       : 0x00
+bInterfaceProtocol       : 0x00
+iInterface               : 0x08 (String Descriptor 8)
+ Language 0x0409         : "RNDIS Ethernet Data"
+Data (HexDump)           : 09 04 01 00 02 0A 00 00 08                        .........
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x81 (Direction=IN EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 81 02 00 02 00                              .......
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x01 (Direction=OUT EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 01 02 00 02 00                              .......
+
+        ------------------- IAD Descriptor --------------------
+bLength                  : 0x08 (8 bytes)
+bDescriptorType          : 0x0B
+bFirstInterface          : 0x02
+bInterfaceCount          : 0x02
+bFunctionClass           : 0x02 (Communications and CDC Control)
+bFunctionSubClass        : 0x02
+bFunctionProtocol        : 0x01
+iFunction                : 0x0C (String Descriptor 12)
+ Language 0x0409         : "CDC Serial"
+Data (HexDump)           : 08 0B 02 02 02 02 01 0C                           ........
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x02
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x01 (1 Endpoint)
+bInterfaceClass          : 0x02 (Communications and CDC Control)
+bInterfaceSubClass       : 0x02 (Abstract Control Model)
+bInterfaceProtocol       : 0x01 (AT Commands defined by ITU-T V.250 etc)
+iInterface               : 0x0A (String Descriptor 10)
+ Language 0x0409         : "CDC Abstract Control Model (ACM)"
+Data (HexDump)           : 09 04 02 00 01 02 02 01 0A                        .........
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x00 (Header Functional Descriptor)
+bcdCDC                   : 0x110 (CDC Version 1.10)
+Data (HexDump)           : 05 24 00 10 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x01 (Call Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..2                   : 0x00 (Reserved)
+ D1                      : 0x00 (sends/receives call management information only over the Communication Class interface)
+ D0                      : 0x00 (does not handle call management itself)
+bDataInterface           : 0x03
+Data (HexDump)           : 05 24 01 00 03                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x04 (4 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x02 (Abstract Control Management Functional Descriptor)
+bmCapabilities           : 0x02
+ D7..4                   : 0x00 (Reserved)
+ D3                      : 0x00 (not supports the notification Network_Connection)
+ D2                      : 0x00 (not supports the request Send_Break)
+ D1                      : 0x01 (supports the request combination of Set_Line_Coding, Set_Control_Line_State, Get_Line_Coding, and the notification Serial_State)
+ D0                      : 0x00 (not supports the request combination of Set_Comm_Feature, Clear_Comm_Feature, and Get_Comm_Feature)
+Data (HexDump)           : 04 24 02 02                                       .$..
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x06 (Union Functional Descriptor)
+bControlInterface        : 0x02
+bSubordinateInterface[0] : 0x03
+Data (HexDump)           : 05 24 06 02 03                                    .$...
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x84 (Direction=IN EndpointID=4)
+bmAttributes             : 0x03 (TransferType=Interrupt)
+wMaxPacketSize           : 0x000A
+ Bits 15..13             : 0x00 (reserved, must be zero)
+ Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+ Bits 10..0              : 0x0A (10 bytes per packet)
+bInterval                : 0x09 (9 ms)
+Data (HexDump)           : 07 05 84 03 0A 00 09                              .......
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x03
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x0A (CDC-Data)
+bInterfaceSubClass       : 0x00
+bInterfaceProtocol       : 0x00
+iInterface               : 0x0B (String Descriptor 11)
+ Language 0x0409         : "CDC ACM Data"
+Data (HexDump)           : 09 04 03 00 02 0A 00 00 0B                        .........
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x83 (Direction=IN EndpointID=3)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 83 02 00 02 00                              .......
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x02 (Direction=OUT EndpointID=2)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 02 02 00 02 00                              .......
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x04
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x08 (Mass Storage)
+bInterfaceSubClass       : 0x06 (SCSI transparent command set)
+bInterfaceProtocol       : 0x50 (Bulk-Only Transport)
+iInterface               : 0x01 (String Descriptor 1)
+ Language 0x0409         : "Mass Storage"
+Data (HexDump)           : 09 04 04 00 02 08 06 50 01                        .......P.
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x85 (Direction=IN EndpointID=5)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 85 02 00 02 00                              .......
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x03 (Direction=OUT EndpointID=3)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0200 (max 512 bytes)
+bInterval                : 0x01 (at most 1 NAK each 1 microframes)
+Data (HexDump)           : 07 05 03 02 00 02 01                              .......
+
+    ----------------- Device Qualifier Descriptor -----------------
+bLength                  : 0x0A (10 bytes)
+bDescriptorType          : 0x06 (Device_qualifier Descriptor)
+bcdUSB                   : 0x200 (USB Version 2.00)
+bDeviceClass             : 0xEF (Miscellaneous)
+bDeviceSubClass          : 0x02
+bDeviceProtocol          : 0x01 (IAD - Interface Association Descriptor)
+bMaxPacketSize0          : 0x40 (64 Bytes)
+bNumConfigurations       : 0x01 (1 other-speed configuration)
+bReserved                : 0x00
+Data (HexDump)           : 0A 06 00 02 EF 02 01 40 01 00                     .......@..
+
+    ------------ Other Speed Configuration Descriptor -------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x07 (Other_speed_configuration Descriptor)
+wTotalLength             : 0x00A4 (164 bytes)
+bNumInterfaces           : 0x05 (5 Interfaces)
+bConfigurationValue      : 0x01 (Configuration 1)
+iConfiguration           : 0x05 (String Descriptor 5)
+ Language 0x0409         : "Multifunction with RNDIS"
+bmAttributes             : 0xC0
+ D7: Reserved, set 1     : 0x01
+ D6: Self Powered        : 0x01 (yes)
+ D5: Remote Wakeup       : 0x00 (no)
+ D4..0: Reserved, set 0  : 0x00
+MaxPower                 : 0x01 (2 mA)
+Data (HexDump)           : 09 07 A4 00 05 01 05 C0 01 08 0B 00 02 02 06 00   ................
+                           09 09 04 00 00 01 02 02 FF 07 05 24 00 10 01 05   ...........$....
+                           24 01 00 01 04 24 02 00 05 24 06 00 01 07 05 82   $....$...$......
+                           03 08 00 20 09 04 01 00 02 0A 00 00 08 07 05 81   ... ............
+                           02 40 00 00 07 05 01 02 40 00 00 08 0B 02 02 02   .@......@.......
+                           02 01 0C 09 04 02 00 01 02 02 01 0A 05 24 00 10   .............$..
+                           01 05 24 01 00 03 04 24 02 02 05 24 06 02 03 07   ..$....$...$....
+                           05 84 03 0A 00 20 09 04 03 00 02 0A 00 00 0B 07   ..... ..........
+                           05 83 02 40 00 00 07 05 02 02 40 00 00 09 04 04   ...@......@.....
+                           00 02 08 06 50 01 07 05 85 02 40 00 00 07 05 03   ....P.....@.....
+                           02 40 00 00                                       .@..
+
+        ------------------- IAD Descriptor --------------------
+bLength                  : 0x08 (8 bytes)
+bDescriptorType          : 0x0B
+bFirstInterface          : 0x00
+bInterfaceCount          : 0x02
+bFunctionClass           : 0x02 (Communications and CDC Control)
+bFunctionSubClass        : 0x06
+bFunctionProtocol        : 0x00
+iFunction                : 0x09 (String Descriptor 9)
+ Language 0x0409         : "RNDIS"
+Data (HexDump)           : 08 0B 00 02 02 06 00 09                           ........
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x00
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x01 (1 Endpoint)
+bInterfaceClass          : 0x02 (Communications and CDC Control)
+bInterfaceSubClass       : 0x02 (Abstract Control Model)
+bInterfaceProtocol       : 0xFF (Vendor-specific)
+iInterface               : 0x07 (String Descriptor 7)
+ Language 0x0409         : "RNDIS Communications Control"
+Data (HexDump)           : 09 04 00 00 01 02 02 FF 07                        .........
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x00 (Header Functional Descriptor)
+bcdCDC                   : 0x110 (CDC Version 1.10)
+Data (HexDump)           : 05 24 00 10 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x01 (Call Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..2                   : 0x00 (Reserved)
+ D1                      : 0x00 (sends/receives call management information only over the Communication Class interface)
+ D0                      : 0x00 (does not handle call management itself)
+bDataInterface           : 0x01
+Data (HexDump)           : 05 24 01 00 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x04 (4 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x02 (Abstract Control Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..4                   : 0x00 (Reserved)
+ D3                      : 0x00 (not supports the notification Network_Connection)
+ D2                      : 0x00 (not supports the request Send_Break)
+ D1                      : 0x00 (not supports the request combination of Set_Line_Coding, Set_Control_Line_State, Get_Line_Coding, and the notification Serial_State)
+ D0                      : 0x00 (not supports the request combination of Set_Comm_Feature, Clear_Comm_Feature, and Get_Comm_Feature)
+Data (HexDump)           : 04 24 02 00                                       .$..
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x06 (Union Functional Descriptor)
+bControlInterface        : 0x00
+bSubordinateInterface[0] : 0x01
+Data (HexDump)           : 05 24 06 00 01                                    .$...
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x82 (Direction=IN EndpointID=2)
+bmAttributes             : 0x03 (TransferType=Interrupt)
+wMaxPacketSize           : 0x0008
+ Bits 15..13             : 0x00 (reserved, must be zero)
+ Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+ Bits 10..0              : 0x08 (8 bytes per packet)
+bInterval                : 0x20 (32 ms)
+Data (HexDump)           : 07 05 82 03 08 00 20                              ...... 
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x01
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x0A (CDC-Data)
+bInterfaceSubClass       : 0x00
+bInterfaceProtocol       : 0x00
+iInterface               : 0x08 (String Descriptor 8)
+ Language 0x0409         : "RNDIS Ethernet Data"
+Data (HexDump)           : 09 04 01 00 02 0A 00 00 08                        .........
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x81 (Direction=IN EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 81 02 40 00 00                              ....@..
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x01 (Direction=OUT EndpointID=1)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 01 02 40 00 00                              ....@..
+
+        ------------------- IAD Descriptor --------------------
+bLength                  : 0x08 (8 bytes)
+bDescriptorType          : 0x0B
+bFirstInterface          : 0x02
+bInterfaceCount          : 0x02
+bFunctionClass           : 0x02 (Communications and CDC Control)
+bFunctionSubClass        : 0x02
+bFunctionProtocol        : 0x01
+iFunction                : 0x0C (String Descriptor 12)
+ Language 0x0409         : "CDC Serial"
+Data (HexDump)           : 08 0B 02 02 02 02 01 0C                           ........
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x02
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x01 (1 Endpoint)
+bInterfaceClass          : 0x02 (Communications and CDC Control)
+bInterfaceSubClass       : 0x02 (Abstract Control Model)
+bInterfaceProtocol       : 0x01 (AT Commands defined by ITU-T V.250 etc)
+iInterface               : 0x0A (String Descriptor 10)
+ Language 0x0409         : "CDC Abstract Control Model (ACM)"
+Data (HexDump)           : 09 04 02 00 01 02 02 01 0A                        .........
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x00 (Header Functional Descriptor)
+bcdCDC                   : 0x110 (CDC Version 1.10)
+Data (HexDump)           : 05 24 00 10 01                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x01 (Call Management Functional Descriptor)
+bmCapabilities           : 0x00
+ D7..2                   : 0x00 (Reserved)
+ D1                      : 0x00 (sends/receives call management information only over the Communication Class interface)
+ D0                      : 0x00 (does not handle call management itself)
+bDataInterface           : 0x03
+Data (HexDump)           : 05 24 01 00 03                                    .$...
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x04 (4 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x02 (Abstract Control Management Functional Descriptor)
+bmCapabilities           : 0x02
+ D7..4                   : 0x00 (Reserved)
+ D3                      : 0x00 (not supports the notification Network_Connection)
+ D2                      : 0x00 (not supports the request Send_Break)
+ D1                      : 0x01 (supports the request combination of Set_Line_Coding, Set_Control_Line_State, Get_Line_Coding, and the notification Serial_State)
+ D0                      : 0x00 (not supports the request combination of Set_Comm_Feature, Clear_Comm_Feature, and Get_Comm_Feature)
+Data (HexDump)           : 04 24 02 02                                       .$..
+
+        -------------- CDC Interface Descriptor ---------------
+bFunctionLength          : 0x05 (5 bytes)
+bDescriptorType          : 0x24 (Interface)
+bDescriptorSubType       : 0x06 (Union Functional Descriptor)
+bControlInterface        : 0x02
+bSubordinateInterface[0] : 0x03
+Data (HexDump)           : 05 24 06 02 03                                    .$...
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x84 (Direction=IN EndpointID=4)
+bmAttributes             : 0x03 (TransferType=Interrupt)
+wMaxPacketSize           : 0x000A
+ Bits 15..13             : 0x00 (reserved, must be zero)
+ Bits 12..11             : 0x00 (0 additional transactions per microframe -> allows 1..1024 bytes per packet)
+ Bits 10..0              : 0x0A (10 bytes per packet)
+bInterval                : 0x20 (32 ms)
+Data (HexDump)           : 07 05 84 03 0A 00 20                              ...... 
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x03
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x0A (CDC-Data)
+bInterfaceSubClass       : 0x00
+bInterfaceProtocol       : 0x00
+iInterface               : 0x0B (String Descriptor 11)
+ Language 0x0409         : "CDC ACM Data"
+Data (HexDump)           : 09 04 03 00 02 0A 00 00 0B                        .........
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x83 (Direction=IN EndpointID=3)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 83 02 40 00 00                              ....@..
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x02 (Direction=OUT EndpointID=2)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 02 02 40 00 00                              ....@..
+
+        ---------------- Interface Descriptor -----------------
+bLength                  : 0x09 (9 bytes)
+bDescriptorType          : 0x04 (Interface Descriptor)
+bInterfaceNumber         : 0x04
+bAlternateSetting        : 0x00
+bNumEndpoints            : 0x02 (2 Endpoints)
+bInterfaceClass          : 0x08 (Mass Storage)
+bInterfaceSubClass       : 0x06 (SCSI transparent command set)
+bInterfaceProtocol       : 0x50 (Bulk-Only Transport)
+iInterface               : 0x01 (String Descriptor 1)
+ Language 0x0409         : "Mass Storage"
+Data (HexDump)           : 09 04 04 00 02 08 06 50 01                        .......P.
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x85 (Direction=IN EndpointID=5)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 85 02 40 00 00                              ....@..
+
+        ----------------- Endpoint Descriptor -----------------
+bLength                  : 0x07 (7 bytes)
+bDescriptorType          : 0x05 (Endpoint Descriptor)
+bEndpointAddress         : 0x03 (Direction=OUT EndpointID=3)
+bmAttributes             : 0x02 (TransferType=Bulk)
+wMaxPacketSize           : 0x0040 (max 64 bytes)
+bInterval                : 0x00 (never NAKs)
+Data (HexDump)           : 07 05 03 02 40 00 00                              ....@..
+
+      -------------------- String Descriptors -------------------
+             ------ String Descriptor 0 ------
+bLength                  : 0x04 (4 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language ID[0]           : 0x0409 (English - United States)
+Data (HexDump)           : 04 03 09 04                                       ....
+             ------ String Descriptor 1 ------
+bLength                  : 0x1A (26 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "Mass Storage"
+Data (HexDump)           : 1A 03 4D 00 61 00 73 00 73 00 20 00 53 00 74 00   ..M.a.s.s. .S.t.
+                           6F 00 72 00 61 00 67 00 65 00                     o.r.a.g.e.
+             ------ String Descriptor 2 ------
+bLength                  : 0x14 (20 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "Circuitco"
+Data (HexDump)           : 14 03 43 00 69 00 72 00 63 00 75 00 69 00 74 00   ..C.i.r.c.u.i.t.
+                           63 00 6F 00                                       c.o.
+             ------ String Descriptor 3 ------
+bLength                  : 0x20 (32 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "BeagleBoneBlack"
+Data (HexDump)           : 20 03 42 00 65 00 61 00 67 00 6C 00 65 00 42 00    .B.e.a.g.l.e.B.
+                           6F 00 6E 00 65 00 42 00 6C 00 61 00 63 00 6B 00   o.n.e.B.l.a.c.k.
+             ------ String Descriptor 4 ------
+bLength                  : 0x20 (32 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "5A-1813BBBK4305"
+Data (HexDump)           : 20 03 35 00 41 00 2D 00 31 00 38 00 31 00 33 00    .5.A.-.1.8.1.3.
+                           42 00 42 00 42 00 4B 00 34 00 33 00 30 00 35 00   B.B.B.K.4.3.0.5.
+             ------ String Descriptor 5 ------
+bLength                  : 0x32 (50 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "Multifunction with RNDIS"
+Data (HexDump)           : 32 03 4D 00 75 00 6C 00 74 00 69 00 66 00 75 00   2.M.u.l.t.i.f.u.
+                           6E 00 63 00 74 00 69 00 6F 00 6E 00 20 00 77 00   n.c.t.i.o.n. .w.
+                           69 00 74 00 68 00 20 00 52 00 4E 00 44 00 49 00   i.t.h. .R.N.D.I.
+                           53 00                                             S.
+             ------ String Descriptor 6 ------
+bLength                  : 0x36 (54 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "Multifunction with CDC ECM"
+Data (HexDump)           : 36 03 4D 00 75 00 6C 00 74 00 69 00 66 00 75 00   6.M.u.l.t.i.f.u.
+                           6E 00 63 00 74 00 69 00 6F 00 6E 00 20 00 77 00   n.c.t.i.o.n. .w.
+                           69 00 74 00 68 00 20 00 43 00 44 00 43 00 20 00   i.t.h. .C.D.C. .
+                           45 00 43 00 4D 00                                 E.C.M.
+             ------ String Descriptor 7 ------
+bLength                  : 0x3A (58 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS Communications Control"
+Data (HexDump)           : 3A 03 52 00 4E 00 44 00 49 00 53 00 20 00 43 00   :.R.N.D.I.S. .C.
+                           6F 00 6D 00 6D 00 75 00 6E 00 69 00 63 00 61 00   o.m.m.u.n.i.c.a.
+                           74 00 69 00 6F 00 6E 00 73 00 20 00 43 00 6F 00   t.i.o.n.s. .C.o.
+                           6E 00 74 00 72 00 6F 00 6C 00                     n.t.r.o.l.
+             ------ String Descriptor 8 ------
+bLength                  : 0x28 (40 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS Ethernet Data"
+Data (HexDump)           : 28 03 52 00 4E 00 44 00 49 00 53 00 20 00 45 00   (.R.N.D.I.S. .E.
+                           74 00 68 00 65 00 72 00 6E 00 65 00 74 00 20 00   t.h.e.r.n.e.t. .
+                           44 00 61 00 74 00 61 00                           D.a.t.a.
+             ------ String Descriptor 9 ------
+bLength                  : 0x0C (12 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "RNDIS"
+Data (HexDump)           : 0C 03 52 00 4E 00 44 00 49 00 53 00               ..R.N.D.I.S.
+             ------ String Descriptor 10 ------
+bLength                  : 0x42 (66 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "CDC Abstract Control Model (ACM)"
+Data (HexDump)           : 42 03 43 00 44 00 43 00 20 00 41 00 62 00 73 00   B.C.D.C. .A.b.s.
+                           74 00 72 00 61 00 63 00 74 00 20 00 43 00 6F 00   t.r.a.c.t. .C.o.
+                           6E 00 74 00 72 00 6F 00 6C 00 20 00 4D 00 6F 00   n.t.r.o.l. .M.o.
+                           64 00 65 00 6C 00 20 00 28 00 41 00 43 00 4D 00   d.e.l. .(.A.C.M.
+                           29 00                                             ).
+             ------ String Descriptor 11 ------
+bLength                  : 0x1A (26 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "CDC ACM Data"
+Data (HexDump)           : 1A 03 43 00 44 00 43 00 20 00 41 00 43 00 4D 00   ..C.D.C. .A.C.M.
+                           20 00 44 00 61 00 74 00 61 00                      .D.a.t.a.
+             ------ String Descriptor 12 ------
+bLength                  : 0x16 (22 bytes)
+bDescriptorType          : 0x03 (String Descriptor)
+Language 0x0409          : "CDC Serial"
+Data (HexDump)           : 16 03 43 00 44 00 43 00 20 00 53 00 65 00 72 00   ..C.D.C. .S.e.r.
+                           69 00 61 00 6C 00                                 i.a.l.
+                                                                                                              
+
+

@@ -1,0 +1,1 @@
+start  /d "C:\Program Files (x86)\teraterm" /b ttermpro.exe /T=1 telnet://192.168.8.102 /X=0 /Y=0   /W="TELNET" 

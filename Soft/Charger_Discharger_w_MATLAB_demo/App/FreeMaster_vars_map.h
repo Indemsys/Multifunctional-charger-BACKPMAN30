@@ -1,0 +1,9 @@
+﻿#ifndef FREEMASTER_VARS_MAP_H
+  #define FREEMASTER_VARS_MAP_H
+
+
+
+#endif // FREEMASTER_VARS_MAP_H
+
+
+
